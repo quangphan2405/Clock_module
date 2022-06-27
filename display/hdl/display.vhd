@@ -1,8 +1,15 @@
+--------------------------------------------------------------------------------
+-- Author       : Quang Phan
+-- Author email : quang.phan@tum.de
+-- Create Date  : 27/06/2022
+-- Project Name : Project Lab IC Design
+-- Module Name  : display.vhd
+-- Description  : Display module of the CLOCK
+--------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-
-use common_pkg.all;
 
 entity display is
     port (
@@ -16,7 +23,7 @@ entity display is
         lcd_time_data       : in  std_logic_vector(20 downto 0);  -- hh/mm/ss
         -- Date
         fsm_date_start      : in  std_logic;
-        lcd_date_dow        : in  DOW_t;
+        lcd_date_dow        : in  std_logic_vector(2  downto 0);
         lcd_date_data       : in  std_logic_vector(20 downto 0);  -- DD/MM/YY
         -- Alarm
         fsm_alarm_start     : in  std_logic;
@@ -128,7 +135,7 @@ architecture behavior of display is
                                                    "00110101", "00110110", "00110111", "00111000", "00111001");
 
     -- Special characters -> (*, :, .)
-    constant SPECIAL_encode_c : encode_array3_t := ("00101010", "00111010", "10100101")
+    constant SPECIAL_encode_c : encode_array3_t := ("00101010", "00111010", "10100101");
 
     -- ***********************************
     -- Dynamic data / characters address
@@ -161,8 +168,8 @@ architecture behavior of display is
     -- BCD decoder
     component BCD_decoder_28bit
     port (
-        bin_in  : in  std_logic_vector(27 downto 0),
-        bcd_out : out std_logic_vector(32 downto 0)
+        bin28_in  : in  std_logic_vector(27 downto 0);
+        bcd32_out : out std_logic_vector(32 downto 0)
     );
     end component BCD_decoder_28bit;
 
@@ -190,7 +197,7 @@ begin
 
         -- Concurrent assignments
         mode_s  <= fsm_stopwatch_start & fsm_countdown_start & fsm_switchoff_start &
-                       fsm_switchon_start & fsm_alarm_start & fsm_date_start & fsm_time_start;
+                   fsm_switchon_start & fsm_alarm_start & fsm_date_start & fsm_time_start;
 
         with mode_s select next_mode_s <=
             TIME_M      when "0000001",
@@ -202,20 +209,20 @@ begin
             STOPWATCH_M when "1000000",
             TIME_M      when others;
 
-        data_in_s <= fsm_time_start      ? std_logic_vector(resize(unsigned(lcd_time_data     ), 28)) :
-                     fsm_date_start      ? std_logic_vector(resize(unsigned(lcd_date_data     ), 28)) :
-                     fsm_alarm_start     ? std_logic_vector(resize(unsigned(lcd_alarm_data    ), 28)) :
-                     fsm_switchon_start  ? std_logic_vector(resize(unsigned(lcd_switchon_data ), 28)) :
-                     fsm_switchoff_start ? std_logic_vector(resize(unsigned(lcd_switchoff_data), 28)) :
-                     fsm_countdown_start ? std_logic_vector(resize(unsigned(lcd_countdown_data), 28)) :
-                     fsm_stopwatch_start ? std_logic_vector(resize(unsigned(lcd_stopwatch_data), 28)) :
-                     x"0000000";
+        -- data_in_s <= fsm_time_start      ? std_logic_vector(resize(unsigned(lcd_time_data     ), 28)) :
+        --              fsm_date_start      ? std_logic_vector(resize(unsigned(lcd_date_data     ), 28)) :
+        --              fsm_alarm_start     ? std_logic_vector(resize(unsigned(lcd_alarm_data    ), 28)) :
+        --              fsm_switchon_start  ? std_logic_vector(resize(unsigned(lcd_switchon_data ), 28)) :
+        --              fsm_switchoff_start ? std_logic_vector(resize(unsigned(lcd_switchoff_data), 28)) :
+        --              fsm_countdown_start ? std_logic_vector(resize(unsigned(lcd_countdown_data), 28)) :
+        --              fsm_stopwatch_start ? std_logic_vector(resize(unsigned(lcd_stopwatch_data), 28)) :
+        --              x"0000000";
 
         -- Component instantiations
         BCD_28bit_i : BCD_decoder_28bit
         port map (
-            bin_in  => data_in_s,
-            bcd_out => data_out_s
+            bin28_in  => data_in_s,
+            bcd32_out => data_out_s
         );
 
         -- Processes
@@ -223,41 +230,23 @@ begin
         begin
             if ( clk'EVENT and clk = '1' and en_freq = '1' ) then
                 if ( reset = '1' ) then
-                    begin
-                        data_r      <= (others => '0');
-                        lcd_en_r    <= '0';
-                        lcd_rw_r    <= '0';              -- Tied to '0' as we are only writing to LCD
-                        lcd_rs_r    <= '0';
-                        lcd_data_r  <= (others => '0');
-                        curr_mode_r <= (others => '0');
-                        send_static_done_r <= '0';
-                    end;
+                    data_r      <= (others => '0');
+                    lcd_en_r    <= '0';
+                    lcd_rw_r    <= '0';              -- Tied to '0' as we are only writing to LCD
+                    lcd_rs_r    <= '0';
+                    lcd_data_r  <= (others => '0');
+                    curr_mode_r <= TIME_M;
+                    send_static_done_r <= '0';
                 else
-                    begin
-                        -- Send static data
-                        if ( fsm_time_start = '1' ) then
-                            begin
-                            end;
-                        elsif ( fsm_date_start = '1' ) then
-                            begin
-                            end;
-                        elsif ( fsm_alarm_start = '1' ) then
-                            begin
-                            end;
-                        elsif ( fsm_switchon_start = '1' ) then
-                            begin
-                            end;
-                        elsif ( fsm_switchoff_start = '1' ) then
-                            begin
-                            end;
-                        elsif ( fsm_countdown_start = '1' ) then
-                            begin
-                            end;
-                        elsif ( fsm_stopwatch_start = '1' ) then
-                            begin
-                            end;
-                        end if;
-                    end;
+                    -- Send static data
+                    if ( fsm_time_start = '1' ) then
+                    elsif ( fsm_date_start = '1' ) then
+                    elsif ( fsm_alarm_start = '1' ) then
+                    elsif ( fsm_switchon_start = '1' ) then
+                    elsif ( fsm_switchoff_start = '1' ) then
+                    elsif ( fsm_countdown_start = '1' ) then
+                    elsif ( fsm_stopwatch_start = '1' ) then
+                    end if;
                 end if;
             end if;
         end process SEND_STATIC;
@@ -266,17 +255,14 @@ begin
         begin
             if ( clk'EVENT and clk = '1' and en_freq = '1' ) then
                 if ( reset = '1' ) then
-                    begin
-                        data_r      <= (others => '0');
-                        lcd_en_r    <= '0';
-                        lcd_rw_r    <= '0';              -- Tied to '0' as we are only writing to LCD
-                        lcd_rs_r    <= '0';
-                        lcd_data_r  <= (others => '0');
-                        curr_mode_r <= (others => '0');
-                    end;
-                elsif ( send_static_finished = '1' ) then
-                    begin
-                    end;
+                    data_r      <= (others => '0');
+                    lcd_en_r    <= '0';
+                    lcd_rw_r    <= '0';              -- Tied to '0' as we are only writing to LCD
+                    lcd_rs_r    <= '0';
+                    lcd_data_r  <= (others => '0');
+                    curr_mode_r <= TIME_M;
+                    send_static_done_r <= '0';
+                -- elsif ( send_static_done = '1' ) then
                 end if;
             end if;
         end process SEND_DYNAMIC;

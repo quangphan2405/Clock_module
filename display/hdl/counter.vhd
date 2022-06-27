@@ -1,3 +1,12 @@
+--------------------------------------------------------------------------------
+-- Author       : Quang Phan
+-- Author email : quang.phan@tum.de
+-- Create Date  : 27/06/2022
+-- Project Name : Project Lab IC Design
+-- Module Name  : counter.vhd
+-- Description  : Counter for adjusting the frequency of commands to LCD
+--------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
