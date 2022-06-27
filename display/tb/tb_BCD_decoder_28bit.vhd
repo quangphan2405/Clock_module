@@ -57,7 +57,7 @@ begin
     STIM_PROC : process is
     begin
         -- Stimulus
-        STIMULUS: for i in 0 to 4 loop
+        STIMULUS: for i in 0 to 5 loop
             -- Send input
             bin_in <= sti_array(i);
 
