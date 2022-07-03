@@ -183,7 +183,6 @@ architecture behavior of display is
     signal lcd_rw_r       : std_logic;
     signal lcd_rs_r       : std_logic;
     signal lcd_data_r     : std_logic_vector(7 downto 0);
-    signal state_r     : mode_t;
     signal send_done_r : std_logic;
     signal cnt_r       : integer range 0 to 100;
     signal lcd_data_out_r : std_logic_vector(10 downto 0);
@@ -209,7 +208,7 @@ architecture behavior of display is
     -- Data selector
     component data_selector
     port (
-        - Time
+        -- Time
         fsm_time_start      : in  std_logic;
         lcd_time_data       : in  std_logic_vector(20 downto 0);  -- hh/mm/ss
         -- Date
@@ -247,13 +246,13 @@ architecture behavior of display is
     component fifo
     generic (
         WIDTH_g : integer := 11;
-        DEPTH_g : integer := 50;
+        DEPTH_g : integer := 50
     );
     port (
         -- Clock and reset
         clk    : in  std_logic;
         reset  : in  std_logic;
-        -- FIFO wrire interface
+        -- FIFO write interface
         wr_en   : in  std_logic;
         wr_data : in  std_logic_vector(WIDTH_g-1 downto 0);
         full    : out std_logic;
@@ -263,6 +262,9 @@ architecture behavior of display is
         empty   : out std_logic
     );
     end component fifo;
+    
+    -- NEW FIFO
+    
 
     -- Transmitter
     component transmitter
@@ -288,17 +290,17 @@ architecture behavior of display is
     -- ***********************************
     -- For each digit (0 -> 9) to LCD character
     procedure digitEncode (
-        signal digit_in  : in  std_logic_vector(3 downto 0);
-        signal digit_out : out std_logic_vector(7 downto 0)
+        signal   digit_in  : in  std_logic_vector(3 downto 0);
+        variable digit_out : out std_logic_vector(7 downto 0)
     ) is
     begin
-        digit_out <= DIGIT_encode_c(to_integer(unsigned(digit_in)));
+        digit_out := DIGIT_encode_c(to_integer(unsigned(digit_in)));
     end procedure digitEncode;
 
     -- For DOW to German short terms
     procedure dowEncode (
         signal dow_in  : in  std_logic_vector(2 downto 0);
-        signal dow_out : out encode_array_t
+        signal dow_out : out encode_array2_t
     ) is
     begin
         dow_out <= DOW_encode_c( to_integer(unsigned(dow_in)) - 1 ); -- Since MO <-> 1 and SU <-> 7, 0 is not used
@@ -312,7 +314,7 @@ architecture behavior of display is
         variable digit : std_logic_vector(7 downto 0);
     begin
         DATA_ENCODE : for i in 0 to 7 loop
-            digit := digitEncode(data_in(4*i+3 downto 4*i))
+            digitEncode(data_in(4*i+3 downto 4*i), digit);
             data_out(i) <= digit;
         end loop DATA_ENCODE;
     end procedure dataInputEncode;
@@ -334,7 +336,7 @@ begin
             lcd_time_data       => lcd_time_data,
             -- Date
             fsm_date_start      => fsm_date_start,
-            lcd_date_data       => (lcd_date_dow & lcd_date_data),
+            lcd_date_data       => lcd_date_data,
             -- Alarm
             fsm_alarm_start     => fsm_alarm_start,
             lcd_alarm_data      => lcd_alarm_data,
@@ -346,7 +348,7 @@ begin
             lcd_switchoff_data  => lcd_switchoff_data,
             -- Countdown
             fsm_countdown_start => fsm_countdown_start,
-            fsm_countdown_data  => fsm_countdown_data,
+            lcd_countdown_data  => lcd_countdown_data,
             -- Stopwatch
             fsm_stopwatch_start => fsm_stopwatch_start,
             lcd_stopwatch_data  => lcd_stopwatch_data,
@@ -363,11 +365,11 @@ begin
 
         -- FIFO
         fifo_i : fifo
-        generic (
+        generic map (
             WIDTH_g => 11,
             DEPTH_g => 50
-        );
-        port (
+        )
+        port map (
             -- Clock and reset
             clk     => clk,
             reset   => reset,
@@ -387,7 +389,7 @@ begin
             -- Clock and reset
             clk      => clk,
             reset    => reset,
-            en_freq  => en_freq,
+            en_freq  => en_100,
             -- Data in
             data_in  => fifo_rd_data,
             -- Output to LCD
@@ -421,20 +423,20 @@ begin
             end if;
         end process PROCESS_DATA;
 
-        SEND_DYNAMIC : process (clk) is
-        begin
-            if ( clk'EVENT and clk = '1' and en_freq = '1' ) then
-                if ( reset = '1' ) then
-                    data_r      <= (others => '0');
-                    lcd_en_r    <= '0';
-                    lcd_rw_r    <= '0';              -- Tied to '0' as we are only writing to LCD
-                    lcd_rs_r    <= '0';
-                    lcd_data_r  <= (others => '0');
-                    curr_mode_r <= TIME_M;
-                    send_static_done_r <= '0';
-                -- elsif ( send_static_done = '1' ) then
-                end if;
-            end if;
-        end process SEND_DYNAMIC;
+    --    SEND_DYNAMIC : process (clk) is
+    --    begin
+    --        if ( clk'EVENT and clk = '1' and en_freq = '1' ) then
+    --            if ( reset = '1' ) then
+    --                data_r      <= (others => '0');
+    --                lcd_en_r    <= '0';
+    --                lcd_rw_r    <= '0';              -- Tied to '0' as we are only writing to LCD
+    --                lcd_rs_r    <= '0';
+    --                lcd_data_r  <= (others => '0');
+    --                curr_mode_r <= TIME_M;
+    --                send_static_done_r <= '0';
+    --            -- elsif ( send_static_done = '1' ) then
+    --            end if;
+    --        end if;
+    --    end process SEND_DYNAMIC;
 
 end architecture behavior;

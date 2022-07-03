@@ -56,7 +56,7 @@ begin
                 data_out_r <= (others => '0');
                 counter_r  <= MIN_INTERVAL_c;  -- Ready to send at the beginning
             else
-                if ( counter_r == MIN_INTERVAL_c ) then
+                if ( counter_r = MIN_INTERVAL_c ) then
                     lcd_ack_r  <= '1';
                     data_out_r <= data_in;
                     counter_r  <= 0;

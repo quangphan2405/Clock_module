@@ -18,7 +18,7 @@ entity data_selector is
         lcd_time_data       : in  std_logic_vector(20 downto 0);  -- hh/mm/ss
         -- Date
         fsm_date_start      : in  std_logic;
-        lcd_date_data       : in  std_logic_vector(23 downto 0);  -- DOW/YY/MM/DD
+        lcd_date_data       : in  std_logic_vector(20 downto 0);  -- YY/MM/DD, DOW is handled separately
         -- Alarm
         fsm_alarm_start     : in  std_logic;
         lcd_alarm_data      : in  std_logic_vector(13 downto 0);  -- hh/mm
