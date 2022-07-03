@@ -14,7 +14,7 @@ use ieee.numeric_std.all;
 entity fifo is
     generic (
         WIDTH_g : integer := 11;
-        DEPTH_g : integer := 50;
+        DEPTH_g : integer := 50
     );
     port (
         -- Clock and reset
@@ -39,66 +39,79 @@ architecture behavior of fifo is
     signal fifo_array_r : fifo_array_t;
     signal wr_ptr_r     : integer range 0 to DEPTH_g-1;
     signal rd_ptr_r     : integer range 0 to DEPTH_g-1;
-    signal fifo_cnt_r   : integer range 0 to DEPTH_g+1; -- FIFO fill level
-
-    -- Internal signals
-    signal full_s     : std_logic;
-    signal empty_s    : std_logic;
+    signal full_r       : std_logic;
+    signal empty_r      : std_logic;
 
 begin
 
     -- Process
     FIFO_ACT : process (clk) is
+        variable fifo_cnt_v : integer range 0 to DEPTH_g+1; -- FIFO fill level
+    begin
         if ( clk'EVENT and clk = '1' ) then
             if ( reset = '1' ) then
                 fifo_array_r <= (others => (others => '0'));
                 wr_ptr_r     <= 0;
                 rd_ptr_r     <= 0;
-                fifo_cnt_r   <= 0;
+                full_r       <= '0';
+                empty_r      <= '0';
+                fifo_cnt_v   := 0;
             else
-                -- Total number of data piece in FIFO
-                if ( wr_en = '1' and rd_en = '0' and full_s = '0' ) then
-                    fifo_cnt_r <= fifo_cnt_r + 1;
-                elsif ( wr_en = '0' and rd_en = '1' and empty_s = '0' ) then
-                    fifo_cnt_r <= fifo_cnt_r - 1;
-                end if;
+                -- Write operation
+                if ( wr_en = '1' and full_r = '0' ) then
+                    -- Write to FIFO
+                    fifo_array_r(wr_ptr_r) <= wr_data;
 
-                -- Update write index
-                if ( wr_en = '1' and full_s = '0' ) then
-                    if ( wr_ptr = DEPTH_g-1 ) then
-                        wr_ptr <= 0;
+                    -- Fill level
+                    fifo_cnt_v := fifo_cnt_v + 1;
+
+                    -- Update write pointer
+                    if ( wr_ptr_r = DEPTH_g-1 ) then
+                        wr_ptr_r <= 0;
                     else
-                        wr_ptr <= wr_ptr + 1;
+                        wr_ptr_r <= wr_ptr_r + 1;
                     end if;
                 end if;
 
-                -- Update read pointer
-                if ( rd_en = '1' and empty_s = '0' ) then
-                    if ( rd_ptr = DEPTH_g-1 ) then
-                        rd_ptr <= 0;
+                -- Read operation
+                if ( rd_en = '1' and empty_r = '0' ) then
+                    -- Read from FIFO
+                    rd_data <= fifo_array_r(rd_ptr_r);
+
+                    -- Fill level
+                    fifo_cnt_v := fifo_cnt_v - 1;
+
+                    -- Update read pointer
+                    if ( rd_ptr_r = DEPTH_g-1 ) then
+                        rd_ptr_r <= 0;
                     else
-                        rd_ptr <= rd_ptr + 1;
+                        rd_ptr_r <= rd_ptr_r + 1;
                     end if;
                 end if;
 
-                -- Write data to fifo
-                if ( wr_en ) then
-                    fifo_array_r(wr_ptr) <= wr_data;
+                -- Setting flags
+                -- EMPTY
+                if ( fifo_cnt_v = 0) then
+                    empty_r <= '1';
+                else
+                    empty_r <= '0';
+                end if;
+                -- FULL
+                if ( fifo_cnt_v = DEPTH_g ) then
+                    full_r <= '1';
+                else
+                    full_r <= '0';
                 end if;
             end if;
         end if;
     end process FIFO_ACT;
 
-    -- Output data
-    rd_data <= fifo_array_r(rd_ptr);
-
     -- FIFO flags
-    full_s  <= '1' when fifo_cnt_r = DEPTH_g else '0';
-    empty_s <= '1' when fifo_cnt_r = 0       else '0';
+    -- full_s  <= '1' when fifo_cnt_r = DEPTH_g else '0';
+    -- empty_s <= '1' when fifo_cnt_r = 0       else '0';
 
     -- Output flag assignments
-    full  <= full_s;
-    empty <= empty_s;
-
+    full  <= full_r;
+    empty <= empty_r;
 
 end architecture behavior;
