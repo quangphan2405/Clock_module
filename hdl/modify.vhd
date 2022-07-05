@@ -52,11 +52,12 @@ begin
 
 process (clk, rst, key_enable, key_p_m, mux_1, mux_2, temp_2, O_1, fsm_alarm)
 begin
-if (clk = '1' and clk'EVENT) and (fsm_alarm='1')then
+if (clk = '1' and clk'EVENT) then
     if (rst = '1') then
         mux_1 <= "000000010000";
         mux_2 <= "000000000000";
-    elsif (O_1 = "010110011111") and (key_enable = '1') and (key_p_m = '1') then
+    elsif (fsm_alarm='1') then
+    if (O_1 = "010110011111") and (key_enable = '1') and (key_p_m = '1') then
         mux_1 <= (others => '0'); --if hh> 23:59, -> 00:00
         mux_2 <= (others => '0');
     elsif (O_1 = "000000000000") and (key_enable = '1') and (key_p_m = '0') then
@@ -66,7 +67,7 @@ if (clk = '1' and clk'EVENT) and (fsm_alarm='1')then
         mux_1 <= mux_1 + 1;
     elsif (key_enable = '1') and (key_p_m = '0') then
         mux_2 <= mux_2 + 1;
-    
+    end if;
     end if;
 end if;
 
