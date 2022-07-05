@@ -12,13 +12,18 @@ end;
 architecture bench of lap_tb is
 
   component lap
-      Port ( sw_ena : in STD_LOGIC;
+      Port ( 
+             clk    : in STD_LOGIC;
+             sw_ena : in STD_LOGIC;
+             sw_reset : in STD_LOGIC;
              counter_ena : in STD_LOGIC;
              key_minus_imp : in STD_LOGIC;
              transmitter_ena : out STD_LOGIC);
   end component;
 
+  signal clk: STD_LOGIC;
   signal sw_ena: STD_LOGIC;
+  signal sw_reset: STD_LOGIC;
   signal counter_ena: STD_LOGIC;
   signal key_minus_imp: STD_LOGIC;
   signal transmitter_ena: STD_LOGIC;
@@ -28,17 +33,32 @@ architecture bench of lap_tb is
 
 begin
 
-  uut: lap port map ( sw_ena          => sw_ena,
+  uut: lap port map ( 
+                      clk            => clk,
+                      sw_ena          => sw_ena,
+                      sw_reset        =>  sw_reset,
                       counter_ena     => counter_ena,
                       key_minus_imp   => key_minus_imp,
                       transmitter_ena => transmitter_ena );
 
+
+                                     
+   process				 
+    begin
+    clk <= '0';			-- clock cycle is 10 ns
+    wait for 5 ns;
+    clk <= '1';
+    wait for 5 ns;
+    end process;
+    
+    
   stimulus: process
   begin
   
     -- Put initialisation code here
 
     sw_ena <= '0';
+    sw_reset <= '0';
     counter_ena <='0';
     key_minus_imp <= '0';
    

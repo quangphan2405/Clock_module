@@ -41,18 +41,26 @@ end repeat_action_detector;
 architecture Behavioral of repeat_action_detector is
     signal cnt :std_logic_vector(1 downto 0):="00";
     signal Pre_repeat_action_imp :std_logic:='0';
+    signal flag : std_logic_vector(2 downto 0):="000";
 
 begin
     process(clk, key_action_imp)
     
     begin
+        if (clk='1' and clk'event) and (not (flag = "000")) and key_action_imp = '0' then
+            flag <= flag -1;
+        end if;
+        if flag = "000" then
+             cnt <= cnt - cnt; 
+        end if;
         if (clk='1' and clk'event and Pre_repeat_action_imp = '1') then
              Pre_repeat_action_imp <= '0';
         end if;
         if rising_edge(key_action_imp) then
+            flag <= "000"; --"100"
             cnt <= cnt + 1;
         end if;
-        if cnt = 3 then
+        if cnt = 1 then -- cnt=3
             cnt <= cnt - cnt;
             Pre_repeat_action_imp <= '1';
         end if;

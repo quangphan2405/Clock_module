@@ -1,66 +1,81 @@
-----------------------------------------------------
--- VHDL code for n-bit counter (ESD figure 2.6)
--- by Weijun Zhang, 04/2001
---
--- this is the behavior description of n-bit counter
--- another way can be used is FSM model. 
-----------------------------------------------------
-	
-library ieee ;
-use ieee.std_logic_1164.all;
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 07/04/2022 02:26:58 PM
+-- Design Name: 
+-- Module Name: counter_clock - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- reference: http://esd.cs.ucr.edu/labs/tutorial/counter.vhd
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
 use ieee.std_logic_unsigned.all;
 
-----------------------------------------------------
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
 
-entity counter is
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
 
-generic(n: natural :=2);
-port(	clk:	  in std_logic;
-	reset:	      in std_logic;
-	count_ena:	  in std_logic;
-	csec:	      out std_logic_vector(6 downto 0);
-	sec:	      out std_logic_vector(5 downto 0);
-	min:	      out std_logic_vector(5 downto 0);
-	hr:	          out std_logic_vector(4 downto 0)
-);
-end counter;
+entity counter_clock is
+    Port ( clk : in STD_LOGIC;
+    	   sw_reset:	      in std_logic;
+    	   count_ena:	  in std_logic;
+    	   csec:	      out std_logic_vector(6 downto 0);
+    	   sec:	      out std_logic_vector(6 downto 0);
+        	min:	      out std_logic_vector(6 downto 0);
+        	hr:	          out std_logic_vector(6 downto 0)
+    
+    );
+end counter_clock;
 
-----------------------------------------------------
-
-architecture behv of counter is		 	  
+architecture Behavioral of counter_clock is		 	  
 	
-    signal Pre_csec: std_logic_vector(6 downto 0):="0000000";
-    signal Pre_sec: std_logic_vector(5 downto 0):="000000";
-    signal Pre_min: std_logic_vector(5 downto 0):="000000";
-    signal Pre_hr: std_logic_vector(4 downto 0):="00000";
+    signal csec_signal: std_logic_vector(6 downto 0):="0000000";
+    signal sec_signal: std_logic_vector(6 downto 0):="0000000";
+    signal min_signal: std_logic_vector(6 downto 0):="0000000";
+    signal hr_signal: std_logic_vector(6 downto 0):="0000000";
 begin
 
-    -- behavior describe the counter
-
-    process(clk, count_ena, reset)
+    process(clk, sw_reset, count_ena, csec_signal, sec_signal, min_signal, hr_signal) 
     begin
-	if reset = '1' then
- 	    Pre_csec <= Pre_csec - Pre_csec;
- 	    Pre_sec <= Pre_sec - Pre_sec;
- 	    Pre_min <= Pre_min - Pre_min;
- 	    Pre_hr <= Pre_hr - Pre_hr;
+	if sw_reset = '1' then
+ 	    csec_signal <= csec_signal - csec_signal;
+ 	    sec_signal <= sec_signal - sec_signal;
+ 	    min_signal <= min_signal - min_signal;
+ 	    hr_signal <= hr_signal - hr_signal;
 	elsif (clk='1' and clk'event) then
 	    if count_ena = '1' then
-            Pre_csec <= Pre_csec + 1;
-            if Pre_csec = "1100011" then
-               Pre_csec <= "0000000";
-               Pre_sec <= Pre_sec + 1;
-               if Pre_sec = "111011" then
-                  Pre_sec <= "000000";
-                  Pre_min <= Pre_min + 1;
-                  if Pre_min = "111011"  then
-                      Pre_min <= "000000";
-                      Pre_hr <= Pre_hr + 1;
-                      if Pre_hr = "10111" then --why not 24
-                          Pre_csec <= Pre_csec - Pre_csec;
-                          Pre_sec <= Pre_sec - Pre_sec;
-                          Pre_min <= Pre_min - Pre_min;
-                           Pre_hr <= Pre_hr - Pre_hr;
+            csec_signal <= csec_signal + 1;
+            if csec_signal = "1100011" then
+               csec_signal <= "0000000";
+               sec_signal <= sec_signal + 1;
+               if sec_signal = "111011" then
+                  sec_signal <= "0000000";
+                  min_signal <= min_signal + 1;
+                  if min_signal = "0111011"  then
+                      min_signal <= "0000000";
+                      hr_signal <= hr_signal + 1;
+                      if hr_signal = "0010111" then
+                          csec_signal <= csec_signal - csec_signal;
+                          sec_signal <= sec_signal - sec_signal;
+                          min_signal <= min_signal - min_signal;
+                           hr_signal <= hr_signal - hr_signal;
                       end if;
                    end if;
                end if;
@@ -69,12 +84,10 @@ begin
 	end if;
     end process;	
 	
-    -- concurrent assignment statement
-    csec <= Pre_csec;
-    sec <= Pre_sec;
-    min <= Pre_min;
-    hr <= Pre_hr;
+    csec <= csec_signal;
+    sec <= sec_signal;
+    min <= min_signal;
+    hr <= hr_signal;
 
-end behv;
+end Behavioral;
 
------------------------------------------------------
