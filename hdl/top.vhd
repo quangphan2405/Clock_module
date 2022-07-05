@@ -31,7 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity top is
+entity alarm is
     Port ( clk : in STD_LOGIC;
            reset : in STD_LOGIC;
            key_action_imp : in STD_LOGIC;
@@ -51,9 +51,9 @@ entity top is
            --lcd_alarm_mm : out STD_LOGIC_VECTOR (5 downto 0);--(6 downto 0);
            --lcd_alarm_hh : out STD_LOGIC_VECTOR (4 downto 0);--(13 downto 7));
            lcd_alarm_data : out STD_LOGIC_VECTOR (13 downto 0));
-end top;
+end alarm;
 
-architecture Behavioral of top is
+architecture Behavioral of alarm is
     component active
         Port ( clk : in STD_LOGIC;
            I_ring : in STD_LOGIC;
