@@ -31,22 +31,25 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity reset is
-    Port ( --Clk      : in STD_LOGIC;
+entity reset_control is
+    Port (-- clk :     in STD_LOGIC;
+          -- sw_ena : in STD_LOGIC;
            sys_reset : in STD_LOGIC;
            key_plus_imp : in STD_LOGIC;
-           sw_reset : out STD_LOGIC);
-end reset;
+           sw_reset : out STD_LOGIC:='0');
+end reset_control;
 
-architecture Behavioral of reset is
+architecture Behavioral of reset_control is
 begin
-
-   -- process(Clk) is
-   -- begin
-    
-        --if rising_edge(Clk) then --is the clock needed
+    process(key_plus_imp, sys_reset) --clk, sw_ena,
+    begin
+    --  if (clk='1' and clk'event) then
+        --  if sw_ena = '1' then  
             sw_reset <= sys_reset OR  key_plus_imp;
-        --end if;
-        
-    --end process;
+          --else
+        --    sw_reset <= '0';  
+      --    end if;
+    --  end if;
+
+     end process;
 end Behavioral;
