@@ -36,7 +36,7 @@ entity tb_top is
 end tb_top;
 
 architecture Behavioral of tb_top is
-    component top
+    component alarm
         Port ( clk : in STD_LOGIC;
            reset : in STD_LOGIC;
            key_action_imp : in STD_LOGIC;
@@ -69,7 +69,7 @@ architecture Behavioral of tb_top is
     constant clk_period: time := 100 ns;
 
 begin
-    uut: top port map (clk=>clk, reset=>reset, key_action_imp=>key_action_imp, key_action_long=>key_action_long, key_plus_minus=>key_plus_minus, 
+    uut: alarm port map (clk=>clk, reset=>reset, key_action_imp=>key_action_imp, key_action_long=>key_action_long, key_plus_minus=>key_plus_minus, 
                        key_enable=>key_enable, fsm_alarm_start=>fsm_alarm_start, second=>second, minute=>minute, hour=>hour, led_alarm_act=>led_alarm_act,
                        led_alarm_ring=>led_alarm_ring, lcd_alarm_act=>lcd_alarm_act, lcd_alarm_snooze=>lcd_alarm_snooze, lcd_alarm_data=>data);
     clock: process
@@ -131,7 +131,8 @@ begin
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
         wait for 100 ns;
         fsm_alarm_start <= '0';
-        wait for 100 ns;
+        --reset <= '1';
+        wait for 400 ns;
         fsm_alarm_start <= '1';
      --case6
         wait for 100 ns;
