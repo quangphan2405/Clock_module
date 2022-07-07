@@ -18,16 +18,17 @@ entity fifo is
     );
     port (
         -- Clock and reset
-        clk    : in  std_logic;
-        reset  : in  std_logic;
+        clk           : in  std_logic;
+        reset         : in  std_logic;
         -- FIFO wrire interface
-        wr_en   : in  std_logic;
-        wr_data : in  std_logic_vector(WIDTH_g-1 downto 0);
-        full    : out std_logic;
+        wr_en         : in  std_logic;
+        wr_data       : in  std_logic_vector(WIDTH_g-1 downto 0);
+        full          : out std_logic;
         -- FIFO read interface
-        rd_en   : in  std_logic;
-        rd_data : out std_logic_vector(WIDTH_g-1 downto 0);
-        empty   : out std_logic
+        rd_en         : in  std_logic;
+        rd_data       : out std_logic_vector(WIDTH_g-1 downto 0);
+        rd_data_ready : out std_logic;
+        empty         : out std_logic
     );
 end entity fifo;
 
@@ -36,11 +37,12 @@ architecture behavior of fifo is
     type fifo_array_t is array (0 to DEPTH_g-1) of std_logic_vector(WIDTH_g-1 downto 0);
 
     -- Internal registers
-    signal fifo_array_r : fifo_array_t;
-    signal wr_ptr_r     : integer range 0 to DEPTH_g-1;
-    signal rd_ptr_r     : integer range 0 to DEPTH_g-1;
-    signal full_r       : std_logic;
-    signal empty_r      : std_logic;
+    signal fifo_array_r    : fifo_array_t;
+    signal wr_ptr_r        : integer range 0 to DEPTH_g-1;
+    signal rd_ptr_r        : integer range 0 to DEPTH_g-1;
+    signal full_r          : std_logic;
+    signal empty_r         : std_logic;
+    signal rd_data_ready_r : std_logic;
 
 begin
 
@@ -50,13 +52,17 @@ begin
     begin
         if ( clk'EVENT and clk = '1' ) then
             if ( reset = '1' ) then
-                fifo_array_r <= (others => (others => '0'));
-                wr_ptr_r     <= 0;
-                rd_ptr_r     <= 0;
-                full_r       <= '0';
-                empty_r      <= '0';
-                fifo_cnt_v   := 0;
+                fifo_array_r    <= (others => (others => '0'));
+                wr_ptr_r        <= 0;
+                rd_ptr_r        <= 0;
+                full_r          <= '0';
+                empty_r         <= '1';
+                fifo_cnt_v      := 0;
+                rd_data_ready_r <= '0';
             else
+                -- Reset RD_DATA handshake, can be overwritten later on
+                rd_data_ready_r <= '0';
+
                 -- Write operation
                 if ( wr_en = '1' and full_r = '0' ) then
                     -- Write to FIFO
@@ -76,7 +82,8 @@ begin
                 -- Read operation
                 if ( rd_en = '1' and empty_r = '0' ) then
                     -- Read from FIFO
-                    rd_data <= fifo_array_r(rd_ptr_r);
+                    rd_data         <= fifo_array_r(rd_ptr_r);
+                    rd_data_ready_r <= '1';
 
                     -- Fill level
                     fifo_cnt_v := fifo_cnt_v - 1;
@@ -110,8 +117,9 @@ begin
     -- full_s  <= '1' when fifo_cnt_r = DEPTH_g else '0';
     -- empty_s <= '1' when fifo_cnt_r = 0       else '0';
 
-    -- Output flag assignments
-    full  <= full_r;
-    empty <= empty_r;
+    -- Output assignments
+    full          <= full_r;
+    empty         <= empty_r;
+    rd_data_ready <= rd_data_ready_r;
 
 end architecture behavior;
