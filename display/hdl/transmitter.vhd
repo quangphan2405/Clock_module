@@ -32,7 +32,7 @@ end entity transmitter;
 architecture behavior of transmitter is
 
     -- Minimum interval between two transmission
-    constant MIN_INTERVAL_c : integer := 50;
+    constant MIN_INTERVAL_c : integer := 0;
 
     -- Internal registers / signals
     signal lcd_ack_r  : std_logic;
