@@ -248,12 +248,13 @@ architecture behavior of display is
     signal BCD_decoded_stw_data_s   : std_logic_vector(31 downto 0);
 
     -- FIFO signals
-    signal fifo_wr_en   : std_logic;
-    signal fifo_rd_en   : std_logic;
-    signal fifo_full    : std_logic;
-    signal fifo_empty   : std_logic;
-    signal fifo_wr_data : std_logic_vector(10 downto 0);
-    signal fifo_rd_data : std_logic_vector(10 downto 0);
+    signal fifo_wr_en         : std_logic;
+    signal fifo_rd_en         : std_logic;
+    signal fifo_full          : std_logic;
+    signal fifo_empty         : std_logic;
+    signal fifo_wr_data       : std_logic_vector(10 downto 0);
+    signal fifo_rd_data       : std_logic_vector(10 downto 0);
+    signal fifo_rd_data_ready : std_logic;
 
     -- Component declarations
     -- Data selector
@@ -301,35 +302,39 @@ architecture behavior of display is
     );
     port (
         -- Clock and reset
-        clk    : in  std_logic;
-        reset  : in  std_logic;
+        clk           : in  std_logic;
+        reset         : in  std_logic;
         -- FIFO write interface
-        wr_en   : in  std_logic;
-        wr_data : in  std_logic_vector(WIDTH_g-1 downto 0);
-        full    : out std_logic;
+        wr_en         : in  std_logic;
+        wr_data       : in  std_logic_vector(WIDTH_g-1 downto 0);
+        full          : out std_logic;
         -- FIFO read interface
-        rd_en   : in  std_logic;
-        rd_data : out std_logic_vector(WIDTH_g-1 downto 0);
-        empty   : out std_logic
+        rd_en         : in  std_logic;
+        rd_data       : out std_logic_vector(WIDTH_g-1 downto 0);
+        rd_data_ready : out std_logic;
+        empty         : out std_logic
     );
     end component fifo;
 
     -- Transmitter
     component transmitter
+    generic (
+        MIN_INTERVAL_g : integer := 1
+    );
     port (
         -- Clock and reset
-        clk      : in  std_logic;
-        reset    : in  std_logic;
-        en_freq  : in  std_logic;
+        clk           : in  std_logic;
+        reset         : in  std_logic;
         -- Data in
-        data_in  : in  std_logic_vector(10 downto 0);
+        data_in       : in  std_logic_vector(10 downto 0);
+        data_in_ready : in  std_logic;
         -- Output to LCD
-        lcd_en   : out std_logic;
-        lcd_rw   : out std_logic;
-        lcd_rs   : out std_logic;
-        lcd_data : out std_logic_vector(7 downto 0);
+        lcd_en        : out std_logic;
+        lcd_rw        : out std_logic;
+        lcd_rs        : out std_logic;
+        lcd_data      : out std_logic_vector(7 downto 0);
         -- Acknowledge
-        lcd_ack  : out std_logic
+        lcd_ack       : out std_logic
     );
     end component transmitter;
 
@@ -371,7 +376,8 @@ begin
 
         -- Output assignments
         lcd_en      <= lcd_en_r;
-        lcd_rw      <= lcd_rw_r;
+        lcd_rw      <= '0';          -- Tied to 0
+        -- lcd_rw      <= lcd_rw_r;
         lcd_rs      <= lcd_rs_r;
         lcd_data    <= lcd_data_r;
 
@@ -384,6 +390,9 @@ begin
         padded_swoff_data_s <= "0000000" & lcd_switchoff_data;
         padded_timer_data_s <= "0000000" & lcd_countdown_data;
         padded_stw_data_s   <= lcd_stopwatch_data;
+
+        -- Continuously read from FIFO
+        fifo_rd_en <= '0';
 
         -- Component instantiations
         -- Data selector
@@ -465,34 +474,38 @@ begin
         )
         port map (
             -- Clock and reset
-            clk     => clk,
-            reset   => reset,
+            clk           => clk,
+            reset         => reset,
             -- FIFO write interface
-            wr_en   => fifo_wr_en,
-            wr_data => fifo_wr_data,
-            full    => fifo_full,
+            wr_en         => fifo_wr_en,
+            wr_data       => fifo_wr_data,
+            full          => fifo_full,
             -- FIFO read interface
-            rd_en   => fifo_rd_en,
-            rd_data => fifo_rd_data,
-            empty   => fifo_empty
+            rd_en         => fifo_rd_en,
+            rd_data       => fifo_rd_data,
+            rd_data_ready => fifo_rd_data_ready,
+            empty         => fifo_empty
         );
 
         -- Transmitter
         trans_i : transmitter
+        generic map (
+            MIN_INTERVAL_g => 1 -- Send every cycle
+        )
         port map (
             -- Clock and reset
-            clk      => clk,
-            reset    => reset,
-            en_freq  => en_100,
+            clk           => clk,
+            reset         => reset,
             -- Data in
-            data_in  => fifo_rd_data,
+            data_in       => fifo_rd_data,
+            data_in_ready => fifo_rd_data_ready,
             -- Output to LCD
-            lcd_en   => lcd_en_r,
-            lcd_rw   => lcd_rw_r,
-            lcd_rs   => lcd_rs_r,
-            lcd_data => lcd_data_r,
+            lcd_en        => lcd_en_r,
+            lcd_rw        => lcd_rw_r,
+            lcd_rs        => lcd_rs_r,
+            lcd_data      => lcd_data_r,
             -- Acknowledge for transmission
-            lcd_ack  => fifo_rd_en  -- ACK for next data to be read from FIFO
+            lcd_ack       => fifo_rd_en  -- ACK for next data to be read from FIFO
         );
 
         -- Processes
