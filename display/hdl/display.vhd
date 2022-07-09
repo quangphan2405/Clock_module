@@ -146,7 +146,7 @@ architecture behavior of display is
     -- Stop watch word -> (S, t, o, p, ' ', w, a, t, c, h, :)
     constant STOPWATCH_ENCODE_c : encode_array11_t := ("01010011", "01110100", "01101111", "01110000", "10001100", "01010111",
                                                        "01100001", "01110100", "01100011", "01101000", "00111010");
-    constant STOPWATCH_ADDR_c   : encode_array10_t := (x"17"     , x"18"     , x"19"     , x"1A"     , x"1B"     , x"1C"     ,
+    constant STOPWATCH_ADDR_c   : encode_array11_t := (x"17"     , x"18"     , x"19"     , x"1A"     , x"1B"     , x"1C"     ,
                                                        x"1D"     , x"1E"     , x"1F"     , x"20"     , x"21"     );
 
     -- Lap word -> (L, a, p)                                 *** (4) in Manual section 2.7.1
@@ -265,7 +265,7 @@ architecture behavior of display is
         lcd_time_data       : in  std_logic_vector(20 downto 0);  -- hh/mm/ss
         -- Date
         fsm_date_start      : in  std_logic;
-        lcd_date_data       : in  std_logic_vector(23 downto 0);  -- DOW/YY/MM/DD
+        lcd_date_data       : in  std_logic_vector(20 downto 0);  -- DOW/YY/MM/DD
         -- Alarm
         fsm_alarm_start     : in  std_logic;
         lcd_alarm_data      : in  std_logic_vector(13 downto 0);  -- hh/mm
@@ -828,7 +828,7 @@ begin
 
                     case state_r is
                         when INIT =>
-                            -- Wake up from TIME mode
+                            -- FIXME: Wake up from TIME mode?
                             if ( fsm_time_start = '1' ) then
                                 state_r <= TURN_ON_DISPLAY;
                             else

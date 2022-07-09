@@ -102,12 +102,54 @@ architecture behavior of tb_display is
     signal lcd_rs   : std_logic;
     signal lcd_data : std_logic_vector(7 downto 0);
 
+    -- *** Output wrapper ***
+    signal lcd_output : std_logic_vector(10 downto 0);
+
+    -- Input data
+    constant MAX_DATA_c : integer := 20;
+
+    -- Input type declaration
+    type input_dow_array_t    is array(0 to MAX_DATA_c-1) of std_logic_vector(2  downto 0);
+    type input_2parts_array_t is array(0 to MAX_DATA_c-1) of std_logic_vector(13 downto 0);
+    type input_3parts_array_t is array(0 to MAX_DATA_c-1) of std_logic_vector(20 downto 0);
+    type input_4parts_array_t is array(0 to MAX_DATA_c-1) of std_logic_vector(27 downto 0);
+
+    -- Output type declaration
+    type output_data_array_t  is array(0 to 100) of std_logic_vector(10 downto 0);  -- For one piece of data
+    type output_func_array_t  is array(0 to MAX_DATA_c-1) of output_data_array_t;   -- For one functionality
+
+    -- Input declaration
+    signal lcd_time_input_array      : input_3parts_array_t := (others => (others => '0'));
+    signal lcd_date_input_array      : input_3parts_array_t := (others => (others => '0'));
+    signal lcd_alarm_input_array     : input_2parts_array_t := (others => (others => '0'));
+    signal lcd_switchon_input_array  : input_3parts_array_t := (others => (others => '0'));
+    signal lcd_switchoff_input_array : input_3parts_array_t := (others => (others => '0'));
+    signal lcd_timer_input_array     : input_3parts_array_t := (others => (others => '0'));
+    signal lcd_stopwatch_input_array : input_4parts_array_t := (others => (others => '0'));
+    signal lcd_dow_input_array       : input_dow_array_t    := (others => (others => '0'));
+
+    -- Output declaration
+    signal lcd_time_output_array      : output_func_array_t := (others => (others => (others => '0')));
+    signal lcd_date_output_array      : output_func_array_t := (others => (others => (others => '0')));
+    signal lcd_alarm_output_array     : output_func_array_t := (others => (others => (others => '0')));
+    signal lcd_switchon_output_array  : output_func_array_t := (others => (others => (others => '0')));
+    signal lcd_switchoff_output_array : output_func_array_t := (others => (others => (others => '0')));
+    signal lcd_timer_output_array     : output_func_array_t := (others => (others => (others => '0')));
+    signal lcd_stopwatch_output_array : output_func_array_t := (others => (others => (others => '0')));
+    signal lcd_dow_output_array       : output_func_array_t := (others => (others => (others => '0')));
+
     -- Clock period
     constant CLK_10K_PERIOD_c : time := 100 us;
     constant CLK_100_PERIOD_c : time :=  10 ms;
 
+    -- Special commands for LCD
+    constant CMD_TURN_ON_DISPLAY_c : std_logic_vector(10 downto 0) := "10000001100";
+    constant CMD_FUNCTION_SET_c    : std_logic_vector(10 downto 0) := "10000111000";
+
     -- Error counter
     signal error_cnt : integer := 0;
+
+    -- Process to decode commands to LCD
 
 begin
 
@@ -154,6 +196,9 @@ begin
         lcd_data            => lcd_data
     );
 
+    -- Wrap the LCD outputs from display module
+    lcd_output <= lcd_en & lcd_rw & lcd_rs & lcd_data;
+
     -- Clock 10 kHz generator
     CLK_10K_GEN : process
     begin
@@ -164,10 +209,12 @@ begin
     -- Clock 100 Hz generator
     CLK_100_GEN : process
     begin
-        wait for CLK_10K_PERIOD_c*99;
+        wait for CLK_10K_PERIOD_c/2;
         clk_100 <= '1';
         wait for CLK_10K_PERIOD_c;    -- 1/99 duty cycle, actually "en_100"
         clk_100 <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+        wait for CLK_10K_PERIOD_c*98;
     end process CLK_100_GEN;
 
     -- EN_100 generator
@@ -184,6 +231,21 @@ begin
     -- Stimulus
     STIM : process
     begin
+        -- Generate input array
+        INPUT_GEN : for i in 0 to MAX_DATA_c-1 loop
+            lcd_time_input_array(i)      <= std_logic_vector(to_unsigned(i+1, 21)); -- Input data: 1 -> MAX_DATA_c
+            lcd_date_input_array(i)      <= std_logic_vector(to_unsigned(i+1, 21));
+            lcd_alarm_input_array(i)     <= std_logic_vector(to_unsigned(i+1, 14));
+            lcd_switchon_input_array(i)  <= std_logic_vector(to_unsigned(i+1, 21));
+            lcd_switchoff_input_array(i) <= std_logic_vector(to_unsigned(i+1, 21));
+            lcd_timer_input_array(i)     <= std_logic_vector(to_unsigned(i+1, 21));
+            lcd_stopwatch_input_array(i) <= std_logic_vector(to_unsigned(i+1, 28));
+            -- Since 0 is not used in DOW encoding
+            if ( i rem 8 /= 7 ) then
+                lcd_dow_input_array(i)   <= std_logic_vector(to_unsigned(i+1,  3)); -- Auto trimming -> return back to 0
+            end if;
+        end loop INPUT_GEN;
+
         -- Generate reset
         wait for CLK_10K_PERIOD_c*2;
         reset <= '1';
@@ -191,9 +253,20 @@ begin
         reset <= '0';
         wait for CLK_10K_PERIOD_c/2;
 
-        -- Trigger time mode
+        -- Wake up the display
         fsm_time_start <= '1';
-
+        wait for CLK_10K_PERIOD_c*3/2; -- Wait for data to transmit thru FIFO
+        -- Check TURN_ON_DISPLAY command after waking up
+        if ( lcd_output /= CMD_TURN_ON_DISPLAY_c ) then
+            error_cnt <= error_cnt + 1;
+            report "TURN_ON_DISPLAY command not received!";
+        end if;
+        -- Check FUNCTION_SET command in the next cycle
+        wait for CLK_10K_PERIOD_c;
+        if ( lcd_output /= CMD_FUNCTION_SET_c ) then
+            error_cnt <= error_cnt + 1;
+            report "FUNCTION_SET command not received!";
+        end if;
 
         -- Print testbench output
         if ( error_cnt /= 0 ) then
@@ -204,6 +277,5 @@ begin
 
         wait;
     end process STIM;
-
 
 end architecture behavior;
