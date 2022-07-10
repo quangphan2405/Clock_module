@@ -45,17 +45,18 @@ begin
 
     -- Output assignments
     lcd_en   <= data_out_r(10);
-    lcd_rw   <= data_out_r(9);
-    lcd_rs   <= data_out_r(8);
+    lcd_rs   <= data_out_r(9);
+    lcd_rw   <= data_out_r(8);
     lcd_data <= data_out_r(7 downto 0);
-    lcd_ack  <= lcd_ack_r;
+    -- lcd_ack  <= lcd_ack_r;
+    lcd_ack  <= '1';
 
     -- Process
     SEND : process (clk) is
     begin
         if ( clk'EVENT and clk = '1') then
             if ( reset = '1' ) then
-                lcd_ack_r  <= '0';
+                -- lcd_ack_r  <= '0';
                 data_out_r <= (others => '0');
                 counter_r  <= 0;  -- Ready to send at the beginning
             else
@@ -65,10 +66,10 @@ begin
                     else
                         data_out_r <= CMD_ALL_ZEROS_c; -- Disregard fail-synchronized command
                     end if;
-                    lcd_ack_r  <= '1';
+                    -- lcd_ack_r  <= '1';
                     counter_r  <= 0;
                 else
-                    lcd_ack_r  <= '0';
+                    -- lcd_ack_r  <= '0';
                     counter_r  <= counter_r + 1;
                 end if;
             end if;
