@@ -63,7 +63,6 @@ architecture behavior of tb_display is
     -- *** Inputs ***
     -- Clock and reset
     signal clk_10k             : std_logic := '0';
-    signal clk_100             : std_logic := '0';
     signal reset               : std_logic := '0';
     signal en_100              : std_logic := '0';
     -- Time
@@ -159,7 +158,7 @@ begin
         -- Clock and reset
         clk                 => clk_10k,
         reset               => reset,
-        en_100              => clk_100,
+        en_100              => en_100,
         -- Time
         fsm_time_start      => fsm_time_start,
         lcd_time_act        => lcd_time_act,
@@ -197,7 +196,7 @@ begin
     );
 
     -- Wrap the LCD outputs from display module
-    lcd_output <= lcd_en & lcd_rw & lcd_rs & lcd_data;
+    lcd_output <= lcd_en & lcd_rs & lcd_rw & lcd_data;
 
     -- Clock 10 kHz generator
     CLK_10K_GEN : process
@@ -206,40 +205,57 @@ begin
         clk_10k <= not clk_10k;
     end process CLK_10K_GEN;
 
-    -- Clock 100 Hz generator
-    CLK_100_GEN : process
+    -- Enable 100 Hz generator
+    EN_100_GEN : process
     begin
-        wait for CLK_10K_PERIOD_c/2;
-        clk_100 <= '1';
+        wait for CLK_10K_PERIOD_c*9/2;
+        en_100 <= '1';
         wait for CLK_10K_PERIOD_c;    -- 1/99 duty cycle, actually "en_100"
-        clk_100 <= '0';
+        en_100 <= '0';
         wait for CLK_10K_PERIOD_c/2;
-        wait for CLK_10K_PERIOD_c*98;
-    end process CLK_100_GEN;
+        wait for CLK_10K_PERIOD_c*95;
+    end process EN_100_GEN;
 
-    -- EN_100 generator
-    -- EN_GEN : process
-    -- begin
-    --     wait for CLK_10K_PERIOD_c/2;   -- Get clock rising edge
-    --     EN_100 <= '1';
-    --     wait for CLK_10K_PERIOD_c;     -- Enable for 1 clock cycle
-    --     EN_100 <= '0';
-    --     wait for CLK_10K_PERIOD_c/2;
-    --     wait for CLK_PERIOd_c*98;  -- Enough 100 cycles
-    -- end process EN_GEN;
+    -- Time Data generator
+    DATA_GEN : process
+    begin
+        wait on fsm_time_start;
+
+        DATA_GEN_LOOP : for i in 0 to MAX_DATA_c-1 loop
+            lcd_time_data      <= lcd_time_input_array(i);
+            lcd_date_data      <= lcd_date_input_array(i);
+            lcd_date_dow       <= lcd_dow_input_array(i);
+            lcd_alarm_data     <= lcd_alarm_input_array(i);
+            lcd_switchon_data  <= lcd_switchon_input_array(i);
+            lcd_switchoff_data <= lcd_switchoff_input_array(i);
+            lcd_countdown_data <= lcd_timer_input_array(i);
+            lcd_stopwatch_data <= lcd_stopwatch_input_array(i);
+            wait for CLK_100_PERIOD_c;
+        end loop DATA_GEN_LOOP;
+    end process DATA_GEN;
 
     -- Stimulus
     STIM : process
+        variable index : std_logic_vector(6 downto 0);
     begin
         -- Generate input array
         INPUT_GEN : for i in 0 to MAX_DATA_c-1 loop
-            lcd_time_input_array(i)      <= std_logic_vector(to_unsigned(i+1, 21)); -- Input data: 1 -> MAX_DATA_c
-            lcd_date_input_array(i)      <= std_logic_vector(to_unsigned(i+1, 21));
-            lcd_alarm_input_array(i)     <= std_logic_vector(to_unsigned(i+1, 14));
-            lcd_switchon_input_array(i)  <= std_logic_vector(to_unsigned(i+1, 21));
-            lcd_switchoff_input_array(i) <= std_logic_vector(to_unsigned(i+1, 21));
-            lcd_timer_input_array(i)     <= std_logic_vector(to_unsigned(i+1, 21));
-            lcd_stopwatch_input_array(i) <= std_logic_vector(to_unsigned(i+1, 28));
+            -- lcd_time_input_array(i)      <= std_logic_vector(to_unsigned(i+1, 21)); -- Input data: 1 -> MAX_DATA_c
+            -- lcd_date_input_array(i)      <= std_logic_vector(to_unsigned(i+1, 21));
+            -- lcd_alarm_input_array(i)     <= std_logic_vector(to_unsigned(i+1, 14));
+            -- lcd_switchon_input_array(i)  <= std_logic_vector(to_unsigned(i+1, 21));
+            -- lcd_switchoff_input_array(i) <= std_logic_vector(to_unsigned(i+1, 21));
+            -- lcd_timer_input_array(i)     <= std_logic_vector(to_unsigned(i+1, 21));
+            -- lcd_stopwatch_input_array(i) <= std_logic_vector(to_unsigned(i+1, 28));
+
+            index := std_logic_vector(to_unsigned(i+1, 7));
+            lcd_time_input_array(i)      <= index & index & index; -- Input data: 1 -> MAX_DATA_c
+            lcd_date_input_array(i)      <= index & index & index;
+            lcd_alarm_input_array(i)     <= index & index;
+            lcd_switchon_input_array(i)  <= index & index & index;
+            lcd_switchoff_input_array(i) <= index & index & index;
+            lcd_timer_input_array(i)     <= index & index & index;
+            lcd_stopwatch_input_array(i) <= index & index & index & index;
             -- Since 0 is not used in DOW encoding
             if ( i rem 8 /= 7 ) then
                 lcd_dow_input_array(i)   <= std_logic_vector(to_unsigned(i+1,  3)); -- Auto trimming -> return back to 0
@@ -253,9 +269,9 @@ begin
         reset <= '0';
         wait for CLK_10K_PERIOD_c/2;
 
-        -- Wake up the display
+        -- Wake up the display and activate TIME mode
         fsm_time_start <= '1';
-        wait for CLK_10K_PERIOD_c*3/2; -- Wait for data to transmit thru FIFO
+        wait for CLK_10K_PERIOD_c*9/2; -- Wait for data to transmit thru FIFO
         -- Check TURN_ON_DISPLAY command after waking up
         if ( lcd_output /= CMD_TURN_ON_DISPLAY_c ) then
             error_cnt <= error_cnt + 1;
@@ -267,6 +283,48 @@ begin
             error_cnt <= error_cnt + 1;
             report "FUNCTION_SET command not received!";
         end if;
+
+        -- Activate DATE mode after 3 TIME data
+        wait for CLK_100_PERIOD_c*2;
+        wait until en_100 = '1';
+        fsm_time_start <= '0';
+        fsm_date_start <= '1';
+
+        -- Activate ALARM mode after 3 DATE data
+        wait for CLK_100_PERIOD_c*2;
+        wait until en_100 = '1';
+        fsm_date_start <= '0';
+        fsm_alarm_start <= '1';
+
+        -- Activate SWITCH-ON mode after 3 ALARM data
+        wait for CLK_100_PERIOD_c*2;
+        wait until en_100 = '1';
+        fsm_alarm_start <= '0';
+        fsm_switchon_start <= '1';
+
+        -- Activate SWITCH-OFF mode after 3 SWITCH-ON data
+        wait for CLK_100_PERIOD_c*2;
+        wait until en_100 = '1';
+        fsm_switchon_start <= '0';
+        fsm_switchoff_start <= '1';
+
+        -- Activate COUNTDOWN mode after 3 SWITCH-OFF data
+        wait for CLK_100_PERIOD_c*2;
+        wait until en_100 = '1';
+        fsm_switchoff_start <= '0';
+        fsm_countdown_start <= '1';
+
+        -- Activate STOPWATCH mode after 3 COUNTDOWN data
+        wait for CLK_100_PERIOD_c*2;
+        wait until en_100 = '1';
+        fsm_countdown_start <= '0';
+        fsm_stopwatch_start <= '1';
+
+        -- Activate TIME mode after 3 STOPWATCH data
+        wait for CLK_100_PERIOD_c*2;
+        wait until en_100 = '1';
+        fsm_stopwatch_start <= '0';
+        fsm_time_start <= '1';
 
         -- Print testbench output
         if ( error_cnt /= 0 ) then
