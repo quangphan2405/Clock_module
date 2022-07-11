@@ -296,6 +296,2352 @@ begin
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+      --initialization values
+    sw_ena <= '1';
+    key_minus_imp <= '0';
+    key_plus_imp <= '0';
+    key_action_imp <= '0';
+    reset <= '0';
+    wait for 20 ns;
+    
+    --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------
+        --start counting
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+   -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    
+    --stop lapping 
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';
+    wait for 40 ns;
+    
+    --pause 
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;   
+    
+        --resume
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+    reset <= '1';
+    wait for 10 ns;
+    reset <= '0'; 
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- start lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+    
+    --pause
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns; 
+    
+    -- stop lapping
+    key_minus_imp <= '1';
+    wait for 10 ns;
+    key_minus_imp <= '0';    
+    wait for 40 ns;
+
+    --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+
+     --reset
+    key_plus_imp <= '1';
+    wait for 10 ns;
+    key_plus_imp <= '0';
+    wait for 40 ns;
+    
+        --run
+    key_action_imp <= '1';
+    wait for 10 ns;
+    key_action_imp <= '0';
+    wait for 40 ns;
+    
+    
+    
     -- Put test bench stimulus code here
 
     wait;
