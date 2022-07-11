@@ -34,7 +34,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity counter_controller is
     Port ( 
            clk: in STD_LOGIC;
-           --sw_ena : in STD_LOGIC;
+           sw_ena : in STD_LOGIC;
            sw_reset : in STD_LOGIC;
            key_action_imp : in STD_LOGIC;
            counter_ena : out STD_LOGIC);
@@ -50,7 +50,7 @@ begin
     process(clk, sw_reset, key_action_imp, Pre_counter_ena)
     begin
         if (clk='1' and clk'event) then
-       --  if sw_ena = '1' then 
+         if sw_ena = '1' then 
                 if sw_reset = '1' then
                         Pre_counter_ena <= '0';   
                  else
@@ -63,7 +63,7 @@ begin
                                end if;                    
                     end if;
                  end if;
-      --   end if;
+         end if;
           end if;
     end process;
 

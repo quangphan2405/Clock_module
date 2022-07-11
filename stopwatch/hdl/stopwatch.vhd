@@ -48,7 +48,7 @@ architecture Behavioral of stopwatch is
 
 component counter_controller
     Port ( clk : in STD_LOGIC:= '0';
-          --  sw_ena : in STD_LOGIC:='0';
+           sw_ena : in STD_LOGIC:='0';
            sw_reset : in STD_LOGIC:='0';
            key_action_imp : in STD_LOGIC:='0';
            counter_ena : out STD_LOGIC);
@@ -112,7 +112,7 @@ begin
 
 counter_controller_port : counter_controller port map (
           clk => clk,
-         --  sw_ena => sw_ena,
+           sw_ena => sw_ena,
            sw_reset => sw_reset_signal,
            key_action_imp => key_action_imp,
            counter_ena => counter_ena_signal);
