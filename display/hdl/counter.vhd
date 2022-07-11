@@ -28,14 +28,14 @@ architecture behavior of counter is
     signal cnt_r : integer range 0 to max;
 begin
     -- Output assignment
-    cnt_out <= cnt_r;
+    cnt_out <= std_logic_vector(to_unsigned(cnt_r, N));
 
     -- Process
     COUNT : process (clk) is
     begin
         if ( clk'EVENT and clk = '1' and en_freq = '1' ) then
             if ( reset = '1' ) then
-                cnt_r <= (others => '0');
+                cnt_r <= 0;
             else
                 if ( cnt_r < max ) then
                     cnt_r <= cnt_r + 1;
