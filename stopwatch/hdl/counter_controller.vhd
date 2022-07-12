@@ -1,26 +1,24 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
+-- Company:
+-- Engineer:
+--
 -- Create Date: 06/22/2022 11:54:10 AM
--- Design Name: 
+-- Design Name:
 -- Module Name: counter_controller - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
+-- Project Name:
+-- Target Devices:
+-- Tool Versions:
+-- Description:
+--
+-- Dependencies:
+--
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
-
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+Library IEEE;
+Use IEEE.STD_LOGIC_1164.All;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,43 +29,49 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity counter_controller is
-    Port ( 
-           clk: in STD_LOGIC;
-           sw_ena : in STD_LOGIC;
-           sw_reset : in STD_LOGIC;
-           key_action_imp : in STD_LOGIC;
-           counter_ena : out STD_LOGIC);
-end counter_controller;
+Entity counter_controller Is
+	Port (
+		clk : In STD_LOGIC;
+		fsm_stopwatch_start : In STD_LOGIC;
+		sw_reset : In STD_LOGIC;
+		key_plus_imp : In STD_LOGIC;
+		key_action_imp : In STD_LOGIC;
+		counter_ena : Out STD_LOGIC
+	);
+End counter_controller;
 
-architecture Behavioral of counter_controller is
-    
-    signal Pre_counter_ena: STD_LOGIC:='0';
-    
+Architecture Behavioral Of counter_controller Is
+ 
+	Signal Pre_counter_ena : STD_LOGIC := '0';
+ 
 
-begin    
-    
-    process(clk)
-    begin
-        if (clk='1' and clk'event) then
-         if sw_reset = '1' then 
-                Pre_counter_ena <= '0'; 
-         else
-                if sw_ena = '1' then
-                     if key_action_imp = '1' then
-                      
-                                if  Pre_counter_ena ='1' then 
-                                          Pre_counter_ena <= '0';
-                                 else
-                                          Pre_counter_ena <= '1';
-                               end if; 
-                      else
-                                Pre_counter_ena <= Pre_counter_ena;                   
-                    end if;
-                 end if;
-         end if;
-          end if;
-    end process;
+Begin
+	Process (clk)
+	Begin
+		If (clk = '1' And clk'event) Then
+			If sw_reset = '1' Then
+				Pre_counter_ena <= '0';
+			Else
+				If fsm_stopwatch_start = '1' Then
+					If key_plus_imp = '1' Then
+						Pre_counter_ena <= '0';
+					Else
+ 
+						If key_action_imp = '1' Then
+ 
+							If Pre_counter_ena = '1' Then
+								Pre_counter_ena <= '0';
+							Else
+								Pre_counter_ena <= '1';
+							End If;
+						Else
+							Pre_counter_ena <= Pre_counter_ena; 
+						End If;
+					End If;
+				End If;
+			End If;
+		End If;
+	End Process;
 
-counter_ena <= Pre_counter_ena;
-end Behavioral;
+	counter_ena <= Pre_counter_ena;
+End Behavioral;

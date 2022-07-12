@@ -1,121 +1,115 @@
 -- Testbench created online at:
---   https://www.doulos.com/knowhow/perl/vhdl-testbench-creation-using-perl/
+-- https://www.doulos.com/knowhow/perl/vhdl-testbench-creation-using-perl/
 -- Copyright Doulos Ltd
 
-library IEEE;
-use IEEE.Std_logic_1164.all;
-use IEEE.Numeric_Std.all;
+LIBRARY IEEE;
+USE IEEE.Std_logic_1164.ALL;
+USE IEEE.Numeric_Std.ALL;
 
-entity lap_tb is
-end;
+ENTITY lap_tb IS
+END;
 
-architecture bench of lap_tb is
+ARCHITECTURE bench OF lap_tb IS
 
-  component lap
-      Port ( 
-             clk    : in STD_LOGIC;
-             sw_ena : in STD_LOGIC;
-             sw_reset : in STD_LOGIC;
-             counter_ena : in STD_LOGIC;
-             key_minus_imp : in STD_LOGIC;
-             transmitter_ena : out STD_LOGIC);
-  end component;
+	COMPONENT lap
+		PORT (
+			clk : IN STD_LOGIC;
+			fsm_stopwatch_start : IN STD_LOGIC;
+			sw_reset : IN STD_LOGIC;
+			counter_ena : IN STD_LOGIC;
+			key_minus_imp : IN STD_LOGIC;
+			transmitter_ena : OUT STD_LOGIC
+		);
+	END COMPONENT;
 
-  signal clk: STD_LOGIC;
-  signal sw_ena: STD_LOGIC;
-  signal sw_reset: STD_LOGIC;
-  signal counter_ena: STD_LOGIC;
-  signal key_minus_imp: STD_LOGIC;
-  signal transmitter_ena: STD_LOGIC;
+	SIGNAL clk : STD_LOGIC;
+	SIGNAL fsm_stopwatch_start : STD_LOGIC;
+	SIGNAL sw_reset : STD_LOGIC;
+	SIGNAL counter_ena : STD_LOGIC;
+	SIGNAL key_minus_imp : STD_LOGIC;
+	SIGNAL transmitter_ena : STD_LOGIC;
 
-  --constant clock_period: time := 10 ns;
+	--constant clock_period: time := 10 ns;
+BEGIN
+	uut : lap
+	PORT MAP(
+		clk => clk, 
+		fsm_stopwatch_start => fsm_stopwatch_start, 
+		sw_reset => sw_reset, 
+		counter_ena => counter_ena, 
+		key_minus_imp => key_minus_imp, 
+		transmitter_ena => transmitter_ena 
+	);
+ 
+	PROCESS 
+	BEGIN
+		clk <= '0'; -- clock cycle is 10 ns
+		WAIT FOR 5 ns;
+		clk <= '1';
+		WAIT FOR 5 ns;
+	END PROCESS;
+ 
+ 
+	stimulus : PROCESS
+	BEGIN
+		-- Put initialisation code here
 
+		fsm_stopwatch_start <= '0';
+		sw_reset <= '0';
+		counter_ena <= '0';
+		key_minus_imp <= '0';
+ 
+		WAIT FOR 20 ns;
+ 
+		fsm_stopwatch_start <= '1';
+		counter_ena <= '1';
+ 
+ 
+		WAIT FOR 40 ns;
+ 
+		key_minus_imp <= '1';
+		WAIT FOR 10 ns;
+		key_minus_imp <= '0';
+ 
+		WAIT FOR 40 ns;
+ 
+		key_minus_imp <= '1';
+		WAIT FOR 10 ns;
+		key_minus_imp <= '0';
+ 
+		WAIT FOR 40 ns;
+ 
+		key_minus_imp <= '1';
+		WAIT FOR 10 ns;
+		key_minus_imp <= '0';
+ 
+		WAIT FOR 40 ns;
+ 
+		key_minus_imp <= '1';
+		WAIT FOR 10 ns;
+		key_minus_imp <= '0';
+ 
+		WAIT FOR 80 ns;
+ 
+		fsm_stopwatch_start <= '1';
+		counter_ena <= '0';
+ 
+ 
+		WAIT FOR 40 ns;
+ 
+		key_minus_imp <= '1';
+		WAIT FOR 10 ns;
+		key_minus_imp <= '0';
+ 
+		WAIT FOR 40 ns;
+ 
+		key_minus_imp <= '1';
+		WAIT FOR 10 ns;
+		key_minus_imp <= '0';
 
-begin
+ 
+		-- Put test bench stimulus code here
 
-  uut: lap port map ( 
-                      clk            => clk,
-                      sw_ena          => sw_ena,
-                      sw_reset        =>  sw_reset,
-                      counter_ena     => counter_ena,
-                      key_minus_imp   => key_minus_imp,
-                      transmitter_ena => transmitter_ena );
-
-
-                                     
-   process				 
-    begin
-    clk <= '0';			-- clock cycle is 10 ns
-    wait for 5 ns;
-    clk <= '1';
-    wait for 5 ns;
-    end process;
-    
-    
-  stimulus: process
-  begin
-  
-    -- Put initialisation code here
-
-    sw_ena <= '0';
-    sw_reset <= '0';
-    counter_ena <='0';
-    key_minus_imp <= '0';
-   
-    wait for 20 ns;
-    
-    sw_ena <= '1';
-    counter_ena <='1';
-   
-    
-    wait for 40 ns;
-    
-    key_minus_imp <= '1';
-    wait for 10 ns;
-    key_minus_imp <= '0';
-    
-    wait for 40 ns;
-    
-    key_minus_imp <= '1';
-    wait for 10 ns;
-    key_minus_imp <= '0';
-    
-    wait for 40 ns;
-    
-    key_minus_imp <= '1';
-    wait for 10 ns;
-    key_minus_imp <= '0';
-    
-    wait for 40 ns;
-    
-    key_minus_imp <= '1';
-    wait for 10 ns;
-    key_minus_imp <= '0';
-    
-    wait for 80 ns;
-    
-    sw_ena <= '1';
-    counter_ena <='0';
-   
-    
-    wait for 40 ns;
-    
-    key_minus_imp <= '1';
-    wait for 10 ns;
-    key_minus_imp <= '0';
-    
-    wait for 40 ns;
-    
-    key_minus_imp <= '1';
-    wait for 10 ns;
-    key_minus_imp <= '0';
-
-    
-    -- Put test bench stimulus code here
-
-    wait;
-  end process;
-
-
-end;
-  
+		WAIT;
+	END PROCESS;
+END;
