@@ -1,108 +1,103 @@
 -- Testbench created online at:
---   https://www.doulos.com/knowhow/perl/vhdl-testbench-creation-using-perl/
+-- https://www.doulos.com/knowhow/perl/vhdl-testbench-creation-using-perl/
 -- Copyright Doulos Ltd
 
-library IEEE;
-use IEEE.Std_logic_1164.all;
-use IEEE.Numeric_Std.all;
+LIBRARY IEEE;
+USE IEEE.Std_logic_1164.ALL;
+USE IEEE.Numeric_Std.ALL;
 
-entity counter_controller_tb is
-end;
+ENTITY counter_controller_tb IS
+END;
 
-architecture bench of counter_controller_tb is
+ARCHITECTURE bench OF counter_controller_tb IS
 
-  component counter_controller
-      Port ( 
-            clk : in STD_LOGIC;
-         --   sw_ena : in STD_LOGIC;
-             sw_reset : in STD_LOGIC;
-             key_action_imp : in STD_LOGIC;
-             counter_ena : out STD_LOGIC);
-  end component;
+	COMPONENT counter_controller
+		PORT (
+			clk : IN STD_LOGIC;
+			fsm_stopwatch_start : IN STD_LOGIC;
+			sw_reset : IN STD_LOGIC;
+			key_action_imp : IN STD_LOGIC;
+			counter_ena : OUT STD_LOGIC
+		);
+	END COMPONENT;
 
-  signal clk: STD_LOGIC;
-  --signal sw_ena: STD_LOGIC;
-  signal sw_reset: STD_LOGIC;
-  signal key_action_imp: STD_LOGIC;
-  signal counter_ena: STD_LOGIC;
+	SIGNAL clk : STD_LOGIC;
+	SIGNAL fsm_stopwatch_start : STD_LOGIC;
+	SIGNAL sw_reset : STD_LOGIC;
+	SIGNAL key_action_imp : STD_LOGIC;
+	SIGNAL counter_ena : STD_LOGIC;
+BEGIN
+	uut : counter_controller
+	PORT MAP(
+		clk => clk, 
+		fsm_stopwatch_start => fsm_stopwatch_start, 
+		sw_reset => sw_reset, 
+		key_action_imp => key_action_imp, 
+		counter_ena => counter_ena 
+	);
+ 
+	PROCESS 
+	BEGIN
+		clk <= '0'; -- clock cycle is 10 ns
+		WAIT FOR 5 ns;
+		clk <= '1';
+		WAIT FOR 5 ns;
+	END PROCESS;
 
+	stimulus : PROCESS
+	BEGIN
+		-- Put initialisation code here
+		fsm_stopwatch_start <= '1';
+		sw_reset <= '0';
+		key_action_imp <= '0';
 
-begin
+		WAIT FOR 20 ns;
+ 
+		--start counting
+		key_action_imp <= '1';
+		WAIT FOR 10 ns;
+		key_action_imp <= '0';
+		WAIT FOR 40 ns;
+ 
+		--stop counting
+		key_action_imp <= '1';
+		WAIT FOR 10 ns;
+		key_action_imp <= '0';
+		WAIT FOR 40 ns;
+ 
+		-- start counting
+		key_action_imp <= '1';
+		WAIT FOR 10 ns;
+		key_action_imp <= '0';
+		WAIT FOR 40 ns;
+ 
+ 
+		-- reset 
+		sw_reset <= '1';
+		WAIT FOR 10 ns;
+		sw_reset <= '0';
+		WAIT FOR 40 ns;
 
-  uut: counter_controller port map ( 
-                                     clk         =>  clk,
-                                   --  sw_ena            => sw_ena,
-                                     sw_reset             => sw_reset,
-                                     key_action_imp    => key_action_imp,
-                                     counter_ena       => counter_ena );
-                                     
-    process				 
-    begin
-    clk <= '0';			-- clock cycle is 10 ns
-    wait for 5 ns;
-    clk <= '1';
-    wait for 5 ns;
-    end process;
+		--start counting
+		key_action_imp <= '1';
+		WAIT FOR 10 ns;
+		key_action_imp <= '0';
+		WAIT FOR 40 ns;
+ 
+		--stop counting
+		key_action_imp <= '1';
+		WAIT FOR 10 ns;
+		key_action_imp <= '0';
+		WAIT FOR 40 ns;
+ 
+		-- start counting
+		key_action_imp <= '1';
+		WAIT FOR 10 ns;
+		key_action_imp <= '0';
+		WAIT FOR 40 ns;
+ 
+		-- Put test bench stimulus code here
 
-  stimulus: process
-  begin
-  
-    -- Put initialisation code here
-  --  sw_ena <= '1';
-    sw_reset <= '0';
-    key_action_imp <= '0';
-
-    wait for 20 ns;
-    
-    --start counting
-    key_action_imp <= '1';
-    wait for 10 ns;
-    key_action_imp <= '0';
-    wait for 40 ns;
-    
-    --stop counting
-    key_action_imp <= '1';
-    wait for 10 ns;
-    key_action_imp <= '0';
-     wait for 40 ns;
-    
-    -- start counting
-     key_action_imp <= '1';
-     wait for 10 ns;
-     key_action_imp <= '0';
-     wait for 40 ns;
-     
-     
-    -- reset  
-    sw_reset <= '1';
-    wait for 10 ns;
-    sw_reset <= '0';
-     wait for 40 ns;
-
-        --start counting
-    key_action_imp <= '1';
-    wait for 10 ns;
-    key_action_imp <= '0';
-    wait for 40 ns;
-    
-    --stop counting
-    key_action_imp <= '1';
-    wait for 10 ns;
-    key_action_imp <= '0';
-     wait for 40 ns;
-    
-    -- start counting
-     key_action_imp <= '1';
-     wait for 10 ns;
-     key_action_imp <= '0';
-     wait for 40 ns;
-     
-
-
-    -- Put test bench stimulus code here
-
-    wait;
-  end process;
-
-
-end;
+		WAIT;
+	END PROCESS;
+END;

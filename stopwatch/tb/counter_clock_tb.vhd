@@ -1,93 +1,91 @@
 -- Testbench created online at:
---   https://www.doulos.com/knowhow/perl/vhdl-testbench-creation-using-perl/
+-- https://www.doulos.com/knowhow/perl/vhdl-testbench-creation-using-perl/
 -- Copyright Doulos Ltd
 
-library IEEE;
-use IEEE.Std_logic_1164.all;
-use IEEE.Numeric_Std.all;
+LIBRARY IEEE;
+USE IEEE.Std_logic_1164.ALL;
+USE IEEE.Numeric_Std.ALL;
 
-entity counter_clock_tb is
-end;
+ENTITY counter_clock_tb IS
+END;
 
-architecture bench of counter_clock_tb is
+ARCHITECTURE bench OF counter_clock_tb IS
 
-  component counter_clock
-      Port ( clk : in STD_LOGIC;
-      	   sw_reset:	      in std_logic;
-      	   count_ena:	  in std_logic;
-      	   csec:	      out std_logic_vector(6 downto 0);
-      	   sec:	      out std_logic_vector(6 downto 0);
-          	min:	      out std_logic_vector(6 downto 0);
-          	hr:	          out std_logic_vector(6 downto 0)
-      );
-  end component;
+	COMPONENT counter_clock
+		PORT (
+			clk : IN STD_LOGIC;
+			sw_reset : IN std_logic;
+			count_ena : IN std_logic;
+			csec : OUT std_logic_vector(6 DOWNTO 0);
+			sec : OUT std_logic_vector(6 DOWNTO 0);
+			min : OUT std_logic_vector(6 DOWNTO 0);
+			hr : OUT std_logic_vector(6 DOWNTO 0)
+		);
+	END COMPONENT;
 
-  signal clk: STD_LOGIC;
-  signal sw_reset: std_logic;
-  signal count_ena: std_logic;
-  signal csec: std_logic_vector(6 downto 0);
-  signal sec: std_logic_vector(6 downto 0);
-  signal min: std_logic_vector(6 downto 0);
-  signal hr: std_logic_vector(6 downto 0) ;
+	SIGNAL clk : STD_LOGIC;
+	SIGNAL sw_reset : std_logic;
+	SIGNAL count_ena : std_logic;
+	SIGNAL csec : std_logic_vector(6 DOWNTO 0);
+	SIGNAL sec : std_logic_vector(6 DOWNTO 0);
+	SIGNAL min : std_logic_vector(6 DOWNTO 0);
+	SIGNAL hr : std_logic_vector(6 DOWNTO 0);
 
-begin
+BEGIN
+	uut : counter_clock
+	PORT MAP(
+		clk => clk, 
+		sw_reset => sw_reset, 
+		count_ena => count_ena, 
+		csec => csec, 
+		sec => sec, 
+		min => min, 
+		hr => hr 
+	);
 
-  uut: counter_clock port map ( clk       => clk,
-                                sw_reset  => sw_reset,
-                                count_ena => count_ena,
-                                csec      => csec,
-                                sec       => sec,
-                                min       => min,
-                                hr        => hr );
+	stimulus : PROCESS
+	BEGIN
+		-- Put initialisation code here
 
-  stimulus: process
-  begin
-  
-    -- Put initialisation code here
-
-	clk <= '0';			-- clock cycle is 10 ns
-	wait for 5 ns;
-	clk <= '1';
-	wait for 5 ns;
-    end process;
-	
-    process
-
-	variable err_cnt: integer :=0;
-
-    begin								
-			
-	sw_reset <= '1';			-- start counting
-	count_ena <= '1';
-	wait for 20 ns;	
-		
-	sw_reset <= '0';			-- clear output
-		
-	-- test case 1
-	wait for 10 ns;
-	--assert (csec=1) report "Failed case 1" severity error;
---	if csec = "0000001" then
---	    err_cnt := err_cnt+1;
---	end if;
-	
-				
-       	-- summary of all the tests
-	if (err_cnt=0) then 			
-	    assert false 
-	    report "Testbench of Adder completed successfully!" 
-	    severity note; 
-	else 
-	    assert true 
-	    report "Something wrong, try again" 
-	    severity error; 
-	end if; 
-		
-    -- Put test bench stimulus code here
-
-    wait;
-  end process;
-
+		clk <= '0'; -- clock cycle is 10 ns
+		WAIT FOR 5 ns;
+		clk <= '1';
+		WAIT FOR 5 ns;
+	END PROCESS;
  
+	PROCESS
 
-end;
-  
+	VARIABLE err_cnt : INTEGER := 0;
+
+		BEGIN
+			sw_reset <= '1'; -- start counting
+			count_ena <= '1';
+			WAIT FOR 20 ns; 
+ 
+			sw_reset <= '0'; -- clear output
+ 
+			-- test case 1
+			WAIT FOR 10 ns;
+			--assert (csec=1) report "Failed case 1" severity error;
+			-- if csec = "0000001" then
+			-- err_cnt := err_cnt+1;
+			-- end if;
+ 
+ 
+			-- summary of all the tests
+			IF (err_cnt = 0) THEN 
+				ASSERT false
+				REPORT "Testbench OF Adder completed successfully!"
+					SEVERITY note;
+			ELSE
+				ASSERT true
+				REPORT "Something wrong, try again"
+					SEVERITY error;
+			END IF;
+ 
+			-- Put test bench stimulus code here
+
+			WAIT;
+		END PROCESS;
+
+END;
