@@ -58,22 +58,22 @@ architecture Behavioral of transmitter is
 begin
 
 
-    process(clk,sw_ena, sw_reset, transmitter_ena, csec_in, sec_in, min_in, hr_in, csec_old, sec_old, min_old, hr_old)
+    process(clk)
     
     begin
     
     if (clk='1' and clk'event) then
-         if sw_ena = '1' then 
                 if sw_reset = '1' then
-                	  csec_old <= csec_old - csec_old;
-	                  sec_old <= sec_old - sec_old;
-                      min_old <= min_old -  min_old;
-                      hr_old <=  hr_old -  hr_old;
-                      csec <= csec_old - csec_old;
-	                  sec <= sec_old - sec_old;
-                      min <= min_old -  min_old;
-                      hr <=  hr_old -  hr_old;
+                	  csec_old <= "0000000";
+	                  sec_old <= "0000000";
+                      min_old <= "0000000";
+                      hr_old <=  "0000000";
+                      csec <= "0000000";
+	                  sec <= "0000000";
+                      min <= "0000000";
+                      hr <=  "0000000";
                 else
+                     if sw_ena = '1' then 
     
                      if transmitter_ena = '1' then                                                                                                   
                                 csec <= csec_in;

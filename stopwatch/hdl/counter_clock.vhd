@@ -52,35 +52,40 @@ architecture Behavioral of counter_clock is
     signal hr_signal: std_logic_vector(6 downto 0):="0000000";
 begin
 
-    process(clk, sw_reset, count_ena, csec_signal, sec_signal, min_signal, hr_signal) 
+    process(clk) 
     begin
-	if sw_reset = '1' then
- 	    csec_signal <= csec_signal - csec_signal;
- 	    sec_signal <= sec_signal - sec_signal;
- 	    min_signal <= min_signal - min_signal;
- 	    hr_signal <= hr_signal - hr_signal;
-	elsif (clk='1' and clk'event) then
-	    if count_ena = '1' then
-            csec_signal <= csec_signal + 1;
-            if csec_signal = "1100011" then
-               csec_signal <= "0000000";
-               sec_signal <= sec_signal + 1;
-               if sec_signal = "111011" then
-                  sec_signal <= "0000000";
-                  min_signal <= min_signal + 1;
-                  if min_signal = "0111011"  then
-                      min_signal <= "0000000";
-                      hr_signal <= hr_signal + 1;
-                      if hr_signal = "0010111" then
-                          csec_signal <= csec_signal - csec_signal;
-                          sec_signal <= sec_signal - sec_signal;
-                          min_signal <= min_signal - min_signal;
-                           hr_signal <= hr_signal - hr_signal;
-                      end if;
+    
+    if (clk='1' and clk'event) then
+    
+        if sw_reset = '1' then
+            csec_signal <= "0000000";
+            sec_signal <= "0000000";
+            min_signal <= "0000000";
+            hr_signal <= "0000000";
+ 	      
+         else
+            if count_ena = '1' then
+                csec_signal <= csec_signal + 1;
+                if csec_signal = "1100011" then
+                   csec_signal <= "0000000";
+                   sec_signal <= sec_signal + 1;
+                   if sec_signal = "111011" then
+                      sec_signal <= "0000000";
+                      min_signal <= min_signal + 1;
+                      if min_signal = "0111011"  then
+                          min_signal <= "0000000";
+                          hr_signal <= hr_signal + 1;
+                          if hr_signal = "0010111" then
+                              csec_signal <= csec_signal - csec_signal;
+                              sec_signal <= sec_signal - sec_signal;
+                              min_signal <= min_signal - min_signal;
+                               hr_signal <= hr_signal - hr_signal;
+                          end if;
+                       end if;
                    end if;
-               end if;
+                end if;
             end if;
-	    end if;
+          end if;
 	end if;
     end process;	
 	
