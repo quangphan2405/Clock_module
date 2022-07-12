@@ -46,17 +46,15 @@ architecture Behavioral of lap is
     signal Pre_transmitter_ena: STD_LOGIC:= '1';
 begin
 
-   process(clk, sw_ena, sw_reset, counter_ena, key_minus_imp, Pre_transmitter_ena)
+   process(clk)
    begin
       if (clk='1' and clk'event) then
-
-          if sw_ena = '1' then         
-              if sw_reset = '1' then
+          if sw_reset = '1' then 
                      Pre_transmitter_ena <=  '1';
-               else
-    
-                    if counter_ena = '1' then
-                            if Pre_transmitter_ena ='0' then
+             else
+                     if sw_ena = '1' then
+                         if counter_ena = '1' then
+                             if Pre_transmitter_ena ='0' then
                                     if key_minus_imp = '1' then
                                          Pre_transmitter_ena <= '1';
                                      end if;
@@ -65,7 +63,7 @@ begin
                                         Pre_transmitter_ena <= '0';
                                     end if;
                             end if;
-                        end if;
+                       end if;
                end if;
            end if;
      end if;

@@ -47,20 +47,22 @@ architecture Behavioral of counter_controller is
 
 begin    
     
-    process(clk, sw_reset, key_action_imp, Pre_counter_ena)
+    process(clk)
     begin
         if (clk='1' and clk'event) then
-         if sw_ena = '1' then 
-                if sw_reset = '1' then
-                        Pre_counter_ena <= '0';   
-                 else
+         if sw_reset = '1' then 
+                Pre_counter_ena <= '0'; 
+         else
+                if sw_ena = '1' then
                      if key_action_imp = '1' then
                       
                                 if  Pre_counter_ena ='1' then 
                                           Pre_counter_ena <= '0';
                                  else
                                           Pre_counter_ena <= '1';
-                               end if;                    
+                               end if; 
+                      else
+                                Pre_counter_ena <= Pre_counter_ena;                   
                     end if;
                  end if;
          end if;

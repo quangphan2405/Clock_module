@@ -40,20 +40,21 @@ entity countdown is
 end countdown;
 
 architecture Behavioral of countdown is
-    
-    
 
 begin      
-    process(clk,countdown_ena, countdown_reset)
+    process(clk)
     begin
         if (clk='1' and clk'event) then
-		 if countdown_ena = '1' then 
-		        if countdown_reset = '1' then
-		                counter_ena <= '0';   
+        	  if countdown_reset = '1' then
+		            counter_ena <= '0';   
 		         else
-		        	counter_ena <= '1';  
-		         end if;
-		 end if;
+                     if countdown_ena = '1' then 
+            
+                                counter_ena <= '1';  
+                      else
+                         counter_ena <= '1';  
+                      end if;
+		        end if;
         end if;
     end process;
 
