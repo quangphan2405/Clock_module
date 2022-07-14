@@ -34,7 +34,7 @@ architecture behavior of transmitter is
     -- Zero command
     constant CMD_ALL_ZEROS_c : std_logic_vector(10 downto 0) := "00000000000";
     -- Internal registers / signals
-    signal data_out_r : std_logic_vector(10 downto 0);
+    signal data_out_r : std_logic_vector(10 downto 0) := CMD_ALL_ZEROS_c;
 
 begin
 
@@ -50,7 +50,7 @@ begin
     begin
         if ( clk'EVENT and clk = '1') then
             if ( reset = '1' ) then
-                data_out_r <= (others => '0');
+                data_out_r <= CMD_ALL_ZEROS_c;
             else
                 if ( data_in_ready = '1' ) then
                     data_out_r <= data_in; -- Send every clock cycle

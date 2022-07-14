@@ -37,12 +37,12 @@ architecture behavior of fifo is
     type fifo_array_t is array (0 to DEPTH_g-1) of std_logic_vector(WIDTH_g-1 downto 0);
 
     -- Internal registers
-    signal fifo_array_r    : fifo_array_t;
-    signal wr_ptr_r        : integer range 0 to DEPTH_g-1;
-    signal rd_ptr_r        : integer range 0 to DEPTH_g-1;
-    signal full_r          : std_logic;
-    signal empty_r         : std_logic;
-    signal rd_data_ready_r : std_logic;
+    signal fifo_array_r    : fifo_array_t := (others => (others => '0'));
+    signal wr_ptr_r        : integer range 0 to DEPTH_g-1 := 0;
+    signal rd_ptr_r        : integer range 0 to DEPTH_g-1 := 0;
+    signal full_r          : std_logic := '0';
+    signal empty_r         : std_logic := '1';
+    signal rd_data_ready_r : std_logic := '0';
 
 begin
 
