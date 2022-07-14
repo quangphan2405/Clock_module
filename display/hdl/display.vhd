@@ -305,9 +305,6 @@ architecture behavior of display is
 
     -- Transmitter
     component transmitter
-    generic (
-        MIN_INTERVAL_g : integer := 1
-    );
     port (
         -- Clock and reset
         clk           : in  std_logic;
@@ -445,9 +442,6 @@ begin
 
     -- Transmitter
     trans_i : transmitter
-    generic map (
-        MIN_INTERVAL_g => 1 -- Send every cycle
-    )
     port map (
         -- Clock and reset
         clk           => clk,
@@ -467,7 +461,7 @@ begin
     -- Processes
     -- STORE_DATA: Update the data from other modules with the lowest period
     --             (every 1/100 second from the stopwatch) -> Additional 100 Hz clk
-    STORE_DATA : process (clk) is
+    STORE_DATA : process (en_100) is
         variable data_line2_v : encode_array8_t;
         variable data_line4_v : encode_array8_t;
         variable dow_cnt_v    : integer range 0 to 8;
@@ -475,7 +469,7 @@ begin
         variable fifo_array_v : data_fifo_array_t;
         variable store_v      : store_t;
     begin
-        if ( clk'EVENT and clk = '1' and en_100'EVENT and en_100 = '1' ) then  -- Sync to 100 Hz clock rising edge
+        if ( en_100'EVENT and en_100 = '1' ) then  -- Sync to 100 Hz clock rising edge
             if ( reset = '1' ) then
                 -- Global registers
                 data_fifo_cnt_r   <= 0;

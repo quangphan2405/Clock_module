@@ -12,9 +12,6 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity transmitter is
-    generic (
-        MIN_INTERVAL_g : integer := 1 -- Minimum interval between two transmission
-    );
     port (
         -- Clock and reset
         clk           : in  std_logic;
@@ -37,9 +34,7 @@ architecture behavior of transmitter is
     -- Zero command
     constant CMD_ALL_ZEROS_c : std_logic_vector(10 downto 0) := "00000000000";
     -- Internal registers / signals
-    signal lcd_ack_r  : std_logic;
     signal data_out_r : std_logic_vector(10 downto 0);
-    signal counter_r  : integer range 0 to MIN_INTERVAL_g;
 
 begin
 
@@ -48,7 +43,6 @@ begin
     lcd_rs   <= data_out_r(9);
     lcd_rw   <= data_out_r(8);
     lcd_data <= data_out_r(7 downto 0);
-    -- lcd_ack  <= lcd_ack_r;
     lcd_ack  <= '1';
 
     -- Process
@@ -56,21 +50,12 @@ begin
     begin
         if ( clk'EVENT and clk = '1') then
             if ( reset = '1' ) then
-                -- lcd_ack_r  <= '0';
                 data_out_r <= (others => '0');
-                counter_r  <= 0;  -- Ready to send at the beginning
             else
-                if ( counter_r = MIN_INTERVAL_g-1 ) then
-                    if ( data_in_ready = '1' ) then
-                        data_out_r <= data_in;
-                    else
-                        data_out_r <= CMD_ALL_ZEROS_c; -- Disregard fail-synchronized command
-                    end if;
-                    -- lcd_ack_r  <= '1';
-                    counter_r  <= 0;
+                if ( data_in_ready = '1' ) then
+                    data_out_r <= data_in; -- Send every clock cycle
                 else
-                    -- lcd_ack_r  <= '0';
-                    counter_r  <= counter_r + 1;
+                    data_out_r <= CMD_ALL_ZEROS_c;
                 end if;
             end if;
         end if;
