@@ -70,10 +70,7 @@ architecture behavior of clock_module is
         fsm_switch_on_start  : out std_logic;
         fsm_switch_off_start : out std_logic;
         fsm_count_down_start : out std_logic;
-        fsm_stop_watch_start : out std_logic;
-        fsm_alarm_wait       : out std_logic;
-        fsm_switch_on_wait   : out std_logic;
-        fsm_switch_off_wait  : out std_logic
+        fsm_stop_watch_start : out std_logic
     );
     end component FSM;
 
@@ -146,6 +143,20 @@ architecture behavior of clock_module is
         lcd_switchoff_data : out std_logic_vector (20 downto 0)
     );
     end component Switch;
+
+    -- Countdown
+    component Countdown
+    port (
+        clk : IN STD_LOGIC;
+		fsm_countdown_start : IN STD_LOGIC;
+		reset : IN STD_LOGIC;
+		led_countdown_act : OUT STD_LOGIC;
+		cs                : OUT STD_LOGIC_vector(6 DOWNTO 0);
+		ss                : OUT STD_LOGIC_vector(6 DOWNTO 0);
+		mm                : OUT STD_LOGIC_vector(6 DOWNTO 0);
+		hh                : OUT STD_LOGIC_vector(6 DOWNTO 0)
+    );
+    end component Countdown;
 
     -- Stopwatch
     component Stopwatch
@@ -292,10 +303,7 @@ begin
         fsm_switch_on_start  => fsm_switchon_start,
         fsm_switch_off_start => fsm_switchoff_start,
         fsm_count_down_start => fsm_countdown_start,
-        fsm_stop_watch_start => fsm_stopwatch_start,
-        fsm_alarm_wait       => ,
-        fsm_switch_on_wait   => ,
-        fsm_switch_off_wait  =>
+        fsm_stop_watch_start => fsm_stopwatch_start
     );
 
     -- Time and Date
