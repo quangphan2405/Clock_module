@@ -227,25 +227,27 @@ architecture behavior of display is
     constant CMD_FUNCTION_SET_c      : std_logic_vector(10 downto 0) := "10000111000";
     constant CMD_SEND_ZERO_c         : std_logic_vector(10 downto 0) := "00000000000";
 
+    -- ***********************************
     -- Internal registers
+    -- ***********************************
     -- STORE_DATA -> SEND_FIFO
-    signal data_fifo_array_r : data_fifo_array_t;
-    signal data_fifo_cnt_r   : integer range 0 to MAX_FIFO_CNT_c-1;
+    signal data_fifo_array_r : data_fifo_array_t := (others => (others => '0'));
+    signal data_fifo_cnt_r   : integer range 0 to MAX_FIFO_CNT_c-1 := 0;
     -- SEND_FIFO -> FIFO
-    signal data_fifo_index_r : integer range 0 to MAX_FIFO_CNT_c-1;
+    signal data_fifo_index_r : integer range 0 to MAX_FIFO_CNT_c-1 := 0;
     -- Output to LCD
-    signal lcd_en_r       : std_logic;
-    signal lcd_rw_r       : std_logic;
-    signal lcd_rs_r       : std_logic;
-    signal lcd_data_r     : std_logic_vector(7 downto 0);
+    signal lcd_en_r       : std_logic := '0';
+    signal lcd_rw_r       : std_logic := '0';
+    signal lcd_rs_r       : std_logic := '0';
+    signal lcd_data_r     : std_logic_vector(7 downto 0) := (others => '0');
     -- State register for SEND_FIFO process
-    signal state_r        : state_t;
-
+    signal state_r        : state_t := INIT;
     -- Debug signal for knowing the storing state
-    signal store_r        : store_t;
-    signal fsm_all_start  : std_logic_vector(6 downto 0);
+    signal store_r        : store_t := STORE_INIT;
 
-    -- Internal signals
+    -- ***********************************
+    -- Internal signal
+    -- ***********************************
     -- Padded inputs
     signal padded_time_data_s  : std_logic_vector(27 downto 0);
     signal padded_date_data_s  : std_logic_vector(27 downto 0);
@@ -371,10 +373,6 @@ begin
     padded_swoff_data_s <= "0000000" & lcd_switchoff_data;
     padded_timer_data_s <= "0000000" & lcd_countdown_data;
     padded_stw_data_s   <= lcd_stopwatch_data;
-
-    -- Debug state from FSM
-    fsm_all_start <= fsm_stopwatch_start & fsm_countdown_start & fsm_switchoff_start &
-                        fsm_switchon_start  & fsm_alarm_start     & fsm_date_start      & fsm_time_start;
 
     -- BCD decoder
     BCD_28bit_time_i : BCD_decoder_28bit
