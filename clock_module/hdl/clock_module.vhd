@@ -52,7 +52,7 @@ architecture behavior of clock_module is
     -- Component declarations
     -- ***********************************
     -- FSM
-    component FSM
+    component GlobalFSM
     generic (
         wait_3sec : integer := 30000
     );
@@ -72,10 +72,10 @@ architecture behavior of clock_module is
         fsm_count_down_start : out std_logic;
         fsm_stop_watch_start : out std_logic
     );
-    end component FSM;
+    end component GlobalFSM;
 
     -- Time and Date
-    component Time_date
+    component Time_Date
     port (
         de_set   : in  std_logic;
         de_dow   : in  std_logic_vector(2 downto 0);
@@ -95,10 +95,10 @@ architecture behavior of clock_module is
         day      : out std_logic_vector(6 downto 0);
         lcd_dcf  : out std_logic
     );
-    end component Time_date;
+    end component Time_Date;
 
     -- Alarm
-    component Alarm
+    component alarm
     port (
         clk              : in  std_logic;
         reset            : in  std_logic;
@@ -117,10 +117,10 @@ architecture behavior of clock_module is
         lcd_alarm_mm     : out std_logic_vector (6 downto 0);
         lcd_alarm_hh     : out std_logic_vector (6 downto 0)
     );
-    end component Alarm;
+    end component alarm;
 
     -- Switch
-    component Switch
+    component switch
     port (
         clk              : in  std_logic;
         reset            : in  std_logic;
@@ -143,10 +143,10 @@ architecture behavior of clock_module is
         lcd_switchoff_mm : out std_logic_vector (6 downto 0);
         lcd_switchoff_hh : out std_logic_vector (6 downto 0)
     );
-    end component Switch;
+    end component switch;
 
     -- Countdown
-    component Countdown
+    component countdown
     port (
 		clk                 : in  std_logic;
         reset               : in  std_logic;
@@ -157,10 +157,10 @@ architecture behavior of clock_module is
 		mm                  : out std_logic_vector(6 downto 0);
 		hh                  : out std_logic_vector(6 downto 0)
 	);
-    end component Countdown;
+    end component countdown;
 
     -- Stopwatch
-    component Stopwatch
+    component stopwatch
     port (
         clk                 : in  std_logic;
         reset               : in  std_logic;
@@ -168,15 +168,16 @@ architecture behavior of clock_module is
         key_minus_imp       : in  std_logic;
         key_plus_imp        : in  std_logic;
         key_action_imp      : in  std_logic;
+        lcd_stopwatch_act   : out std_logic;
         cs                  : out std_logic_vector(6 downto 0);
         ss                  : out std_logic_vector(6 downto 0);
         mm                  : out std_logic_vector(6 downto 0);
         hh                  : out std_logic_vector(6 downto 0)
     );
-    end component Stopwatch;
+    end component stopwatch;
 
     -- Display
-    component Display
+    component display
     port (
         -- Clock and reset
         clk                 : in  std_logic;
@@ -217,7 +218,7 @@ architecture behavior of clock_module is
         lcd_rs              : out std_logic;
         lcd_data            : out std_logic_vector(7 downto 0)
     );
-    end component Display;
+    end component display;
 
 
     -- ***********************************
@@ -254,7 +255,7 @@ architecture behavior of clock_module is
     signal lcd_switchon_data  : std_logic_vector(20 downto 0);
     signal lcd_switchoff_data : std_logic_vector(20 downto 0);
     signal lcd_countdown_data : std_logic_vector(20 downto 0);
-    signal lcd_stopwatch_data : std_logic_vector(20 downto 0);
+    signal lcd_stopwatch_data : std_logic_vector(27 downto 0);
 
     -- Time signals
     signal top_time_hh : std_logic_vector(6 downto 0);
@@ -270,7 +271,6 @@ architecture behavior of clock_module is
     -- Alarm signals
     signal top_alarm_hh : std_logic_vector(6 downto 0);
     signal top_alarm_mm : std_logic_vector(6 downto 0);
-    signal top_alarm_ss : std_logic_vector(6 downto 0);
 
     -- Switch-on signals
     signal top_switchon_hh : std_logic_vector(6 downto 0);
@@ -311,7 +311,7 @@ begin
     -- Component instatiations
     -- ***********************************
     -- FSM
-    FSM_i : FSM
+    FSM_i : GlobalFSM
     generic map (
         wait_3sec => DELAY_3SEC_c
     )
@@ -332,7 +332,7 @@ begin
     );
 
     -- Time and Date
-    Time_date_i : Time_date
+    Time_date_i : Time_Date
     port map (
         de_set   => de_set,
         de_dow   => de_dow,
@@ -350,11 +350,11 @@ begin
         year     => top_date_year,
         month    => top_date_month,
         day      => top_date_day,
-        lcd_dcf  => lcd_time_act,
+        lcd_dcf  => lcd_time_act
     );
 
     -- Alarm
-    Alarm_i : Alarm
+    Alarm_i : alarm
     port map (
         clk              => clk,
         reset            => reset,
@@ -370,13 +370,12 @@ begin
         led_alarm_ring   => led_alarm_ring,
         lcd_alarm_act    => lcd_alarm_act,
         lcd_alarm_snooze => lcd_alarm_snooze,
-        lcd_alarm_hh     => lcd_alarm_hh,
-        lcd_alarm_mm     => lcd_alarm_mm,
-        lcd_alarm_ss     => lcd_alarm_ss
+        lcd_alarm_hh     => top_alarm_hh,
+        lcd_alarm_mm     => top_alarm_mm
     );
 
     -- Switch
-    Switch_i : Switch
+    Switch_i : switch
     port map (
         clk                => clk,
         reset              => reset,
@@ -392,16 +391,16 @@ begin
         led_switch_act     => led_switch_act,
         lcd_switch_act     => lcd_switch_act,
         led_switch_on      => led_switch_on,
-        lcd_switchon_hh    => lcd_switchon_hh,
-        lcd_switchon_mm    => lcd_switchon_mm,
-        lcd_switchon_ss    => lcd_switchon_ss,
-        lcd_switchoff_hh   => lcd_switchoff_hh,
-        lcd_switchoff_mm   => lcd_switchoff_mm,
-        lcd_switchoff_ss   => lcd_switchoff_ss
+        lcd_switchon_hh    => top_switchon_hh,
+        lcd_switchon_mm    => top_switchon_mm,
+        lcd_switchon_ss    => top_switchon_ss,
+        lcd_switchoff_hh   => top_switchoff_hh,
+        lcd_switchoff_mm   => top_switchoff_mm,
+        lcd_switchoff_ss   => top_switchoff_ss
     );
 
     -- Countdown
-    Countdown_i : Countdown
+    Countdown_i : countdown
     port map (
         clk => clk,
         reset => reset,
@@ -411,10 +410,10 @@ begin
         ss                  => top_countdown_ss,
         mm                  => top_countdown_mm,
         hh                  => top_countdown_hh
-    )
+    );
 
     -- Stopwatch
-    Stopwatch_i : Stopwatch
+    Stopwatch_i : stopwatch
     port map (
         clk                 => clk,
         reset               => reset,
@@ -422,6 +421,7 @@ begin
         key_minus_imp       => key_minus_imp,
         key_plus_imp        => key_plus_imp,
         key_action_imp      => key_action_imp,
+        lcd_stopwatch_act   => lcd_stopwatch_act,
         cs                  => top_stopwatch_cs,
         ss                  => top_stopwatch_ss,
         mm                  => top_stopwatch_mm,
