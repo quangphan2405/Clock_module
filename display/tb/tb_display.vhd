@@ -280,50 +280,50 @@ begin
 
         -- Activate DATE mode after 3 TIME data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
+        wait on en_100;
         fsm_time_start <= '0';
         fsm_date_start <= '1';
 
         -- Activate ALARM mode after 3 DATE data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
-        fsm_date_start <= '0';
+        wait on en_100;
+        fsm_date_start  <= '0';
         fsm_alarm_start <= '1';
 
         -- Activate SWITCH-ON mode after 3 ALARM data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
-        fsm_alarm_start <= '0';
+        wait on en_100;
+        fsm_alarm_start    <= '0';
         fsm_switchon_start <= '1';
 
         -- Activate SWITCH-OFF mode after 3 SWITCH-ON data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
-        fsm_switchon_start <= '0';
+        wait on en_100;
+        fsm_switchon_start  <= '0';
         fsm_switchoff_start <= '1';
 
         -- Activate COUNTDOWN mode after 3 SWITCH-OFF data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
+        wait on en_100;
         fsm_switchoff_start <= '0';
         fsm_countdown_start <= '1';
 
         -- Activate STOPWATCH mode after 3 COUNTDOWN data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
+        wait on en_100;
         fsm_countdown_start <= '0';
         fsm_stopwatch_start <= '1';
 
         -- Activate TIME mode after 3 STOPWATCH data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
+        wait on en_100;
         fsm_stopwatch_start <= '0';
         fsm_time_start      <= '1';  -- Always ends up at TIME state
 
 
         -- Wait for a long time
         wait for CLK_100_PERIOD_c*20;
-        fsm_time_start      <= '0';  -- Will be turned on after reset
+        fsm_time_start <= '0';  -- Will be turned on after reset
 
         -- Generate reset
         wait for CLK_10K_PERIOD_c*3/2;
@@ -357,7 +357,7 @@ begin
 
         -- Activate DATE mode after 3 TIME data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
+        wait on en_100;
         fsm_time_start <= '0';
         fsm_date_start <= '1';
 
@@ -370,39 +370,38 @@ begin
         wait for CLK_100_PERIOD_c;
 
         -- Activate ALARM mode after 3 DATE data
-        wait until en_100 = '1';
-        fsm_date_start <= '0';
+        wait on en_100;
+        fsm_date_start  <= '0';
         fsm_alarm_start <= '1';
 
         -- Activate SWITCH-ON mode after 3 ALARM data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
-        fsm_alarm_start <= '0';
+        wait on en_100;
+        fsm_alarm_start    <= '0';
         fsm_switchon_start <= '1';
 
         -- Activate SWITCH-OFF mode after 3 SWITCH-ON data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
-        fsm_switchon_start <= '0';
+        wait on en_100;
+        fsm_switchon_start  <= '0';
         fsm_switchoff_start <= '1';
 
         -- Activate COUNTDOWN mode after 3 SWITCH-OFF data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
+        wait on en_100;
         fsm_switchoff_start <= '0';
         fsm_countdown_start <= '1';
 
         -- Activate STOPWATCH mode after 3 COUNTDOWN data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
+        wait on en_100;
         fsm_countdown_start <= '0';
         fsm_stopwatch_start <= '1';
 
         -- Activate TIME mode after 3 STOPWATCH data
         wait for CLK_100_PERIOD_c*2;
-        wait until en_100 = '1';
+        wait on en_100;
         fsm_stopwatch_start <= '0';
-        fsm_time_start <= '1';
         fsm_time_start      <= '1';  -- Always ends up at TIME state
 
         -- Print testbench output
