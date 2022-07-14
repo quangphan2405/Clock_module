@@ -19,6 +19,7 @@ ARCHITECTURE bench OF stopwatch_tb IS
 			reset : IN STD_LOGIC;
 			key_plus_imp : IN STD_LOGIC;
 			key_action_imp : IN STD_LOGIC;
+			lcd_stopwatch_act : OUT STD_LOGIC;
 			cs : OUT STD_LOGIC_vector(6 DOWNTO 0);
 			ss : OUT STD_LOGIC_vector(6 DOWNTO 0);
 			mm : OUT STD_LOGIC_vector(6 DOWNTO 0);
@@ -32,6 +33,7 @@ ARCHITECTURE bench OF stopwatch_tb IS
 	SIGNAL reset : STD_LOGIC;
 	SIGNAL key_plus_imp : STD_LOGIC;
 	SIGNAL key_action_imp : STD_LOGIC;
+	SIGNAL lcd_stopwatch_act : STD_LOGIC;
 	SIGNAL cs : STD_LOGIC_vector(6 DOWNTO 0);
 	SIGNAL ss : STD_LOGIC_vector(6 DOWNTO 0);
 	SIGNAL mm : STD_LOGIC_vector(6 DOWNTO 0);
@@ -46,6 +48,7 @@ BEGIN
 		reset => reset, 
 		key_plus_imp => key_plus_imp, 
 		key_action_imp => key_action_imp, 
+		lcd_stopwatch_act => lcd_stopwatch_act,
 		cs => cs, 
 		ss => ss, 
 		mm => mm, 

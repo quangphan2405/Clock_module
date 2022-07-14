@@ -37,6 +37,7 @@ Entity stopwatch Is
 		clk : In STD_LOGIC;
 		key_plus_imp : In STD_LOGIC;
 		key_action_imp : In STD_LOGIC;
+		lcd_stopwatch_act: out STD_LOGIC;
 		cs : Out STD_LOGIC_vector(6 Downto 0);
 		ss : Out STD_LOGIC_vector(6 Downto 0);
 		mm : Out STD_LOGIC_vector(6 Downto 0);
@@ -107,6 +108,9 @@ Architecture Behavioral Of stopwatch Is
 	Signal hr_signal : std_logic_vector(6 Downto 0);
 
 Begin
+    -- Concurrent assignment
+    lcd_stopwatch_act <= not transmitter_ena_signal;
+    
 	counter_controller_port : counter_controller
 	Port Map(
 		clk => clk, 
