@@ -161,16 +161,16 @@ architecture behavior of clock_module is
     -- Stopwatch
     component Stopwatch
     port (
-        sw_ena         : in  std_logic;
-        reset          : in  std_logic;
-        key_minus_imp  : in  std_logic;
-        clk            : in  std_logic;
-        key_plus_imp   : in  std_logic;
-        key_action_imp : in  std_logic;
-        cs             : out std_logic_vector(6 downto 0);
-        ss             : out std_logic_vector(6 downto 0);
-        mm             : out std_logic_vector(6 downto 0);
-        hh             : out std_logic_vector(6 downto 0)
+        clk                 : in  std_logic;
+        reset               : in  std_logic;
+        fsm_stopwatch_start : in  std_logic;
+        key_minus_imp       : in  std_logic;
+        key_plus_imp        : in  std_logic;
+        key_action_imp      : in  std_logic;
+        cs                  : out std_logic_vector(6 downto 0);
+        ss                  : out std_logic_vector(6 downto 0);
+        mm                  : out std_logic_vector(6 downto 0);
+        hh                  : out std_logic_vector(6 downto 0)
     );
     end component Stopwatch;
 
@@ -391,16 +391,16 @@ begin
     -- Stopwatch
     Stopwatch_i : Stopwatch
     port map (
-        sw_ena         => ,
-        reset          => reset,
-        key_minus_imp  => key_minus_imp,
-        clk            => clk,
-        key_plus_imp   => key_plus_imp,
-        key_action_imp => key_action_imp,
-        cs             => top_stopwatch_cs,
-        ss             => top_stopwatch_ss,
-        mm             => top_stopwatch_mm,
-        hh             => top_stopwatch_hh
+        clk                 => clk,
+        reset               => reset,
+        fsm_stopwatch_start => fsm_stopwatch_start,
+        key_minus_imp       => key_minus_imp,
+        key_plus_imp        => key_plus_imp,
+        key_action_imp      => key_action_imp,
+        cs                  => top_stopwatch_cs,
+        ss                  => top_stopwatch_ss,
+        mm                  => top_stopwatch_mm,
+        hh                  => top_stopwatch_hh
     );
 
     -- Display
