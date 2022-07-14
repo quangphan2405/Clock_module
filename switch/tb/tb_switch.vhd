@@ -45,27 +45,34 @@ architecture Behavioral of tb_switch is
            key_enable : in STD_LOGIC;
            fsm_switch_on : in STD_LOGIC;
            fsm_switch_off : in STD_LOGIC;
-           second : in STD_LOGIC_VECTOR (5 downto 0);
-           minute : in STD_LOGIC_VECTOR (5 downto 0);
-           hour : in STD_LOGIC_VECTOR (4 downto 0);
+           second : in STD_LOGIC_VECTOR (6 downto 0);
+           minute : in STD_LOGIC_VECTOR (6 downto 0);
+           hour : in STD_LOGIC_VECTOR (6 downto 0);
            led_switch_act : out STD_LOGIC;
            lcd_switch_act : out STD_LOGIC;
            led_switch_on : out STD_LOGIC;
-           lcd_switchon_data : out STD_LOGIC_VECTOR (20 downto 0);
-           lcd_switchoff_data : out STD_LOGIC_VECTOR (20 downto 0));
+           lcd_switchon_ss : out STD_LOGIC_VECTOR (6 downto 0);
+           lcd_switchon_mm : out STD_LOGIC_VECTOR (6 downto 0);
+           lcd_switchon_hh : out STD_LOGIC_VECTOR (6 downto 0);
+           lcd_switchoff_ss : out STD_LOGIC_VECTOR (6 downto 0);
+           lcd_switchoff_mm : out STD_LOGIC_VECTOR (6 downto 0);
+           lcd_switchoff_hh : out STD_LOGIC_VECTOR (6 downto 0));
+           --lcd_switchon_data : out STD_LOGIC_VECTOR (20 downto 0);
+           --lcd_switchoff_data : out STD_LOGIC_VECTOR (20 downto 0));
     end component;
     
     signal clk, reset, key_action_imp, key_action_long, key_plus_minus, key_enable, fsm_switch_on, fsm_switch_off: std_logic := '0';
-    signal second : STD_LOGIC_VECTOR (5 downto 0) := (others => '0');
-    signal minute : STD_LOGIC_VECTOR (5 downto 0) := (others => '0');
-    signal hour : STD_LOGIC_VECTOR (4 downto 0) := (others => '0');
+    signal second : STD_LOGIC_VECTOR (6 downto 0) := (others => '0');
+    signal minute : STD_LOGIC_VECTOR (6 downto 0) := (others => '0');
+    signal hour : STD_LOGIC_VECTOR (6 downto 0) := (others => '0');
     signal led_switch_act, led_switch_on, lcd_switch_act : std_logic;
-    signal on_data, off_data : STD_LOGIC_VECTOR (20 downto 0);
+    signal on_ss, off_ss, on_mm, off_mm, on_hh, off_hh : STD_LOGIC_VECTOR (6 downto 0);
     constant clk_period: time := 100 ns;
 begin
     uut: switch port map (clk=>clk, reset=>reset, key_action_imp=>key_action_imp, key_action_long=>key_action_long, key_plus_minus=>key_plus_minus, 
                        key_enable=>key_enable, fsm_switch_on=>fsm_switch_on, fsm_switch_off=>fsm_switch_off, second=>second, minute=>minute, hour=>hour, led_switch_act=>led_switch_act,
-                       led_switch_on=>led_switch_on, lcd_switch_act=>lcd_switch_act, lcd_switchon_data=>on_data, lcd_switchoff_data=>off_data);
+                       led_switch_on=>led_switch_on, lcd_switch_act=>lcd_switch_act, lcd_switchon_ss=>on_ss, lcd_switchoff_ss=>off_ss
+                       , lcd_switchon_mm=>on_mm, lcd_switchoff_mm=>off_mm, lcd_switchon_hh=>on_hh, lcd_switchoff_hh=>off_hh);
     clock: process
     begin
         clk <= '0';
@@ -114,7 +121,7 @@ begin
         reset <= '0';
         wait for 500 ns;
         key_enable <= '0';
-        minute <= "001001";
+        minute <= "0001001";
         --case 6
         
         wait;
