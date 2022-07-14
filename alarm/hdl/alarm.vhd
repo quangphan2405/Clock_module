@@ -39,18 +39,18 @@ entity alarm is
            key_plus_minus : in STD_LOGIC;
            key_enable : in STD_LOGIC;
            fsm_alarm_start : in STD_LOGIC;
-           second : in STD_LOGIC_VECTOR (5 downto 0);
-           minute : in STD_LOGIC_VECTOR (5 downto 0);
-           hour : in STD_LOGIC_VECTOR (4 downto 0);
+           second : in STD_LOGIC_VECTOR (6 downto 0);
+           minute : in STD_LOGIC_VECTOR (6 downto 0);
+           hour : in STD_LOGIC_VECTOR (6 downto 0);
            --lcd_time_data : in STD_LOGIC_VECTOR (20 downto 0);
            led_alarm_act : out STD_LOGIC;
            led_alarm_ring : out STD_LOGIC;
            lcd_alarm_act : out STD_LOGIC;
            lcd_alarm_snooze : out STD_LOGIC;
-           --lcd_alarm_ss : out STD_LOGIC_VECTOR (5 downto 0);
-           --lcd_alarm_mm : out STD_LOGIC_VECTOR (5 downto 0);--(6 downto 0);
-           --lcd_alarm_hh : out STD_LOGIC_VECTOR (4 downto 0);--(13 downto 7));
-           lcd_alarm_data : out STD_LOGIC_VECTOR (13 downto 0));
+           --lcd_alarm_ss : out STD_LOGIC_VECTOR (6 downto 0);
+           lcd_alarm_mm : out STD_LOGIC_VECTOR (6 downto 0);--(6 downto 0);
+           lcd_alarm_hh : out STD_LOGIC_VECTOR (6 downto 0));--(13 downto 7));
+           --lcd_alarm_data : out STD_LOGIC_VECTOR (13 downto 0));
 end alarm;
 
 architecture Behavioral of alarm is
@@ -111,8 +111,8 @@ architecture Behavioral of alarm is
 begin
     u1: active port map (clk=>clk, I_ring=>ring, fsm_alarm=>fsm_alarm_start, action_imp=>key_action_imp,
                          action_long=>key_action_long, rst=>reset, O_act=>led_act_1, lcd_act=>lcd_alarm_act);
-    u2: ringing port map (clk=>clk, ss_alarm=>ss, mm_alarm=>mm, hh_alarm=>hh, ss_current=>second,
-                          mm_current=>minute, hh_current=>hour, I_act=>led_act_1, snooze_1min=>snooze_1min,
+    u2: ringing port map (clk=>clk, ss_alarm=>ss, mm_alarm=>mm, hh_alarm=>hh, ss_current=>second(5 downto 0),
+                          mm_current=>minute(5 downto 0), hh_current=>hour(4 downto 0), I_act=>led_act_1, snooze_1min=>snooze_1min,
                           action_stop=>action_stop, action_long=>key_action_long, action_imp=>key_action_imp, 
                           O_ring=>ring, O_snooze=>snooze_imp);
     u3: stop_ringing port map (clk=>clk, I_ring=>ring, O_stop=>action_stop);
@@ -134,8 +134,8 @@ begin
     end process;
     lcd_alarm_snooze <= snooze_state;
     --lcd_alarm_ss <= ss;
-    --lcd_alarm_mm <= mm;
-    --lcd_alarm_hh <= hh;
-    lcd_alarm_data <= "00" & hh & "0" & mm;
+    lcd_alarm_mm <= "0" & mm;
+    lcd_alarm_hh <= "00" & hh;
+    --lcd_alarm_data <= "00" & hh & "0" & mm;
     
 end Behavioral;

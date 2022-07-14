@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 25.06.2022 14:24:02
+-- Create Date: 25.06.2022 16:18:48
 -- Design Name: 
--- Module Name: stop_ringing - Behavioral
+-- Module Name: tb_stop - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -31,31 +31,38 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity stop_ringing is
-    Port ( I_ring : in STD_LOGIC;
+entity tb_stop is
+--  Port ( );
+end tb_stop;
+
+architecture Behavioral of tb_stop is
+    component stop_ringing
+        Port ( I_ring : in STD_LOGIC;
            clk : in STD_LOGIC;
            O_stop : out STD_LOGIC);
-end stop_ringing;
-
-architecture Behavioral of stop_ringing is
-    signal reg_1: std_logic := '0';
+    end component;
+    
+    signal clk, I_ring: std_logic := '0';
+    signal O_stop: std_logic;
+    constant clk_period: time := 100 ns;
 begin
-process (clk, I_ring)
-    variable cnt: integer range 0 to 599999;
-begin
-    if (clk = '1' and clk'EVENT) then
-        if (I_ring='0') then
-            cnt := 0; 
-            reg_1 <= '0';           
-        elsif (I_ring='1') and (cnt=599999) then
-            cnt := 0;
-            reg_1 <= '1';
-        else
-            cnt := cnt + 1;
-            reg_1 <= '0';
-        end if;
-    end if;
-end process;
-O_stop <= reg_1;
+    uut: stop_ringing port map (clk=>clk, I_ring=>I_ring, O_stop=>O_stop);
+    clock: process
+    begin
+        clk <= '0';
+        wait for clk_period/2;
+        clk <= '1';
+        wait for clk_period/2;
+    end process clock;
+    process
+    begin 
+    --wait for 100 ns;
+    I_ring <= '1';
+    wait for 1000 ns;
+    I_ring <= '0';
+    wait for 1000 ns;
+    I_ring <= '1';
+    wait;
+    end process;
 
 end Behavioral;

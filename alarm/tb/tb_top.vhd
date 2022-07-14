@@ -44,34 +44,34 @@ architecture Behavioral of tb_top is
            key_plus_minus : in STD_LOGIC;
            key_enable : in STD_LOGIC;
            fsm_alarm_start : in STD_LOGIC;
-           second : in STD_LOGIC_VECTOR (5 downto 0);
-           minute : in STD_LOGIC_VECTOR (5 downto 0);
-           hour : in STD_LOGIC_VECTOR (4 downto 0);
+           second : in STD_LOGIC_VECTOR (6 downto 0);
+           minute : in STD_LOGIC_VECTOR (6 downto 0);
+           hour : in STD_LOGIC_VECTOR (6 downto 0);
            led_alarm_act : out STD_LOGIC;
            led_alarm_ring : out STD_LOGIC;
            lcd_alarm_act : out STD_LOGIC;
            lcd_alarm_snooze : out STD_LOGIC;
            --lcd_alarm_ss : out STD_LOGIC_VECTOR (5 downto 0);
-           --lcd_alarm_mm : out STD_LOGIC_VECTOR (5 downto 0);
-           --lcd_alarm_hh : out STD_LOGIC_VECTOR (4 downto 0);
-           lcd_alarm_data : out STD_LOGIC_VECTOR (13 downto 0));
+           lcd_alarm_mm : out STD_LOGIC_VECTOR (6 downto 0);
+           lcd_alarm_hh : out STD_LOGIC_VECTOR (6 downto 0));
+           --lcd_alarm_data : out STD_LOGIC_VECTOR (13 downto 0));
     end component;
     
     signal clk, reset, key_action_imp, key_action_long, key_plus_minus, key_enable, fsm_alarm_start: std_logic := '0';
-    signal second : STD_LOGIC_VECTOR (5 downto 0) := (others => '0');
-    signal minute : STD_LOGIC_VECTOR (5 downto 0) := "010000";
-    signal hour : STD_LOGIC_VECTOR (4 downto 0) := (others => '0');
+    signal second : STD_LOGIC_VECTOR (6 downto 0) := (others => '0');
+    signal minute : STD_LOGIC_VECTOR (6 downto 0) := "0010000";
+    signal hour : STD_LOGIC_VECTOR (6 downto 0) := (others => '0');
     signal led_alarm_act, led_alarm_ring, lcd_alarm_act, lcd_alarm_snooze: std_logic;
     --signal ss : STD_LOGIC_VECTOR (5 downto 0);
-    --signal mm : STD_LOGIC_VECTOR (5 downto 0);
-    --signal hh : STD_LOGIC_VECTOR (4 downto 0);
-    signal data : STD_LOGIC_VECTOR (13 downto 0);
+    signal mm : STD_LOGIC_VECTOR (6 downto 0);
+    signal hh : STD_LOGIC_VECTOR (6 downto 0);
+    --signal data : STD_LOGIC_VECTOR (13 downto 0);
     constant clk_period: time := 100 ns;
 
 begin
     uut: alarm port map (clk=>clk, reset=>reset, key_action_imp=>key_action_imp, key_action_long=>key_action_long, key_plus_minus=>key_plus_minus, 
                        key_enable=>key_enable, fsm_alarm_start=>fsm_alarm_start, second=>second, minute=>minute, hour=>hour, led_alarm_act=>led_alarm_act,
-                       led_alarm_ring=>led_alarm_ring, lcd_alarm_act=>lcd_alarm_act, lcd_alarm_snooze=>lcd_alarm_snooze, lcd_alarm_data=>data);
+                       led_alarm_ring=>led_alarm_ring, lcd_alarm_act=>lcd_alarm_act, lcd_alarm_snooze=>lcd_alarm_snooze, lcd_alarm_mm=>mm, lcd_alarm_hh=>hh);
     clock: process
     begin
         clk <= '0';
