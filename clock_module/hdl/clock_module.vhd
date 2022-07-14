@@ -147,15 +147,15 @@ architecture behavior of clock_module is
     -- Countdown
     component Countdown
     port (
-        clk : IN STD_LOGIC;
-		fsm_countdown_start : IN STD_LOGIC;
-		reset : IN STD_LOGIC;
-		led_countdown_act : OUT STD_LOGIC;
-		cs                : OUT STD_LOGIC_vector(6 DOWNTO 0);
-		ss                : OUT STD_LOGIC_vector(6 DOWNTO 0);
-		mm                : OUT STD_LOGIC_vector(6 DOWNTO 0);
-		hh                : OUT STD_LOGIC_vector(6 DOWNTO 0)
-    );
+		clk                 : in  std_logic;
+        reset               : in  std_logic;
+		fsm_countdown_start : in  std_logic;
+		led_countdown_act   : out std_logic;
+	    lcd_countdown_act   : out std_logic;
+		ss                  : out std_logic_vector(6 downto 0);
+		mm                  : out std_logic_vector(6 downto 0);
+		hh                  : out std_logic_vector(6 downto 0)
+	);
     end component Countdown;
 
     -- Stopwatch
@@ -266,6 +266,11 @@ architecture behavior of clock_module is
     signal top_date_month : std_logic_vector(6 downto 0);
     signal top_date_year  : std_logic_vector(6 downto 0);
 
+    -- Countdown signals
+    signal top_countdown_hh : std_logic_vector(6 downto 0);
+    signal top_countdown_mm : std_logic_vector(6 downto 0);
+    signal top_countdown_ss : std_logic_vector(6 downto 0);
+
     -- Stopwatch signals
     signal top_stopwatch_hh : std_logic_vector(6 downto 0);
     signal top_stopwatch_mm : std_logic_vector(6 downto 0);
@@ -280,6 +285,7 @@ begin
     lcd_time_data      <= top_time_hour    & top_time_minute  & top_time_second;
     lcd_date_data      <= top_date_day     & top_date_month   & top_date_year;
     lcd_date_dow       <= top_date_dow;
+    lcd_countdown_data <= top_countdown_hh & top_countdown_mm & top_countdown_ss;
     lcd_stopwatch_data <= top_stopwatch_hh & top_stopwatch_mm & top_stopwatch_ss & top_stopwatch_cs;
 
     -- ***********************************
@@ -370,6 +376,17 @@ begin
     );
 
     -- Countdown
+    Countdown_i : Countdown
+    port map (
+        clk => clk,
+        reset => reset,
+        fsm_countdown_start => fsm_countdown_start,
+        led_countdown_act   => led_countdown_act,
+        lcd_countdown_act   => lcd_countdown_act,
+        ss                  => top_countdown_ss,
+        mm                  => top_countdown_mm,
+        hh                  => top_countdown_hh
+    )
 
     -- Stopwatch
     Stopwatch_i : Stopwatch
