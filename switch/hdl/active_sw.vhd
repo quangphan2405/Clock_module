@@ -31,7 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity active is
+entity active_sw is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
            switch_on : in STD_LOGIC;
@@ -39,9 +39,9 @@ entity active is
            act_imp : in STD_LOGIC;
            act_long : in STD_LOGIC;
            switch_act : out STD_LOGIC);
-end active;
+end active_sw;
 
-architecture Behavioral of active is
+architecture Behavioral of active_sw is
     signal reg_1: std_logic := '0';
 begin
 process (clk, rst, switch_on, switch_off, reg_1)
