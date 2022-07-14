@@ -86,13 +86,13 @@ architecture behavior of clock_module is
         de_min   : in  std_logic_vector(6 downto 0);
         clk      : in  std_logic;
         rst      : in  std_logic;
-        hour     : out std_logic_vector(4 downto 0);
-        minute   : out std_logic_vector(5 downto 0);
-        second   : out std_logic_vector(5 downto 0);
+        hour     : out std_logic_vector(6 downto 0);
+        minute   : out std_logic_vector(6 downto 0);
+        second   : out std_logic_vector(6 downto 0);
         dow      : out std_logic_vector(2 downto 0);
         year     : out std_logic_vector(6 downto 0);
-        month    : out std_logic_vector(3 downto 0);
-        day      : out std_logic_vector(4 downto 0);
+        month    : out std_logic_vector(6 downto 0);
+        day      : out std_logic_vector(6 downto 0);
         lcd_dcf  : out std_logic
     );
     end component Time_date;
@@ -107,40 +107,41 @@ architecture behavior of clock_module is
         key_plus_minus   : in  std_logic;
         key_enable       : in  std_logic;
         fsm_alarm_start  : in  std_logic;
-        second           : in  std_logic_vector (5 downto 0);
-        minute           : in  std_logic_vector (5 downto 0);
-        hour             : in  std_logic_vector (4 downto 0);
-        --lcd_time_data : in std_logic_vector (20 downto 0);
+        second           : in  std_logic_vector (6 downto 0);
+        minute           : in  std_logic_vector (6 downto 0);
+        hour             : in  std_logic_vector (6 downto 0);
         led_alarm_act    : out std_logic;
         led_alarm_ring   : out std_logic;
         lcd_alarm_act    : out std_logic;
         lcd_alarm_snooze : out std_logic;
-        --lcd_alarm_ss : out std_logic_vector (5 downto 0);
-        --lcd_alarm_mm : out std_logic_vector (5 downto 0);--(6 downto 0);
-        --lcd_alarm_hh : out std_logic_vector (4 downto 0);--(13 downto 7));
-        lcd_alarm_data   : out std_logic_vector (13 downto 0)
+        lcd_alarm_mm     : out std_logic_vector (6 downto 0);
+        lcd_alarm_hh     : out std_logic_vector (6 downto 0)
     );
     end component Alarm;
 
     -- Switch
     component Switch
     port (
-        clk                : in  std_logic;
-        reset              : in  std_logic;
-        key_action_imp     : in  std_logic;
-        key_action_long    : in  std_logic;
-        key_plus_minus     : in  std_logic;
-        key_enable         : in  std_logic;
-        fsm_switch_on      : in  std_logic;
-        fsm_switch_off     : in  std_logic;
-        second             : in  std_logic_vector (5 downto 0);
-        minute             : in  std_logic_vector (5 downto 0);
-        hour               : in  std_logic_vector (4 downto 0);
-        led_switch_act     : out std_logic;
-        lcd_switch_act     : out std_logic;
-        led_switch_on      : out std_logic;
-        lcd_switchon_data  : out std_logic_vector (20 downto 0);
-        lcd_switchoff_data : out std_logic_vector (20 downto 0)
+        clk              : in  std_logic;
+        reset            : in  std_logic;
+        key_action_imp   : in  std_logic;
+        key_action_long  : in  std_logic;
+        key_plus_minus   : in  std_logic;
+        key_enable       : in  std_logic;
+        fsm_switch_on    : in  std_logic;
+        fsm_switch_off   : in  std_logic;
+        second           : in  std_logic_vector (6 downto 0);
+        minute           : in  std_logic_vector (6 downto 0);
+        hour             : in  std_logic_vector (6 downto 0);
+        led_switch_act   : out std_logic;
+        lcd_switch_act   : out std_logic;
+        led_switch_on    : out std_logic;
+        lcd_switchon_ss  : out std_logic_vector (6 downto 0);
+        lcd_switchon_mm  : out std_logic_vector (6 downto 0);
+        lcd_switchon_hh  : out std_logic_vector (6 downto 0);
+        lcd_switchoff_ss : out std_logic_vector (6 downto 0);
+        lcd_switchoff_mm : out std_logic_vector (6 downto 0);
+        lcd_switchoff_hh : out std_logic_vector (6 downto 0)
     );
     end component Switch;
 
@@ -241,7 +242,7 @@ architecture behavior of clock_module is
     signal lcd_time_act      : std_logic;
     signal lcd_alarm_act     : std_logic;
     signal lcd_alarm_snooze  : std_logic;
-    signal lcd_switch_act  : std_logic;
+    signal lcd_switch_act    : std_logic;
     signal lcd_countdown_act : std_logic;
     signal lcd_stopwatch_act : std_logic;
 
@@ -256,15 +257,30 @@ architecture behavior of clock_module is
     signal lcd_stopwatch_data : std_logic_vector(20 downto 0);
 
     -- Time signals
-    signal top_time_hour   : std_logic_vector(6 downto 0);
-    signal top_time_minute : std_logic_vector(6 downto 0);
-    signal top_time_second : std_logic_vector(6 downto 0);
+    signal top_time_hh : std_logic_vector(6 downto 0);
+    signal top_time_mm : std_logic_vector(6 downto 0);
+    signal top_time_ss : std_logic_vector(6 downto 0);
 
     -- Date signals
     signal top_date_dow   : std_logic_vector(2 downto 0);
     signal top_date_day   : std_logic_vector(6 downto 0);
     signal top_date_month : std_logic_vector(6 downto 0);
     signal top_date_year  : std_logic_vector(6 downto 0);
+
+    -- Alarm signals
+    signal top_alarm_hh : std_logic_vector(6 downto 0);
+    signal top_alarm_mm : std_logic_vector(6 downto 0);
+    signal top_alarm_ss : std_logic_vector(6 downto 0);
+
+    -- Switch-on signals
+    signal top_switchon_hh : std_logic_vector(6 downto 0);
+    signal top_switchon_mm : std_logic_vector(6 downto 0);
+    signal top_switchon_ss : std_logic_vector(6 downto 0);
+
+    -- Switch-off signals
+    signal top_switchoff_hh : std_logic_vector(6 downto 0);
+    signal top_switchoff_mm : std_logic_vector(6 downto 0);
+    signal top_switchoff_ss : std_logic_vector(6 downto 0);
 
     -- Countdown signals
     signal top_countdown_hh : std_logic_vector(6 downto 0);
@@ -282,9 +298,12 @@ begin
     -- ***********************************
     -- Concurrent assignments
     -- ***********************************
-    lcd_time_data      <= top_time_hour    & top_time_minute  & top_time_second;
+    lcd_time_data      <= top_time_hh      & top_time_mm      & top_time_ss;
     lcd_date_data      <= top_date_day     & top_date_month   & top_date_year;
     lcd_date_dow       <= top_date_dow;
+    lcd_alarm_data     <= top_alarm_hh     & top_alarm_mm;
+    lcd_switchon_data  <= top_switchon_hh  & top_switchon_mm  & top_switchon_ss;
+    lcd_switchoff_data <= top_switchoff_hh & top_switchoff_mm & top_switchoff_ss;
     lcd_countdown_data <= top_countdown_hh & top_countdown_mm & top_countdown_ss;
     lcd_stopwatch_data <= top_stopwatch_hh & top_stopwatch_mm & top_stopwatch_ss & top_stopwatch_cs;
 
@@ -324,9 +343,9 @@ begin
         de_min   => de_min,
         clk      => clk,
         rst      => reset,
-        hour     => top_time_hour,
-        minute   => top_time_minute,
-        second   => top_time_second,
+        hour     => top_time_hh,
+        minute   => top_time_mm,
+        second   => top_time_ss,
         dow      => top_date_dow,
         year     => top_date_year,
         month    => top_date_month,
@@ -344,14 +363,16 @@ begin
         key_plus_minus   => key_plus_minus,
         key_enable       => key_enable,
         fsm_alarm_start  => fsm_alarm_start,
-        second           => top_time_second,
-        minute           => top_time_minute,
-        hour             => top_time_hour,
+        second           => top_time_ss,
+        minute           => top_time_mm,
+        hour             => top_time_hh,
         led_alarm_act    => led_alarm_act,
         led_alarm_ring   => led_alarm_ring,
         lcd_alarm_act    => lcd_alarm_act,
         lcd_alarm_snooze => lcd_alarm_snooze,
-        lcd_alarm_data   => lcd_alarm_data,
+        lcd_alarm_hh     => lcd_alarm_hh,
+        lcd_alarm_mm     => lcd_alarm_mm,
+        lcd_alarm_ss     => lcd_alarm_ss
     );
 
     -- Switch
@@ -365,14 +386,18 @@ begin
         key_enable         => key_enable,
         fsm_switch_on      => fsm_switchon_start,
         fsm_switch_off     => fsm_switchoff_start,
-        second             => top_time_second,
-        minute             => top_time_minute,
-        hour               => top_time_hour,
+        second             => top_time_ss,
+        minute             => top_time_mm,
+        hour               => top_time_hh,
         led_switch_act     => led_switch_act,
         lcd_switch_act     => lcd_switch_act,
         led_switch_on      => led_switch_on,
-        lcd_switchon_data  => lcd_switchon_data
-        lcd_switchoff_data => lcd_switchoff_data
+        lcd_switchon_hh    => lcd_switchon_hh,
+        lcd_switchon_mm    => lcd_switchon_mm,
+        lcd_switchon_ss    => lcd_switchon_ss,
+        lcd_switchoff_hh   => lcd_switchoff_hh,
+        lcd_switchoff_mm   => lcd_switchoff_mm,
+        lcd_switchoff_ss   => lcd_switchoff_ss
     );
 
     -- Countdown
