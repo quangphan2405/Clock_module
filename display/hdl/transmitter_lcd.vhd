@@ -3,7 +3,7 @@
 -- Author email : quang.phan@tum.de
 -- Create Date  : 27/06/2022
 -- Project Name : Project Lab IC Design
--- Module Name  : transmitter.vhd
+-- Module Name  : transmitter_lcd.vhd
 -- Description  : Transmitter to control the output flow
 --------------------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity transmitter is
+entity transmitter_lcd is
     port (
         -- Clock and reset
         clk           : in  std_logic;
@@ -27,9 +27,9 @@ entity transmitter is
         -- Acknowledge for transmission
         lcd_ack       : out std_logic
     );
-end entity transmitter;
+end entity transmitter_lcd;
 
-architecture behavior of transmitter is
+architecture behavior of transmitter_lcd is
 
     -- Zero command
     constant CMD_ALL_ZEROS_c : std_logic_vector(10 downto 0) := "00000000000";
