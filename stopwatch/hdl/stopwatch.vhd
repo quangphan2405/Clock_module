@@ -31,13 +31,13 @@ Use IEEE.NUMERIC_STD.All;
 
 Entity stopwatch Is
 	Port (
+		clk : In STD_LOGIC;
 		fsm_stopwatch_start : In STD_LOGIC;
 		reset : In STD_LOGIC;
-		key_minus_imp : In STD_LOGIC;
-		clk : In STD_LOGIC;
 		key_plus_imp : In STD_LOGIC;
+		key_minus_imp : In STD_LOGIC;
 		key_action_imp : In STD_LOGIC;
-		lcd_stopwatch_act: out STD_LOGIC;
+		lcd_stopwatch_act: Out STD_LOGIC;
 		cs : Out STD_LOGIC_vector(6 Downto 0);
 		ss : Out STD_LOGIC_vector(6 Downto 0);
 		mm : Out STD_LOGIC_vector(6 Downto 0);
@@ -127,7 +127,6 @@ Begin
 		clk => clk, 
 		sw_reset => reset, 
 		key_plus_imp => key_plus_imp, 
-
 		count_ena => counter_ena_signal, 
 		csec => csec_signal, 
 		sec => sec_signal, 

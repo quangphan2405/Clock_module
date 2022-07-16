@@ -33,8 +33,8 @@ Entity lap Is
 	Port (
 		clk : In STD_LOGIC;
 		fsm_stopwatch_start : In STD_LOGIC;
-		key_plus_imp : In STD_LOGIC;
 		sw_reset : In STD_LOGIC;
+		key_plus_imp : In STD_LOGIC;
 		counter_ena : In STD_LOGIC;
 		key_minus_imp : In STD_LOGIC;
 		transmitter_ena : Out STD_LOGIC

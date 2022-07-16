@@ -13,11 +13,11 @@ ARCHITECTURE bench OF stopwatch_tb IS
 
 	COMPONENT stopwatch
 		PORT (
-			fsm_stopwatch_start : IN STD_LOGIC;
-			key_minus_imp : IN STD_LOGIC;
 			clk : IN STD_LOGIC;
+			fsm_stopwatch_start : IN STD_LOGIC;
 			reset : IN STD_LOGIC;
 			key_plus_imp : IN STD_LOGIC;
+			key_minus_imp : IN STD_LOGIC;
 			key_action_imp : IN STD_LOGIC;
 			lcd_stopwatch_act : OUT STD_LOGIC;
 			cs : OUT STD_LOGIC_vector(6 DOWNTO 0);
