@@ -33,6 +33,7 @@ Use ieee.std_logic_unsigned.All;
 Entity counter_clock Is
 	Port (
 		clk : In STD_LOGIC;
+		fsm_stopwatch_start : In STD_LOGIC;
 		sw_reset : In std_logic;
 		key_plus_imp : In STD_LOGIC;
 		count_ena : In std_logic;
@@ -62,7 +63,7 @@ Begin
  
 			Else
 				If count_ena = '1' Then
-					If key_plus_imp = '1' Then
+					If key_plus_imp = '1' and fsm_stopwatch_start = '1' Then 
 						csec_signal <= "0000000";
 						sec_signal <= "0000000";
 						min_signal <= "0000000";

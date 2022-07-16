@@ -14,6 +14,7 @@ ARCHITECTURE bench OF counter_clock_tb IS
 	COMPONENT counter_clock
 		PORT (
 			clk : IN STD_LOGIC;
+			fsm_stopwatch_start : IN STD_LOGIC;
 			sw_reset : IN std_logic;
 		    key_plus_imp : IN STD_LOGIC;
 		    count_ena : IN std_logic;
@@ -25,10 +26,10 @@ ARCHITECTURE bench OF counter_clock_tb IS
 	END COMPONENT;
 
 	SIGNAL clk : STD_LOGIC;
+	SIGNAL fsm_stopwatch_start : STD_LOGIC;
 	SIGNAL sw_reset : std_logic;
 	SIGNAL count_ena : std_logic;
 	SIGNAL key_plus_imp : std_logic;
-
 	SIGNAL csec : std_logic_vector(6 DOWNTO 0);
 	SIGNAL sec : std_logic_vector(6 DOWNTO 0);
 	SIGNAL min : std_logic_vector(6 DOWNTO 0);
@@ -38,6 +39,7 @@ BEGIN
 	uut : counter_clock
 	PORT MAP(
 		clk => clk, 
+		fsm_stopwatch_start => fsm_stopwatch_start,
 		sw_reset => sw_reset, 
 		count_ena => count_ena, 
 		key_plus_imp => key_plus_imp,

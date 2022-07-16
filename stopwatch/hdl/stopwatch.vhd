@@ -61,6 +61,7 @@ Architecture Behavioral Of stopwatch Is
 	Component counter_clock
 		Port (
 			clk : In std_logic;
+			fsm_stopwatch_start : In STD_LOGIC;
 			sw_reset : In std_logic;
 			key_plus_imp : In STD_LOGIC;
 			count_ena : In std_logic;
@@ -125,6 +126,7 @@ Begin
 	counter_clock_port : counter_clock
 	Port Map(
 		clk => clk, 
+		fsm_stopwatch_start => fsm_stopwatch_start,
 		sw_reset => reset, 
 		key_plus_imp => key_plus_imp, 
 		count_ena => counter_ena_signal, 
@@ -152,7 +154,6 @@ Begin
 		fsm_stopwatch_start => fsm_stopwatch_start, 
 		sw_reset => reset, 
 		key_plus_imp => key_plus_imp, 
-
 		transmitter_ena => transmitter_ena_signal, 
 		csec_in => csec_signal, 
 		sec_in => sec_signal, 
