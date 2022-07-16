@@ -3,23 +3,20 @@
 -- Author email : quang.phan@tum.de
 -- Create Date  : 27/06/2022
 -- Project Name : Project Lab IC Design
--- Module Name  : tb_transmitter.vhd
--- Description  : VHDL testbench for module: transmitter
+-- Module Name  : tb_transmitter_lcd.vhd
+-- Description  : VHDL testbench for module: transmitter_lcd
 --------------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity tb_transmitter is
-end entity tb_transmitter;
+entity tb_transmitter_lcd is
+end entity tb_transmitter_lcd;
 
-architecture behavior of tb_transmitter is
+architecture behavior of tb_transmitter_lcd is
     -- Component Declaration for the Unit Under Test (UUT)
-    component transmitter
-    generic (
-        MIN_INTERVAL_g : integer := 0
-    );
+    component transmitter_lcd
     port (
         -- Clock and reset
         clk           : in  std_logic;
@@ -35,7 +32,7 @@ architecture behavior of tb_transmitter is
         -- Acknowledge
         lcd_ack       : out std_logic
     );
-    end component transmitter;
+    end component transmitter_lcd;
 
     -- Inputs
     signal clk           : std_logic := '0';
@@ -67,10 +64,7 @@ architecture behavior of tb_transmitter is
 begin
 
     -- Instantiate the Unit Under Test (UUT)
-    uut : transmitter
-    generic map (
-        MIN_INTERVAL_g => MIN_INTERVAL_g
-    )
+    uut : transmitter_lcd
     port map (
         -- Clock and reset
         clk           => clk,
@@ -114,7 +108,7 @@ begin
             wait for (MIN_INTERVAL_g) * CLK_PERIOD_c;
 
             -- Get transmitter output and check ack signal
-            output_array(i) <= lcd_en & lcd_rw & lcd_rs & lcd_data;
+            output_array(i) <= lcd_en & lcd_rs & lcd_rw & lcd_data;
             if ( lcd_ack /= '1' ) then
                 error_cnt <= error_cnt + 1;
                 report ("Acknowledge not received after waiting for minimum interval!");

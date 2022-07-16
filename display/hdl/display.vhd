@@ -306,7 +306,7 @@ architecture behavior of display is
     end component fifo;
 
     -- Transmitter
-    component transmitter
+    component transmitter_lcd
     port (
         -- Clock and reset
         clk           : in  std_logic;
@@ -322,7 +322,7 @@ architecture behavior of display is
         -- Acknowledge
         lcd_ack       : out std_logic
     );
-    end component transmitter;
+    end component transmitter_lcd;
 
     -- ***********************************
     -- Procedure for encoding to LCD
@@ -439,7 +439,7 @@ begin
     );
 
     -- Transmitter
-    trans_i : transmitter
+    trans_i : transmitter_lcd
     port map (
         -- Clock and reset
         clk           => clk,

@@ -57,7 +57,7 @@ entity switch is
 end switch;
 
 architecture Behavioral of switch is
-    component active
+    component active_sw
         Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
            switch_on : in STD_LOGIC;
@@ -106,7 +106,7 @@ architecture Behavioral of switch is
     signal ss_on, mm_on, ss_off, mm_off : std_logic_vector (5 downto 0);
     signal hh_on, hh_off : std_logic_vector (4 downto 0);
 begin
-    u1: active port map (clk=>clk, rst=>reset, switch_on=>fsm_switch_on, switch_off=>fsm_switch_off, act_imp=>key_action_imp,
+    u1: active_sw port map (clk=>clk, rst=>reset, switch_on=>fsm_switch_on, switch_off=>fsm_switch_off, act_imp=>key_action_imp,
                          act_long=>key_action_long, switch_act=>switch_act);
     u2: modify_off port map(clk=>clk, rst=>reset, switch_off=>fsm_switch_off, key_enable=>key_enable, key_p_m=>key_plus_minus,
                             ss=>ss_off, mm=>mm_off, hh=>hh_off);
