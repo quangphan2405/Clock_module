@@ -48,7 +48,7 @@ architecture behavior of display_standalone is
     constant DOW_c         : std_logic_vector( 2 downto 0) := "001"; -- Mo
 
     -- FSM control signals
-    constant fsm_time_start_c      : std_logic := '0';
+    constant fsm_time_start_c      : std_logic := '1';
     constant fsm_date_start_c      : std_logic := '0';
     constant fsm_alarm_start_c     : std_logic := '0';
     constant fsm_switchon_start_c  : std_logic := '0';
