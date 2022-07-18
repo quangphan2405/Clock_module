@@ -35,7 +35,8 @@ ENTITY countdown IS
 		fsm_countdown_start : IN STD_LOGIC;
 		reset : IN STD_LOGIC;
 		led_countdown_act : OUT STD_LOGIC;
-	        lcd_countdown_act : OUT STD_LOGIC;
+	    lcd_countdown_act : OUT STD_LOGIC;
+	    led_countdown_ring : OUT std_logic ;
 		ss : OUT STD_LOGIC_vector(6 DOWNTO 0);
 		mm : OUT STD_LOGIC_vector(6 DOWNTO 0);
 		hh : OUT STD_LOGIC_vector(6 DOWNTO 0) 
@@ -54,6 +55,7 @@ BEGIN
 				hh <= "0000000";
 				led_countdown_act <= '0';
 				lcd_countdown_act <= '0';
+				led_countdown_ring <= '0';
 
 			ELSE
 				IF fsm_countdown_start = '1' THEN
