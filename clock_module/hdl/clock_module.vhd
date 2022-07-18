@@ -152,6 +152,7 @@ architecture behavior of clock_module is
         reset               : in  std_logic;
 		fsm_countdown_start : in  std_logic;
 		led_countdown_act   : out std_logic;
+        led_countdown_ring  : out std_logic;
 	    lcd_countdown_act   : out std_logic;
 		ss                  : out std_logic_vector(6 downto 0);
 		mm                  : out std_logic_vector(6 downto 0);
@@ -406,6 +407,7 @@ begin
         reset => reset,
         fsm_countdown_start => fsm_countdown_start,
         led_countdown_act   => led_countdown_act,
+        led_countdown_ring  => led_countdown_ring,
         lcd_countdown_act   => lcd_countdown_act,
         ss                  => top_countdown_ss,
         mm                  => top_countdown_mm,
