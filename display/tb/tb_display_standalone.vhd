@@ -69,6 +69,9 @@ architecture behavior of tb_display_standalone is
 
 begin
 
+    -- Output wrapper
+    LCD_OUTPUT <= LCD_E & LCD_RS & LCD_RW & LCD_DATA;
+
     -- Instantiate the Unit Under Test (UUT)
     uut : display_standalone
     port map (
