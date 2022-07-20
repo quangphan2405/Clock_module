@@ -64,13 +64,20 @@ architecture behavior of tb_display_standalone is
     -- Output wrapper
     signal LCD_OUTPUT : std_logic_vector(10 downto 0) := (others => '0');
 
+    -- Address wrapper
+    signal LCD_ADDR : std_logic_vector(6 downto 0) := (others => '0');
+
     -- Clock period
-    constant CLK_100M_period_c : time := 10 ns;
+    constant CLK_100M_period_c : time :=  10 ns;
+    constant CLK_10K_period_c  : time := 100 us;
 
 begin
 
     -- Output wrapper
     LCD_OUTPUT <= LCD_E & LCD_RS & LCD_RW & LCD_DATA;
+
+    -- Address wrapper
+    LCD_ADDR   <= LCD_DATA(6 downto 0);
 
     -- Instantiate the Unit Under Test (UUT)
     uut : display_standalone
@@ -100,21 +107,31 @@ begin
     STIM : process
     begin
         -- Generate reset by BTND
-        wait for CLK_100M_PERIOD_c*2;
+        wait for CLK_10K_PERIOD_c*2;
         BTND <= '1';
-        wait for CLK_100M_PERIOD_c*2;
+        wait for CLK_10K_PERIOD_c*2;
         BTND <= '0';
-        wait for CLK_100M_PERIOD_c/2;
+        wait for CLK_10K_PERIOD_c/2;
 
         -- Wait for a long time
-        wait for 10 sec;
+        wait for 100 ms;
 
         -- Generate reset by BTND again
-        wait for CLK_100M_PERIOD_c*2;
+        wait for CLK_10K_PERIOD_c*2;
         BTND <= '1';
-        wait for CLK_100M_PERIOD_c*2;
+        wait for CLK_10K_PERIOD_c*2;
         BTND <= '0';
-        wait for CLK_100M_PERIOD_c/2;
+        wait for CLK_10K_PERIOD_c/2;
+
+        -- Wait for a long time
+        wait for 100 ms;
+
+        -- Generate reset by BTND before finishing
+        wait for CLK_10K_PERIOD_c*2;
+        BTND <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        BTND <= '0';
+        wait for CLK_10K_PERIOD_c/2;
 
         wait;
     end process STIM;
