@@ -969,7 +969,11 @@ begin
                     when FUNCTION_SET =>
                         fifo_wr_en   <= '1';
                         fifo_wr_data <= CMD_FUNCTION_SET_c;
-                        state_r      <= SEND_DATA;
+                        if ( data_fifo_cnt_r = 0 ) then
+                            state_r <= IDLE;      -- IDLE when there's no data to send
+                        else
+                            state_r <= SEND_DATA;
+                        end if;
                     when SEND_DATA =>
                         if ( data_fifo_index_r < data_fifo_cnt_r ) then
                             fifo_wr_en        <= '1';
