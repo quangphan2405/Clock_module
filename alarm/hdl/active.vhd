@@ -36,7 +36,6 @@ entity active is
            I_ring : in STD_LOGIC;
            fsm_alarm : in STD_LOGIC;
            action_imp : in STD_LOGIC;
-           action_long : in STD_LOGIC;
            rst : in STD_LOGIC;
            O_act : out STD_LOGIC;
            lcd_act : out STD_LOGIC);
@@ -45,11 +44,11 @@ end active;
 architecture Behavioral of active is
     signal reg_1: std_logic := '0';
 begin
-process (clk, fsm_alarm, reg_1, action_imp, action_long, I_ring, rst)
+process (clk, fsm_alarm, reg_1, action_imp, I_ring, rst)
 begin
     if (clk = '1' and clk'EVENT) then
         if (rst='0')then
-            if (fsm_alarm='1') and (((not I_ring) and (action_imp or action_long))='1')then
+            if (fsm_alarm='1') and (((not I_ring) and action_imp )='1')then
                 reg_1 <= not reg_1;
             else
                 reg_1 <= reg_1;

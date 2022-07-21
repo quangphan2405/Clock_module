@@ -40,6 +40,7 @@ entity ringing is
            hh_current : in STD_LOGIC_VECTOR (4 downto 0);
            clk : in STD_LOGIC;
            I_act : in STD_LOGIC;
+           snooze_state : in STD_LOGIC;
            snooze_1min : in STD_LOGIC;
            action_stop : in STD_LOGIC;
            action_long : in STD_LOGIC;
@@ -49,23 +50,42 @@ entity ringing is
 end ringing;
 
 architecture Behavioral of ringing is
-    signal reg_1: std_logic := '0';
+    signal reg_1, enable: std_logic := '0';
+    
 begin
-process (clk, ss_alarm, ss_current, mm_alarm, mm_current, hh_alarm, hh_current, snooze_1min, action_stop, reg_1, I_act)
+process (clk, ss_alarm, ss_current, mm_alarm, mm_current, hh_alarm, hh_current, snooze_1min, action_stop, reg_1, I_act, snooze_state)
+    variable cnt: integer range 0 to 30100;
 begin
     if (clk = '1' and clk'EVENT) then
+        if (enable='1') then
+                --cnt := 0;
+            if (cnt=30100) then
+                reg_1 <= '0';
+                O_snooze <= '1';
+                enable <= '0';
+                cnt := 0;
+            elsif (action_long='1') then
+                enable <= '0';
+                cnt := 0;
+            else
+                cnt := cnt +1;
+            end if;
+        end if;
         if (ss_alarm=ss_current) and (mm_alarm=mm_current) and (hh_alarm=hh_current) then
             reg_1 <= I_act;
         --1 min snooze is reached
         elsif (snooze_1min='1') then
             reg_1 <= I_act;
-        --press action long or 1 min no action, ringing stop
-        elsif (action_stop='1') or (action_long='1') then
-            reg_1 <= '0';
         --press action short and get into snooze, ringing stop
         elsif (action_imp='1') and (reg_1='1') then
-            reg_1 <= '0';
-            O_snooze <= '1';        
+            enable <= '1';
+            
+        --press action long or 1 min no action, ringing stop
+        elsif (snooze_state='0') then
+            if (action_stop='1') or (action_long='1') then
+                reg_1 <= '0';
+            end if;
+                
         end if;
         if (reg_1='0') then
             O_snooze <= '0';

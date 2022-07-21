@@ -37,7 +37,6 @@ entity active_sw is
            switch_on : in STD_LOGIC;
            switch_off : in STD_LOGIC;
            act_imp : in STD_LOGIC;
-           act_long : in STD_LOGIC;
            switch_act : out STD_LOGIC);
 end active_sw;
 
@@ -51,7 +50,7 @@ begin
             reg_1 <= '0';
         else
             if (switch_on='1') or (switch_off='1') then
-                if (act_imp='1') or (act_long='1') then
+                if (act_imp='1') then
                     reg_1 <= not reg_1;
                 else
                     reg_1 <= reg_1;
