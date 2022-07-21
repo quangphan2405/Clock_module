@@ -9,8 +9,9 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use IEEE.std_logic_ARITH.ALL;
+--use IEEE.std_logic_ARITH.ALL;
 use IEEE.std_logic_UNSIGNED.ALL;
+use IEEE.numeric_std.all;
 
 entity display_standalone is
     port (
@@ -41,20 +42,26 @@ end entity display_standalone;
 architecture behavior of display_standalone is
 
     -- Constant
-    constant HH_MM_c       : std_logic_vector(13 downto 0) := "00100010010001"; -- 17:17
-    constant HH_MM_SS_c    : std_logic_vector(20 downto 0) := "001000100100010010001"; -- 17:17:17
-    constant HH_MM_SS_CS_c : std_logic_vector(27 downto 0) := "0010001001000100100010010001"; -- 17:17:17.17
+    constant HH_MM_c       : std_logic_vector(13 downto 0) := "00100010010010"; -- 17:18
+    constant HH_MM_SS_c    : std_logic_vector(20 downto 0) := "001000100100100010011"; -- 17:18:19
+    constant HH_MM_SS_CS_c : std_logic_vector(27 downto 0) := "0010001001001000100110010100"; -- 17:18:19.20
     constant DD_MM_YY_c    : std_logic_vector(20 downto 0) := "001000100010100010110"; -- 17.10.22
     constant DOW_c         : std_logic_vector( 2 downto 0) := "001"; -- Mo
 
     -- FSM control signals
-    constant fsm_time_start_c      : std_logic := '1';
-    constant fsm_date_start_c      : std_logic := '0';
-    constant fsm_alarm_start_c     : std_logic := '0';
-    constant fsm_switchon_start_c  : std_logic := '0';
-    constant fsm_switchoff_start_c : std_logic := '0';
-    constant fsm_countdown_start_c : std_logic := '0';
-    constant fsm_stopwatch_start_c : std_logic := '0';
+    signal fsm_time_start      : std_logic := '0';
+    signal fsm_date_start      : std_logic := '0';
+    signal fsm_alarm_start     : std_logic := '0';
+    signal fsm_switchon_start  : std_logic := '0';
+    signal fsm_switchoff_start : std_logic := '0';
+    signal fsm_countdown_start : std_logic := '0';
+    signal fsm_stopwatch_start : std_logic := '1';
+
+    -- Trigger signals for starting of states
+    signal cnt_r : integer := 0;
+    signal data_cnt_r : integer := 0;
+    signal stw_data : std_logic_vector(27 downto 0);
+    signal time_data : std_logic_vector(20 downto 0);
 
     -- Clock
     signal clk : std_logic := '0'; -- Internal clock running at 10.00 kHz
@@ -74,6 +81,23 @@ architecture behavior of display_standalone is
 	signal led_countdown_ring : std_logic := '0';
 	signal led_switch_act : std_logic := '0';
 	signal led_switch_on : std_logic := '0';
+	
+	-- Act signals
+	signal lcd_stopwatch_act : std_logic;
+	
+	-- STW signals
+	signal cs : std_logic_vector(6 downto 0);
+	signal ss : std_logic_vector(6 downto 0);
+	signal mm : std_logic_vector(6 downto 0);
+	signal hh : std_logic_vector(6 downto 0);
+	signal key_plus_imp : std_logic;
+	signal key_minus_imp : std_logic;
+	signal key_action_imp : std_logic;
+	signal key_action_long : std_logic;
+	signal key_mode_imp : std_logic;
+	signal key_plus_minus : std_logic;
+	signal key_enable : std_logic;
+	
 
     -- Reset signals
 	signal reset : std_logic := '1';		-- Internal reset signal, high for at least 16 cycles
@@ -146,40 +170,180 @@ begin
         clk                 => clk,
         reset               => reset,
         en_100              => en_100,
+        en_10               => en_10,
         -- Time
-        fsm_time_start      => fsm_time_start_c,
-        lcd_time_act        => '0',
-        lcd_time_data       => HH_MM_SS_c,
+        fsm_time_start      => fsm_time_start,
+        lcd_time_act        => '1',
+        lcd_time_data       => time_data,
         -- Date
-        fsm_date_start      => fsm_date_start_c,
+        fsm_date_start      => fsm_date_start,
         lcd_date_dow        => DOW_c,
         lcd_date_data       => DD_MM_YY_c,
         -- Alarm
-        fsm_alarm_start     => fsm_alarm_start_c,
+        fsm_alarm_start     => fsm_alarm_start,
         lcd_alarm_act       => '0',
-        lcd_alarm_snooze    => '0',
+        lcd_alarm_snooze    => '1',
         lcd_alarm_data      => HH_MM_c,
         -- Switch ON
-        fsm_switchon_start  => fsm_switchon_start_c,
-        lcd_switchon_act    => '0',
+        fsm_switchon_start  => fsm_switchon_start,
+        lcd_switchon_act    => '1',
         lcd_switchon_data   => HH_MM_SS_c,
         -- Switch ON
-        fsm_switchoff_start => fsm_switchoff_start_c,
+        fsm_switchoff_start => fsm_switchoff_start,
         lcd_switchoff_act   => '0',
         lcd_switchoff_data  => HH_MM_SS_c,
         -- Countdown
-        fsm_countdown_start => fsm_countdown_start_c,
+        fsm_countdown_start => fsm_countdown_start,
         lcd_countdown_act   => '0',
         lcd_countdown_data  => HH_MM_SS_c,
         -- Stopwatch
-        fsm_stopwatch_start => fsm_stopwatch_start_c,
-        lcd_stopwatch_act   => '0',
-        lcd_stopwatch_data  => HH_MM_SS_CS_c,
+        fsm_stopwatch_start => fsm_stopwatch_start,
+        lcd_stopwatch_act   => lcd_stopwatch_act,
+        lcd_stopwatch_data  => stw_data,
         -- Output to LCD
         lcd_en              => LCD_E,
         lcd_rw              => LCD_RW,
         lcd_rs              => LCD_RS,
         lcd_data            => LCD_DATA
+        -- Output debug
+        -- led_alarm_act       => led_alarm_act,
+        -- led_alarm_ring      => led_alarm_ring,
+        -- led_countdown_act   => led_countdown_act,
+        -- led_countdown_ring  => led_countdown_ring,
+        -- led_switch_act      => led_switch_act,
+        -- led_switch_on       => led_switch_on
+    );
+    
+    stw_i : entity work.stopwatch
+    port map (
+        clk => clk,
+        reset => reset,
+        fsm_stopwatch_start => fsm_stopwatch_start,
+        key_plus_imp => key_plus_imp,
+        key_minus_imp => key_minus_imp,
+        key_action_imp => key_action_imp,
+        lcd_stopwatch_act => lcd_stopwatch_act,
+        cs => cs,
+        ss => ss,
+        mm => mm,
+        hh => hh
+    );
+    
+    key_ctrl_i : entity work.key_control
+    port map (
+        clk                 => clk,
+        reset               => reset,
+        en_100              => en_100,
+        en_10               => en_10,
+        btn_action          => BTNC,
+        btn_minus          => BTNL,
+        btn_plus          => BTNR,
+        btn_mode          => BTNU,
+        action_imp => key_action_imp,
+        action_long => key_action_long,
+        plus_imp => key_plus_imp,
+        minus_imp => key_minus_imp,
+        mode_imp => key_mode_imp,
+        plus_minus => key_plus_minus,
+        enable => key_enable
     );
 
+    -- Generate start
+    GEN_START : process(clk)
+    begin
+        if (clk'EVENT and clk = '1') then
+            if (reset = '1') then
+                cnt_r <= 0;
+                fsm_time_start      <= '0';
+                fsm_date_start      <= '0';
+                fsm_alarm_start     <= '0';
+                fsm_switchon_start  <= '0';
+                fsm_switchoff_start <= '0';
+                fsm_countdown_start <= '0';
+                fsm_stopwatch_start <= '1';
+            else
+--                if ( cnt_r = 2000 ) then
+--                    fsm_time_start      <= '1';
+--                    fsm_date_start      <= '0';
+--                    fsm_alarm_start     <= '0';
+--                    fsm_switchon_start  <= '0';
+--                    fsm_switchoff_start <= '0';
+--                    fsm_countdown_start <= '0';
+--                    fsm_stopwatch_start <= '0';
+--                elsif ( cnt_r = 12000 ) then
+--                    fsm_time_start      <= '0';
+--                    fsm_date_start      <= '1';
+--                    fsm_alarm_start     <= '0';
+--                    fsm_switchon_start  <= '0';
+--                    fsm_switchoff_start <= '0';
+--                    fsm_countdown_start <= '0';
+--                    fsm_stopwatch_start <= '0';
+--                elsif ( cnt_r = 22000 ) then
+--                    fsm_time_start      <= '0';
+--                    fsm_date_start      <= '0';
+--                    fsm_alarm_start     <= '1';
+--                    fsm_switchon_start  <= '0';
+--                    fsm_switchoff_start <= '0';
+--                    fsm_countdown_start <= '0';
+--                    fsm_stopwatch_start <= '0';
+--                elsif ( cnt_r = 32000 ) then
+--                    fsm_time_start      <= '0';
+--                    fsm_date_start      <= '0';
+--                    fsm_alarm_start     <= '0';
+--                    fsm_switchon_start  <= '1';
+--                    fsm_switchoff_start <= '0';
+--                    fsm_countdown_start <= '0';
+--                    fsm_stopwatch_start <= '0';
+--                elsif ( cnt_r = 42000 ) then
+--                    fsm_time_start      <= '0';
+--                    fsm_date_start      <= '0';
+--                    fsm_alarm_start     <= '0';
+--                    fsm_switchon_start  <= '0';
+--                    fsm_switchoff_start <= '1';
+--                    fsm_countdown_start <= '0';
+--                    fsm_stopwatch_start <= '0';
+--                elsif ( cnt_r = 52000 ) then
+--                    fsm_time_start      <= '0';
+--                    fsm_date_start      <= '0';
+--                    fsm_alarm_start     <= '0';
+--                    fsm_switchon_start  <= '0';
+--                    fsm_switchoff_start <= '0';
+--                    fsm_countdown_start <= '1';
+--                    fsm_stopwatch_start <= '0';
+--                elsif ( cnt_r = 62000 ) then
+--                    fsm_time_start      <= '0';
+--                    fsm_date_start      <= '0';
+--                    fsm_alarm_start     <= '0';
+--                    fsm_switchon_start  <= '0';
+--                    fsm_switchoff_start <= '0';
+--                    fsm_countdown_start <= '0';
+--                    fsm_stopwatch_start <= '1';
+--                end if;
+
+                cnt_r <= cnt_r + 1;
+            
+            end if;
+        end if;
+    end process GEN_START;
+    
+    -- Generate the stopwatch data
+    GEN_STW_DATA : process(clk)
+    begin
+        if (clk'EVENT and clk = '1') then
+            if (reset = '1') then
+                data_cnt_r <= 0;
+            else
+                if ( en_1 = '1' ) then
+                    data_cnt_r <= data_cnt_r + 1;
+                end if;
+            end if;
+        end if;
+    end process GEN_STW_DATA;
+    
+    -- Data assignment
+    -- stw_data <= std_logic_vector(to_unsigned(stw_cnt_r, 28));
+    stw_data <= cs & mm & mm & ss;
+    time_data <= std_logic_vector(to_unsigned(data_cnt_r, 21));
+    
+    
 end architecture behavior;
