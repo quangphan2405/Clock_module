@@ -59,7 +59,6 @@ architecture Behavioral of alarm is
            I_ring : in STD_LOGIC;
            fsm_alarm : in STD_LOGIC;
            action_imp : in STD_LOGIC;
-           action_long : in STD_LOGIC;
            rst : in STD_LOGIC;
            O_act : out STD_LOGIC;
            lcd_act : out STD_LOGIC);
@@ -73,6 +72,7 @@ architecture Behavioral of alarm is
            hh_current : in STD_LOGIC_VECTOR (4 downto 0);
            clk : in STD_LOGIC;
            I_act : in STD_LOGIC;
+           snooze_state : in STD_LOGIC;
            snooze_1min : in STD_LOGIC;
            action_stop : in STD_LOGIC;
            action_long : in STD_LOGIC;
@@ -110,10 +110,10 @@ architecture Behavioral of alarm is
     
 begin
     u1: active port map (clk=>clk, I_ring=>ring, fsm_alarm=>fsm_alarm_start, action_imp=>key_action_imp,
-                         action_long=>key_action_long, rst=>reset, O_act=>led_act_1, lcd_act=>lcd_alarm_act);
+                         rst=>reset, O_act=>led_act_1, lcd_act=>lcd_alarm_act);
     u2: ringing port map (clk=>clk, ss_alarm=>ss, mm_alarm=>mm, hh_alarm=>hh, ss_current=>second(5 downto 0),
                           mm_current=>minute(5 downto 0), hh_current=>hour(4 downto 0), I_act=>led_act_1, snooze_1min=>snooze_1min,
-                          action_stop=>action_stop, action_long=>key_action_long, action_imp=>key_action_imp, 
+                          snooze_state=>snooze_state, action_stop=>action_stop, action_long=>key_action_long, action_imp=>key_action_imp, 
                           O_ring=>ring, O_snooze=>snooze_imp);
     u3: stop_ringing port map (clk=>clk, I_ring=>ring, O_stop=>action_stop);
     u4: snooze port map (clk=>clk, I_snooze=>snooze_imp, I_active=>led_act_1, O_active=>led_act_2, O_snooze=>snooze_state, 

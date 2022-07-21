@@ -125,7 +125,6 @@ architecture behavior of clock_module is
         clk              : in  std_logic;
         reset            : in  std_logic;
         key_action_imp   : in  std_logic;
-        key_action_long  : in  std_logic;
         key_plus_minus   : in  std_logic;
         key_enable       : in  std_logic;
         fsm_switch_on    : in  std_logic;
@@ -381,7 +380,7 @@ begin
         clk                => clk,
         reset              => reset,
         key_action_imp     => key_action_imp,
-        key_action_long    => key_action_long,
+
         key_plus_minus     => key_plus_minus,
         key_enable         => key_enable,
         fsm_switch_on      => fsm_switchon_start,
