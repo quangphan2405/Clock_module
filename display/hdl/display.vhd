@@ -74,7 +74,7 @@ architecture behavior of display is
     -- Type declarations
     -- ***********************************
     -- State type declaration
-    type state_t is (INIT, TURN_ON_DISPLAY, FUNCTION_SET, SEND_DATA, IDLE);
+    type state_t is (INIT, TURN_ON_DISPLAY, FUNCTION_SET, CLEAR_DISPLAY, SET_ENTRY_MODE, SET_EN_LOW, SEND_DATA, IDLE);
     type store_t is (STORE_INIT, STORE_TIME, STORE_DATE, STORE_ALARM, STORE_SWITCH_ON, STORE_SWITCH_OFF, STORE_TIMER, STORE_STW);
 
     -- Data to FIFO (address + data) type declaration
@@ -225,7 +225,10 @@ architecture behavior of display is
     constant CMD_WRITE_DATA_PREFIX_c : std_logic_vector(2 downto 0)  := "110";
     constant CMD_TURN_ON_DISPLAY_c   : std_logic_vector(10 downto 0) := "10000001100";
     constant CMD_FUNCTION_SET_c      : std_logic_vector(10 downto 0) := "10000111000";
-    constant CMD_SEND_ZERO_c         : std_logic_vector(10 downto 0) := "00000000000";
+    constant CMD_CLEAR_DISPLAY_c     : std_logic_vector(10 downto 0) := "10000000001";
+    constant CMD_SET_ENTRY_MODE_c    : std_logic_vector(10 downto 0) := "10000000110";
+    constant CMD_SEND_EN_LOW_c       : std_logic_vector(10 downto 0) := "00000000000";
+    constant CMD_DUMMY_DATA_c        : std_logic_vector(10 downto 0) := "11111111111";
 
     -- ***********************************
     -- Internal registers
@@ -273,6 +276,9 @@ architecture behavior of display is
     signal fifo_wr_data       : std_logic_vector(10 downto 0);
     signal fifo_rd_data       : std_logic_vector(10 downto 0);
     signal fifo_rd_data_ready : std_logic;
+
+    -- FSM control to SEND_DATA state
+    signal lcd_cmd_cnt_r : integer;
 
     -- Component declarations
     -- BCD decoder
@@ -491,6 +497,11 @@ begin
 
                     -- Reset the data_array and assign later on
                     fifo_array_v := (others => (others => '0'));
+
+                    -- *******************************
+                    -- Clear display
+                    -- *******************************
+                    fifo_array_v(data_cnt_v) := CMD_CLEAR_DISPLAY;
 
 
                     -- *******************************
@@ -953,31 +964,64 @@ begin
     begin
         if ( clk'EVENT and clk = '1' ) then
             if ( reset = '1' ) then
-                state_r           <= INIT;
-                fifo_wr_en        <= '0';
-                fifo_wr_data      <= (others => '0');
-                data_fifo_index_r <= 0;
+                state_r            <= INIT;
+                fifo_wr_en         <= '0';
+                fifo_wr_data       <= (others => '0');
+                data_fifo_index_r  <= 0;
+                lcd_cmd_cnt_r      <= 0;
+                -- led_alarm_act      <= '0';
+                -- led_alarm_ring     <= '0';
+                -- led_countdown_act  <= '0';
+                -- led_countdown_ring <= '0';
+                -- led_switch_act     <= '0';
             else
                 case state_r is
                     when INIT =>
                         -- FIXME: Wake up from TIME mode?
-                        if ( fsm_time_start = '1' ) then
-                            state_r <= TURN_ON_DISPLAY;
-                        else
-                            state_r <= INIT;
-                        end if;
-                    when TURN_ON_DISPLAY =>
+                        fifo_wr_en    <= '1';
+                        fifo_wr_data  <= CMD_DUMMY_DATA_c;
+                        state_r       <= SET_EN_LOW;
+                    when SET_EN_LOW =>
                         fifo_wr_en   <= '1';
-                        fifo_wr_data <= CMD_TURN_ON_DISPLAY_c;
-                        state_r      <= FUNCTION_SET;
+                        fifo_wr_data <= CMD_SEND_EN_LOW_c;
+                        case lcd_cmd_cnt_r is
+                            when 0 =>
+                                state_r <= TURN_ON_DISPLAY;
+                            when 1 =>
+                                state_r <= FUNCTION_SET;
+                            when 2 =>
+                                state_r <= SET_ENTRY_MODE;
+                            when 3 =>
+                                state_r <= CLEAR_DISPLAY;
+                            when 4 =>
+                                if ( data_fifo_cnt_r = 0 ) then
+                                    state_r    <= IDLE;      -- IDLE when there's no data to send
+                                else
+                                    state_r    <= SEND_DATA;
+                                end if;
+                            when others =>
+                                state_r <= TURN_ON_DISPLAY;
+                        end case;
+                    when TURN_ON_DISPLAY =>
+                        fifo_wr_en    <= '1';
+                        fifo_wr_data  <= CMD_TURN_ON_DISPLAY_c;
+                        lcd_cmd_cnt_r <= lcd_cmd_cnt_r + 1;
+                        state_r       <= SET_EN_LOW;
                     when FUNCTION_SET =>
                         fifo_wr_en   <= '1';
                         fifo_wr_data <= CMD_FUNCTION_SET_c;
-                        if ( data_fifo_cnt_r = 0 ) then
-                            state_r    <= IDLE;      -- IDLE when there's no data to send
-                        else
-                            state_r    <= SEND_DATA;
-                        end if;
+                        lcd_cmd_cnt_r <= lcd_cmd_cnt_r + 1;
+                        state_r       <= SET_EN_LOW;
+                    when SET_ENTRY_MODE =>
+                        fifo_wr_en   <= '1';
+                        fifo_wr_data <= CMD_SET_ENTRY_MODE_c;
+                        lcd_cmd_cnt_r <= lcd_cmd_cnt_r + 1;
+                        state_r       <= SET_EN_LOW;
+                    when CLEAR_DISPLAY =>
+                        fifo_wr_en    <= '1';
+                        fifo_wr_data  <= CMD_CLEAR_DISPLAY_c;
+                        lcd_cmd_cnt_r <= lcd_cmd_cnt_r + 1;
+                        state_r       <= SET_EN_LOW;
                     when SEND_DATA =>
                         if ( data_fifo_index_r < data_fifo_cnt_r and data_fifo_cnt_r /= 0 ) then
                             fifo_wr_en        <= '1';
