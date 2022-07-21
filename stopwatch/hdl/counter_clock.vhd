@@ -33,6 +33,7 @@ Use ieee.std_logic_unsigned.All;
 Entity counter_clock Is
 	Port (
 		clk : In STD_LOGIC;
+		en_100 : In STD_LOGIC;
 		fsm_stopwatch_start : In STD_LOGIC;
 		sw_reset : In std_logic;
 		key_plus_imp : In STD_LOGIC;
@@ -69,25 +70,27 @@ Begin
 						min_signal <= "0000000";
 						hr_signal <= "0000000";
 					Else
-						csec_signal <= csec_signal + 1;
-						If csec_signal = "1100011" Then
-							csec_signal <= "0000000";
-							sec_signal <= sec_signal + 1;
-							If sec_signal = "111011" Then
-								sec_signal <= "0000000";
-								min_signal <= min_signal + 1;
-								If min_signal = "0111011" Then
-									min_signal <= "0000000";
-									hr_signal <= hr_signal + 1;
-									If hr_signal = "0010111" Then
-										csec_signal <= csec_signal - csec_signal;
-										sec_signal <= sec_signal - sec_signal;
-										min_signal <= min_signal - min_signal;
-										hr_signal <= hr_signal - hr_signal;
-									End If;
-								End If;
-							End If;
-						End If;
+					   if en_100 = '1' then
+                            csec_signal <= csec_signal + 1;
+                            If csec_signal = "1100011" Then
+                                csec_signal <= "0000000";
+                                sec_signal <= sec_signal + 1;
+                                If sec_signal = "111011" Then
+                                    sec_signal <= "0000000";
+                                    min_signal <= min_signal + 1;
+                                    If min_signal = "0111011" Then
+                                        min_signal <= "0000000";
+                                        hr_signal <= hr_signal + 1;
+                                        If hr_signal = "0010111" Then
+                                            csec_signal <= csec_signal - csec_signal;
+                                            sec_signal <= sec_signal - sec_signal;
+                                            min_signal <= min_signal - min_signal;
+                                            hr_signal <= hr_signal - hr_signal;
+                                        End If;
+                                    End If;
+                                End If;
+                            End If;
+                         End If;
 					End If;
 				End If;
 			End If;

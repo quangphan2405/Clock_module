@@ -217,6 +217,7 @@ begin
     stw_i : entity work.stopwatch
     port map (
         clk => clk,
+        en_100 => en_100,
         reset => reset,
         fsm_stopwatch_start => fsm_stopwatch_start,
         key_plus_imp => key_plus_imp,
@@ -342,7 +343,7 @@ begin
     
     -- Data assignment
     -- stw_data <= std_logic_vector(to_unsigned(stw_cnt_r, 28));
-    stw_data <= cs & mm & mm & ss;
+    stw_data <= hh & mm & ss & cs;
     time_data <= std_logic_vector(to_unsigned(data_cnt_r, 21));
     
     

@@ -32,6 +32,7 @@ Use IEEE.NUMERIC_STD.All;
 Entity stopwatch Is
 	Port (
 		clk : In STD_LOGIC;
+		en_100 : In STD_LOGIC;
 		fsm_stopwatch_start : In STD_LOGIC;
 		reset : In STD_LOGIC;
 		key_plus_imp : In STD_LOGIC;
@@ -61,6 +62,7 @@ Architecture Behavioral Of stopwatch Is
 	Component counter_clock
 		Port (
 			clk : In std_logic;
+		    en_100 : In STD_LOGIC;
 			fsm_stopwatch_start : In STD_LOGIC;
 			sw_reset : In std_logic;
 			key_plus_imp : In STD_LOGIC;
@@ -126,6 +128,7 @@ Begin
 	counter_clock_port : counter_clock
 	Port Map(
 		clk => clk, 
+		en_100 => en_100,
 		fsm_stopwatch_start => fsm_stopwatch_start,
 		sw_reset => reset, 
 		key_plus_imp => key_plus_imp, 
