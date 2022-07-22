@@ -46,7 +46,7 @@ architecture behavior of display_standalone is
     constant HH_MM_SS_c    : std_logic_vector(20 downto 0) := "001000100100100010011"; -- 17:18:19
     constant HH_MM_SS_CS_c : std_logic_vector(27 downto 0) := "0010001001001000100110010100"; -- 17:18:19.20
     constant DD_MM_YY_c    : std_logic_vector(20 downto 0) := "001000100010100010110"; -- 17.10.22
-    constant DOW_c         : std_logic_vector( 2 downto 0) := "001"; -- Mo
+    constant DOW_c         : std_logic_vector( 2 downto 0) := "011"; -- Do
 
     -- FSM control signals
     signal fsm_time_start      : std_logic := '0';
@@ -272,7 +272,6 @@ begin
                 elsif ( cnt_r = 70000 ) then
                     lcd_time_act        <= '1';
                 elsif ( cnt_r = 120000 ) then
-                    lcd_time_act        <= '0';
                     fsm_time_start      <= '0';
                     fsm_date_start      <= '1';
                     fsm_alarm_start     <= '0';
@@ -281,7 +280,7 @@ begin
                     fsm_countdown_start <= '0';
                     fsm_stopwatch_start <= '0';
                 elsif ( cnt_r = 220000 ) then
-                    lcd_alarm_snooze    <= '0';
+                    lcd_countdown_act   <= '1';
                     fsm_time_start      <= '0';
                     fsm_date_start      <= '0';
                     fsm_alarm_start     <= '1';
@@ -318,6 +317,8 @@ begin
                 elsif ( cnt_r = 470000 ) then
                     lcd_switchoff_act   <= '1';
                 elsif ( cnt_r = 520000 ) then
+                    lcd_time_act        <= '0';
+                    lcd_alarm_snooze    <= '1';
                     lcd_switchoff_act   <= '0';
                     fsm_time_start      <= '0';
                     fsm_date_start      <= '0';
@@ -327,9 +328,8 @@ begin
                     fsm_countdown_start <= '1';
                     fsm_stopwatch_start <= '0';
                 elsif ( cnt_r = 570000 ) then
-                    lcd_countdown_act   <= '1';
-                elsif ( cnt_r = 620000 ) then
                     lcd_countdown_act   <= '0';
+                elsif ( cnt_r = 620000 ) then
                     fsm_time_start      <= '0';
                     fsm_date_start      <= '0';
                     fsm_alarm_start     <= '0';
@@ -338,9 +338,9 @@ begin
                     fsm_countdown_start <= '0';
                     fsm_stopwatch_start <= '1';
                 elsif ( cnt_r = 670000 ) then
-                    lcd_stopwatch_act   <= '1';
+                    --lcd_stopwatch_act   <= '1';
                 elsif ( cnt_r = 720000 ) then
-                    lcd_stopwatch_act   <= '0';
+                    --lcd_stopwatch_act   <= '0';
                 end if;
 
                 cnt_r <= cnt_r + 1;
