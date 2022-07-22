@@ -109,51 +109,40 @@ architecture behavior of display is
 
     -- Time word -> (T, i, m, e, :)
     constant TIME_ENCODE_c : encode_array5_t := ("01010100", "01101001", "01101101", "01100101", "00111010");
-    constant TIME_ADDR_c   : encode_array5_t := (x"07"     , x"08"     , x"09"     , x"0A"     , x"0B"     );
-
-    -- Alarm "A" character and under it -> (A, *, Z)         *** (1) in Manual section 2.7.1
-    constant ALARM_NOTE_ENCODE_c : encode_array3_t := ("01000001", "00101010", "01011010");
-    constant ALARM_NOTE_ADDR_c   : encode_array3_t := (x"40"     , x"14"     , x"14"     );
-
-    -- Time switch "S" character and under it -> (S, *)      *** (1) in Manual section 2.7.1
-    constant SWITCH_NOTE_ENCODE_c : encode_array2_t := ("01010011", "00101010");
-    constant SWITCH_NOTE_ADDR_c   : encode_array2_t := (x"53"     , x"27"     );
+    constant TIME_ADDR_c   : std_logic_vector(7 downto 0) := x"07";
 
     -- Date word -> (D, a, t, e, :)
     constant DATE_ENCODE_c : encode_array5_t := ("01000100", "01100001", "01110100", "01100101", "00111010");
-    constant DATE_ADDR_c   : encode_array5_t := (x"1B"     , x"1C"     , x"1D"     , x"1E"     , x"1F"     );
+    constant DATE_ADDR_c   : std_logic_vector(7 downto 0) := x"1B";
 
     -- DCF word -> (D, C,F)                                  *** (2) in Manual section 2.7.1
     constant DCF_ENCODE_c : encode_array3_t := ("01000100", "01000011", "01000110");
-    constant DCF_ADDR_c   : encode_array3_t := (x"4F"     , x"50"     , x"51"     );
+    constant DCF_ADDR_c   : std_logic_vector(7 downto 0) := x"4F";
 
     -- Alarm word -> (A, l, a, r, m, :)
     constant ALARM_ENCODE_c : encode_array6_t := ("01000001", "01101100", "01100001", "01110010", "01101101", "00111010");
-    constant ALARM_ADDR_c   : encode_array6_t := (x"1A"     , x"1B"     , x"1C"     , x"1D"     , x"1E"     , x"1F"     );
+    constant ALARM_ADDR_c   : std_logic_vector(7 downto 0) := x"1A";
 
     -- ON word -> (O, n, :)
     constant ON_SWITCH_ENCODE_c : encode_array3_t := ("01001111", "01101110", "00111010");
-    constant ON_SWITCH_ADDR_c   : encode_array3_t := (x"08"     , x"09"     , x"0A"     );
-    constant ON_TIMER_ADDR_c    : encode_array2_t := (x"63"     , x"64"     );  -- *** (3) in Manual section 2.7.1
+    constant ON_SWITCH_ADDR_c   : std_logic_vector(7 downto 0) := x"08";
 
     -- OFF word -> (O, f, f, :)
     constant OFF_SWITCH_ENCODE_c : encode_array4_t := ("01001111", "01100110", "01100110", "00111010");
-    constant OFF_SWITCH_ADDR_c   : encode_array4_t := (x"1C"     , x"1D"     , x"1E"     , x"1F"     );
-    constant OFF_TIMER_ADDR_c    : encode_array3_t := (x"62"     , x"63"     , x"64"     );  -- *** (3) in Manual section 2.7.1
+    constant OFF_SWITCH_ADDR_c   : std_logic_vector(7 downto 0) := x"1C";
 
     -- Timer word -> (T, i, m, e, r, :)
     constant TIMER_ENCODE_c : encode_array6_t := ("01010100", "01101001", "01101101", "01100101", "01110010", "00111010");
-    constant TIMER_ADDR_c   : encode_array6_t := (x"1A"     , x"1B"     , x"1C"     , x"1D"     , x"1E"     , x"1F"     );
+    constant TIMER_ADDR_c   : std_logic_vector(7 downto 0) := x"1A";
 
     -- Stop watch word -> (S, t, o, p, ' ', w, a, t, c, h, :)
     constant STOPWATCH_ENCODE_c : encode_array11_t := ("01010011", "01110100", "01101111", "01110000", "10001100", "01010111",
                                                        "01100001", "01110100", "01100011", "01101000", "00111010");
-    constant STOPWATCH_ADDR_c   : encode_array11_t := (x"17"     , x"18"     , x"19"     , x"1A"     , x"1B"     , x"1C"     ,
-                                                       x"1D"     , x"1E"     , x"1F"     , x"20"     , x"21"     );
+    constant STOPWATCH_ADDR_c   : std_logic_vector(7 downto 0) := x"17";
 
     -- Lap word -> (L, a, p)                                 *** (4) in Manual section 2.7.1
     constant LAP_ENCODE_c : encode_array3_t := ("01001100", "01100001", "01110000");
-    constant LAP_ADDR_c   : encode_array3_t := (x"54"     , x"55"     , x"56"     );
+    constant LAP_ADDR_c   : std_logic_vector(7 downto 0) := x"54";
 
     -- Date of week -> (M, o) / (D, i) / (M, i) / (D, o) / (F, r) / (S, a) / (S, u)
     constant MO_ENCODE_c  : encode_array2_t    := ("01001101", "01101111");
@@ -165,7 +154,7 @@ architecture behavior of display is
     constant SU_ENCODE_c  : encode_array2_t    := ("01010011", "01101111");
     constant DOW_ENCODE_c : DOW_encode_array_t := (MO_ENCODE_c, DI_ENCODE_c, MI_ENCODE_c, DO_ENCODE_c,
                                                    FR_ENCODE_c, SA_ENCODE_c, SU_ENCODE_c);
-    constant DOW_ADDR_c   : encode_array2_t    := (x"58"     , x"59"     );
+    constant DOW_ADDR_c   : std_logic_vector(7 downto 0) := x"58";
 
     -- Digits from 0 to 9
     constant DIGIT_ENCODE_c : encode_array10_t := ("00110000", "00110001", "00110010", "00110011", "00110100",
@@ -174,43 +163,13 @@ architecture behavior of display is
     -- ***********************************
     -- Dynamic data / characters address
     -- ***********************************
-    constant TIME_DATA_ADDR_c      : encode_array6_t := (x"4C", x"4B", x"49", x"48", x"46", x"45");
-    constant DATE_DATA_ADDR_c      : encode_array6_t := (x"63", x"62", x"60", x"5F", x"5D", x"5C");
-    constant ALARM_DATA_ADDR_c     : encode_array4_t := (x"5F", x"5E", x"5C", x"5B");
-    constant SWITCHON_DATA_ADDR_c  : encode_array6_t := (x"4C", x"4B", x"49", x"48", x"46", x"45");
-    constant SWITCHOFF_DATA_ADDR_c : encode_array6_t := (x"60", x"5F", x"5D", x"5C", x"5A", x"59");
-    constant TIMER_DATA_ADDR_c     : encode_array6_t := (x"60", x"5F", x"5D", x"5C", x"5A", x"59");
-    constant STOPWATCH_DATA_ADDR_c : encode_array8_t := (x"62", x"61", x"5F", x"5E", x"5C", x"5B", x"59", x"58");
-
-    -- ***********************************
-    -- Perimeters address
-    -- ***********************************
-    constant TIME_PERIMETER_ADDR_c      : encode_array2_t := (x"47", x"4A");
-    constant DATE_PERIMETER_ADDR_c      : encode_array2_t := (x"5E", x"61");
-    constant ALARM_PERIMETER_ADDR_c     : std_logic_vector(7 downto 0) := x"5D";
-    constant SWITCHOFF_PERIMETER_ADDR_c : encode_array2_t := (x"5B", x"5E");
-    constant STOPWATCH_PERIMETER_ADDR_c : encode_array3_t := (x"5A", x"5D", x"60");
-
-    -- ***********************************
-    -- Clear-up word address
-    -- ***********************************
-    constant TIME_CLEAR_WORD_ADDR_c : encode_array11_t := STOPWATCH_ENCODE_c;
-    constant SWON_CLEAR_WORD_ADDR_c : encode_array4_t := (x"07", x"0B", x"1A", x"1B");
-
-    -- ***********************************
-    -- Clear-up data address
-    -- ***********************************
-    constant TIME_CLEAR_DATA_ADDR_c  : encode_array13_t := (x"64", x"63", x"62", x"61", x"60", x"5F", x"5E",
-                                                            x"5D", x"5C", x"5B", x"5A", x"59", x"58");
-    constant ALARM_CLEAR_DATA_ADDR_c : encode_array6_t  := (x"63", x"62", x"61", x"60", x"59", x"58");
-
-    -- ***********************************
-    -- Clear-up symbol address
-    -- ***********************************
-    constant TIME_CLEAR_SYM_ADDR_c      : encode_array3_t := LAP_ADDR_c;
-    constant SWITCHOFF_CLEAR_SYM_ADDR_c : std_logic_vector(7 downto 0) := x"43";
-    constant TIMER_CLEAR_SYM_ADDR_c     : std_logic_vector(7 downto 0) := x"58";
-    constant STOPWATCH_CLEAR_SYM_ADDR_c : encode_array2_t := (x"64", x"63");
+    constant TIME_DATA_ADDR_c      : std_logic_vector(7 downto 0) := x"45";
+    constant DATE_DATA_ADDR_c      : std_logic_vector(7 downto 0) := x"5C";
+    constant ALARM_DATA_ADDR_c     : std_logic_vector(7 downto 0) := x"5B";
+    constant SWITCHON_DATA_ADDR_c  : std_logic_vector(7 downto 0) := x"45";
+    constant SWITCHOFF_DATA_ADDR_c : std_logic_vector(7 downto 0) := x"59";
+    constant TIMER_DATA_ADDR_c     : std_logic_vector(7 downto 0) := x"59";
+    constant STOPWATCH_DATA_ADDR_c : std_logic_vector(7 downto 0) := x"58";
 
     -- ***********************************
     -- Special symbol address
@@ -218,6 +177,7 @@ architecture behavior of display is
     constant SWITCH_STAR_ADDR_c      : encode_array2_t := (x"43", x"58");
     constant ALARM_INDICATOR_ADDR_c  : encode_array2_t := (x"40", x"14");
     constant SWITCH_INDICATOR_ADDR_c : encode_array2_t := (x"53", x"27");
+    constant TIMER_INDI_ADDR_c       : std_logic_vector(7 downto 0) := x"62";  -- *** (3) in Manual section 2.7.1
 
     -- ***********************************
     -- Special commands for LCD
@@ -293,7 +253,6 @@ architecture behavior of display is
     signal lcd_cmd_cnt_r    : integer;
     signal prev_data_fifo_r : std_logic_vector(7 downto 0);
     signal wait_cnt_r       : integer;
-    
 
     -- Component declarations
     -- BCD decoder
@@ -508,7 +467,7 @@ begin
                 fifo_stw_array_v  := (others => (others => '0'));
                 store_v           := STORE_INIT;
             else
-                -- Update every 1/10 sec
+                -- Update every 1/10 sec - to be safe
                 if ( en_10 = '1' ) then
 
                     -- *******************************
@@ -522,102 +481,107 @@ begin
                     fifo_array_v := (others => (others => '0'));
                     fifo_stw_array_v := (others => (others => '0'));
 
-                    -- *******************************
-                    -- Clear display
-                    -- *******************************
-                    --fifo_array_v(data_cnt_v) := CMD_CLEAR_DISPLAY;
-
 
                     -- *******************************
                     -- Always-on display
                     -- *******************************
                     -- *** Send alarm indicator ***
---                    -- Send letter A
-                    fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_PREFIX_c        & ALARM_INDICATOR_ADDR_c(0)(6 downto 0);
+                    -- Line 2: Send first address - letter A
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_PREFIX_c        & ALARM_INDICATOR_ADDR_c(0)(6 downto 0);
                     fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ALARM_INDICATOR_ADDR_c(0)(6 downto 0);
                     data_cnt_v := data_cnt_v + 2;
-                    fifo_array_v(data_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_A_ENCODE_c;
+                    -- Line 2: Send letter A symbol
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_A_ENCODE_c; -- Change RS
                     fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & LETTER_A_ENCODE_c;
                     fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_A_ENCODE_c;
                     data_cnt_v := data_cnt_v + 3;
-                    -- Send indicative letter if present
-                    fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & ALARM_INDICATOR_ADDR_c(1)(6 downto 0);
+
+                    -- Line 3: Send first address - alarm indicative symbol if present
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ALARM_INDICATOR_ADDR_c(1)(6 downto 0);
                     fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & ALARM_INDICATOR_ADDR_c(1)(6 downto 0);
                     fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ALARM_INDICATOR_ADDR_c(1)(6 downto 0);
-                    data_cnt_v := data_cnt_v + 3;                    
+                    data_cnt_v := data_cnt_v + 3;
+                    -- Line 3: Send alarm indicative symbol if present
                     if ( lcd_alarm_act = '1' ) then
-                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c; -- Change RS
                         fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & STAR_ENCODE_c;
                         fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c;
                     elsif ( lcd_alarm_snooze = '1' ) then
-                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_Z_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_Z_ENCODE_c; -- Change RS
                         fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & LETTER_Z_ENCODE_c;
                         fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_Z_ENCODE_c;
                     else
-                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
                         fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c;
                         fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
-                    end if;                    
+                    end if;
                     data_cnt_v := data_cnt_v + 3;
 
                     -- *** Send switch indicator ***
-                    -- Send letter S
-                    fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_INDICATOR_ADDR_c(0)(6 downto 0);
+                    -- Line 2: Send first address - letter S
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_INDICATOR_ADDR_c(0)(6 downto 0);
                     fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCH_INDICATOR_ADDR_c(0)(6 downto 0);
                     fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_INDICATOR_ADDR_c(0)(6 downto 0);
                     data_cnt_v := data_cnt_v + 3;
-                    fifo_array_v(data_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_S_ENCODE_c;
+                    -- Line 2: Send letter S symbol
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_S_ENCODE_c; -- Change RS
                     fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & LETTER_S_ENCODE_c;
                     fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_S_ENCODE_c;
                     data_cnt_v := data_cnt_v + 3;
-                    -- Send indicative letter if present
-                    fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_INDICATOR_ADDR_c(1)(6 downto 0);
+
+                    -- Line 3: Send first address - switch indicative symbol if present
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_INDICATOR_ADDR_c(1)(6 downto 0);
                     fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCH_INDICATOR_ADDR_c(1)(6 downto 0);
                     fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_INDICATOR_ADDR_c(1)(6 downto 0);
                     data_cnt_v := data_cnt_v + 3;
+                    -- Line 3: Send switch indicative symbol if present
                     if ( lcd_switchon_act = '1' or lcd_switchoff_act = '1' ) then
-                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c; -- Change RS
                         fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & STAR_ENCODE_c;
                         fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c;
                     else
-                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
                         fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c;
                         fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
                     end if;
                     data_cnt_v := data_cnt_v + 3;
 
                     -- *** Send "DCF" ***
-                    fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & DCF_ADDR_c(0)(6 downto 0);
-                    fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & DCF_ADDR_c(0)(6 downto 0);
-                    fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DCF_ADDR_c(0)(6 downto 0);
+                    -- Line 2: Send first address - "DCF" word
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DCF_ADDR_c(6 downto 0);
+                    fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & DCF_ADDR_c(6 downto 0);
+                    fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DCF_ADDR_c(6 downto 0);
                     data_cnt_v := data_cnt_v + 3;
-                    fifo_array_v(data_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                    -- Line 2: Send "DCF" word if present
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
                     data_cnt_v := data_cnt_v + 1;
-                    SEND_DCF_WORD : for i in 0 to 2 loop                        
+                    SEND_DCF_WORD : for i in 0 to 2 loop
                         if ( lcd_time_act = '1' ) then
-                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_DATA_PREFIX_c        & DCF_ENCODE_c(i);
-                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_SET_DATA_EN_LOW_PREFIX_c & DCF_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & DCF_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & DCF_ENCODE_c(i);
                         else
-                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c;
-                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c;
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
                         end if;
                     end loop SEND_DCF_WORD;
                     data_cnt_v := data_cnt_v + 2*3;
-                    
+
                     -- *** Send "LAP" ***
-                    fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & LAP_ADDR_c(0)(6 downto 0);
-                    fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & LAP_ADDR_c(0)(6 downto 0);
-                    fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & LAP_ADDR_c(0)(6 downto 0);
+                    -- Line 4: Send first address - "LAP" word
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & LAP_ADDR_c(6 downto 0);
+                    fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & LAP_ADDR_c(6 downto 0);
+                    fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & LAP_ADDR_c(6 downto 0);
                     data_cnt_v := data_cnt_v + 3;
-                    fifo_array_v(data_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                    -- Line 4: Send "LAP" word if present
+                    fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
                     data_cnt_v := data_cnt_v + 1;
-                    SEND_LAP_WORD : for i in 0 to 2 loop                        
+                    SEND_LAP_WORD : for i in 0 to 2 loop
                         if ( lcd_stopwatch_act = '1' ) then
-                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_DATA_PREFIX_c        & LAP_ENCODE_c(i);
-                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_SET_DATA_EN_LOW_PREFIX_c & LAP_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & LAP_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & LAP_ENCODE_c(i);
                         else
-                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c;
-                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c;
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
                         end if;
                     end loop SEND_LAP_WORD;
                     data_cnt_v := data_cnt_v + 2*3;
@@ -634,39 +598,39 @@ begin
 
                         -- Get time data input encoded to LCD characters - hh/mm/ss
                         dataInputEncode(BCD_decoded_time_data_s, data_line2_v);
-                        
-                        -- Line 1: Send first address
-                        fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(0)(6 downto 0);
-                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_ADDR_c(0)(6 downto 0);
-                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(0)(6 downto 0);
+
+                        -- Line 1: Send first address - "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
                         data_cnt_v := data_cnt_v + 3;
 
-                        -- Line 1: "Time:" word
-                        fifo_array_v(data_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                        -- Line 1: Send "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
                         data_cnt_v := data_cnt_v + 1;
                         SEND_TIME_WORD_T_M : for i in 0 to 4 loop
-                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_DATA_PREFIX_c        & TIME_ENCODE_c(i);
-                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_SET_DATA_EN_LOW_PREFIX_c & TIME_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & TIME_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & TIME_ENCODE_c(i);
                         end loop SEND_TIME_WORD_T_M;
                         data_cnt_v := data_cnt_v + 2*5;
-                        
-                        -- Line 2: Send first address
-                        fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(5)(6 downto 0);
-                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_DATA_ADDR_c(5)(6 downto 0);
-                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(5)(6 downto 0);
+
+                        -- Line 2: Send first address - TIME data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
                         data_cnt_v := data_cnt_v + 3;
 
-                        -- Line 2: Actual time data
-                        fifo_array_v(data_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                        -- Line 2: Actual TIME data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
                         data_cnt_v := data_cnt_v + 1;
                         SEND_TIME_DATA_T_M : for i in 0 to 5 loop
                             -- Read from MSB
-                            fifo_array_v(data_cnt_v)     := CMD_SET_DATA_PREFIX_c        & data_line2_v(7-i);
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line2_v(7-i);
                             fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line2_v(7-i);
                             data_cnt_v := data_cnt_v + 2;
-                            
+
                             if (i = 1 or i = 3) then
-                                fifo_array_v(data_cnt_v)     := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
                                 fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
                                 data_cnt_v := data_cnt_v + 2;
                             end if;
@@ -674,300 +638,555 @@ begin
 
                         -- TIME state can be driven from DATE, ALARM, SWITCHOFF, COUNTDOWN and STOPWATCH
                         -- Therefore, clean up any fields left from all possible previous state
+                        -- Line 3: Send first address - Clear
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
                         -- Line 3: Clear "Stop Watch:" word (longest and covers all cases)
---                        CLEAR_WORD_T_M : for i in 0 to 10 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIME_CLEAR_WORD_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & BLANK_ENCODE_c;
---                        end loop CLEAR_WORD_T_M;
---                        data_cnt_v := data_cnt_v + 2*11;
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        CLEAR_STW_WORD_T_M : for i in 0 to 10 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c(i);
+                        end loop CLEAR_STW_WORD_T_M;
+                        data_cnt_v := data_cnt_v + 2*11;
 
---                        -- Line 4: Clear basically STOPWATCH data line 4 + 2 more on the right due to TIMER off
---                        CLEAR_DATA_T_M : for i in 0 to 12 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIME_CLEAR_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & BLANK_ENCODE_c;
---                        end loop CLEAR_DATA_T_M;
---                        data_cnt_v := data_cnt_v + 2*13;
+                        -- Clear basically STOPWATCH data line 4 + 2 more on the right due to TIMER off
+                        -- Line 4: Send first address - Clear
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 4: Clear "Lap" from STOPWATCH state
---                        CLEAR_SYM_T_M : for i in 0 to 2 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIME_CLEAR_SYM_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & BLANK_ENCODE_c;
---                        end loop CLEAR_SYM_T_M;
---                        data_cnt_v := data_cnt_v + 6;
+                        -- Line 4: Clear data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        CLEAR_STW_DATA_T_M : for i in 0 to 12 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c(i);
+                        end loop CLEAR_STW_DATA_T_M;
+                        data_cnt_v := data_cnt_v + 2*13;
 
---                    elsif ( fsm_date_start = '1' ) then
+                    elsif ( fsm_date_start = '1' ) then
 
---                        -- Report the type of data to be stored
---                        store_v := STORE_DATE;
+                        -- Report the type of data to be stored
+                        store_v := STORE_DATE;
 
---                        -- Get time data input encoded to LCD characters - hh/mm/ss
---                        dataInputEncode(BCD_decoded_time_data_s, data_line2_v);
+                        -- Get time data input encoded to LCD characters - hh/mm/ss
+                        dataInputEncode(BCD_decoded_time_data_s, data_line2_v);
 
---                        -- Get date data input encoded to LCD characters - DD/MM/YY
---                        dataInputEncode(BCD_decoded_date_data_s, data_line4_v);
+                        -- Get date data input encoded to LCD characters - DD/MM/YY
+                        dataInputEncode(BCD_decoded_date_data_s, data_line4_v);
 
---                        -- Line 1: "Time:" word
---                        SEND_TIME_WORD_D_M : for i in 0 to 4 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIME_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & TIME_ENCODE_c(i);
---                        end loop SEND_TIME_WORD_D_M;
---                        data_cnt_v := data_cnt_v + 2*5;
+                        -- Line 1: Send first address - "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 2: Actual time data
---                        SEND_TIME_DATA_D_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIME_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line2_v(i);
---                        end loop SEND_TIME_DATA_D_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Line 1: Send "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_TIME_WORD_D_M : for i in 0 to 4 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & TIME_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & TIME_ENCODE_c(i);
+                        end loop SEND_TIME_WORD_D_M;
+                        data_cnt_v := data_cnt_v + 2*5;
 
---                        -- Line 3: "Date:" word
---                        SEND_DATE_WORD_D_M : for i in 0 to 4 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & DATE_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & DATE_ENCODE_c(i);
---                        end loop SEND_DATE_WORD_D_M;
---                        data_cnt_v := data_cnt_v + 2*5;
+                        -- Line 2: Send first address - TIME data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 4: Actual date data
---                        SEND_DATE_DATA_D_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & DATE_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line4_v(i);
---                        end loop SEND_DATE_DATA_D_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Line 2: Actual TIME data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_TIME_DATA_D_M : for i in 0 to 5 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line2_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line2_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
 
---                        -- Line 4: "DOW" word
---                        dow_cnt_v := to_integer(unsigned(lcd_date_dow)) - 1; -- -1 since index starts from 1 to 7
---                        SEND_DOW_WORD_D_M : for i in 0 to 1 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & DOW_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & DOW_ENCODE_c(dow_cnt_v)(i);
---                        end loop SEND_DOW_WORD_D_M;
---                        data_cnt_v := data_cnt_v + 2*2;
+                            if (i = 1 or i = 3) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_TIME_DATA_D_M;
 
---                        -- Line 2: Perimeter for TIME data was sent from TIME state
+                        -- Line 3: Send first address - "Date:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DATE_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & DATE_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DATE_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 4: Send perimeters "." for DATE data
---                        SEND_PERIMETER_D_M: for i in 0 to 1 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & DATE_PERIMETER_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & DOT_ENCODE_c;
---                        end loop SEND_PERIMETER_D_M;
---                        data_cnt_v := data_cnt_v + 2*2;
+                        -- Line 3: Send "Date:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_DATE_WORD_D_M : for i in 0 to 4 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & DATE_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & DATE_ENCODE_c(i);
+                        end loop SEND_DATE_WORD_D_M;
+                        data_cnt_v := data_cnt_v + 2*5;
 
---                        -- No need to clear as we are sending more characters than TIME state
+                        -- Line 4: Send first address - DOW data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DOW_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & DOW_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DOW_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                    elsif ( fsm_alarm_start = '1' ) then
+                        -- Line 4: Send DOW data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_DOW_WORD_D_M : for i in 0 to 1 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & DATE_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & DATE_ENCODE_c(i);
+                        end loop SEND_DOW_WORD_D_M;
+                        data_cnt_v := data_cnt_v + 2*2;
 
---                        -- Report the type of data to be stored
---                        store_v := STORE_ALARM;
+                        -- Line 4: Send first address - DATE data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DATE_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & DATE_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DATE_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Get time data input encoded to LCD characters - hh/mm/ss
---                        dataInputEncode(BCD_decoded_time_data_s, data_line2_v);
+                        -- Line 4: Send DATE data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_DATE_DATA_D_M : for i in 0 to 5 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line4_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line4_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
 
---                        -- Get alarm data input encoded to LCD characters - hh/mm
---                        dataInputEncode(BCD_decoded_alarm_data_s, data_line4_v);
+                            if (i = 1 or i = 3) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & DOT_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & DOT_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_DATE_DATA_D_M;
 
---                        -- Line 1: "Time:" word
---                        SEND_TIME_WORD_A_M : for i in 0 to 4 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIME_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & TIME_ENCODE_c(i);
---                        end loop SEND_TIME_WORD_A_M;
---                        data_cnt_v := data_cnt_v + 2*5;
+                        -- No need to clear as we are sending more characters than TIME state
 
---                        -- Line 2: Actual time data
---                        SEND_TIME_DATA_A_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIME_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line2_v(i);
---                        end loop SEND_TIME_DATA_A_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                    elsif ( fsm_alarm_start = '1' ) then
 
---                        -- Line 3: "Alarm:" word
---                        SEND_ALARM_WORD_A_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & ALARM_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & ALARM_ENCODE_c(i);
---                        end loop SEND_ALARM_WORD_A_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Report the type of data to be stored
+                        store_v := STORE_ALARM;
 
---                        -- Line 4: Actual alarm data
---                        SEND_ALARM_DATA_A_M : for i in 0 to 3 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & ALARM_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line4_v(i);
---                        end loop SEND_ALARM_DATA_A_M;
---                        data_cnt_v := data_cnt_v + 2*4;
+                        -- Get time data input encoded to LCD characters - hh/mm/ss
+                        dataInputEncode(BCD_decoded_time_data_s, data_line2_v);
 
---                        -- Line 2: Perimeter for TIME data was sent from TIME state
+                        -- Get alarm data input encoded to LCD characters - hh/mm
+                        dataInputEncode(BCD_decoded_alarm_data_s, data_line4_v);
 
---                        -- Line 4: Send perimeters "." for ALARM data
---                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_PREFIX_c   & ALARM_PERIMETER_ADDR_c(6 downto 0);
---                        fifo_array_v(data_cnt_v + 1) := CMD_WRITE_DATA_PREFIX_c & SEMICOLON_ENCODE_c;
---                        data_cnt_v := data_cnt_v + 2*1;
+                        -- Line 1: Send first address - "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- ALARM state can only be reached from DATE state, where the English words are written more
---                        -- Therefore only clear extra data characters from DATE state
---                        CLEAR_DATA_A_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & ALARM_CLEAR_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & BLANK_ENCODE_c;
---                        end loop CLEAR_DATA_A_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Line 1: Send "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_TIME_WORD_A_M : for i in 0 to 4 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & TIME_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & TIME_ENCODE_c(i);
+                        end loop SEND_TIME_WORD_A_M;
+                        data_cnt_v := data_cnt_v + 2*5;
 
---                    elsif ( fsm_switchon_start = '1' ) then
+                        -- Line 2: Send first address - TIME data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Report the type of data to be stored
---                        store_v := STORE_SWITCH_ON;
+                        -- Line 2: Actual TIME data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_TIME_DATA_A_M : for i in 0 to 5 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line2_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line2_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
 
---                        -- Get switchon data input encoded to LCD characters  - hh/mm/ss
---                        dataInputEncode(BCD_decoded_swon_data_s, data_line2_v);
+                            if (i = 1 or i = 3) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_TIME_DATA_A_M;
 
---                        -- Get switchoff data input encoded to LCD characters - hh/mm/ss
---                        dataInputEncode(BCD_decoded_swoff_data_s, data_line4_v);
+                        -- Line 3: Send first address - "Alarm:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ALARM_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & ALARM_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ALARM_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 1: "On:" word
---                        SEND_SWON_WORD_SWON_M : for i in 0 to 2 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & ON_SWITCH_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & ON_SWITCH_ENCODE_c(i);
---                        end loop SEND_SWON_WORD_SWON_M;
---                        data_cnt_v := data_cnt_v + 2*3;
+                        -- Line 3: Send "Alarm:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_ALARM_WORD_A_M : for i in 0 to 5 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & ALARM_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & ALARM_ENCODE_c(i);
+                        end loop SEND_ALARM_WORD_A_M;
+                        data_cnt_v := data_cnt_v + 2*6;
 
---                        -- Line 2: Actual switch-on data
---                        SEND_SW_ON_DATA_SWON_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & SWITCHON_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line2_v(i);
---                        end loop SEND_SW_ON_DATA_SWON_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Line 4: Send first address - Combine clearing previous DATA & DOW data with sending ALARM data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DOW_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & DOW_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & DOW_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 3: "Off:" word
---                        SEND_SWOFF_WORD_SWON_M : for i in 0 to 3 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & OFF_SWITCH_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & OFF_SWITCH_ENCODE_c(i);
---                        end loop SEND_SWOFF_WORD_SWON_M;
---                        data_cnt_v := data_cnt_v + 2*4;
+                        -- Line 4: Clear 3 block prefixes
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        CLEAR_PREFIX_A_M : for i in 0 to 2 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c(i);
+                        end loop CLEAR_PREFIX_A_M;
+                        data_cnt_v := data_cnt_v + 2*3;
 
---                        -- Line 4: Actual switch-off data
---                        SEND_SW_OFF_DATA_SWON_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & SWITCHOFF_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line4_v(i);
---                        end loop SEND_SW_OFF_DATA_SWON_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Line 4: Actual ALARM data
+                        SEND_ALARM_DATA_A_M : for i in 0 to 3 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line4_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line4_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
 
---                        -- Line 2: Send STAR symbol
---                        fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_PREFIX_c   & SWITCH_STAR_ADDR_c(0)(6 downto 0);
---                        fifo_array_v(data_cnt_v + 1) := CMD_WRITE_DATA_PREFIX_c & STAR_ENCODE_c;
---                        data_cnt_v := data_cnt_v + 2*1;
+                            if (i = 1) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_ALARM_DATA_A_M;
 
---                        -- Line 2: Perimeter for SWITCHON data was sent from TIME state
+                        -- Line 4: Clear 4 block suffixes
+                        CLEAR_SUFFIX_A_M : for i in 0 to 3 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c(i);
+                        end loop CLEAR_SUFFIX_A_M;
+                        data_cnt_v := data_cnt_v + 2*4;
 
---                        -- Line 4: Send perimeters "." for SWITCHOFF data
---                        SEND_PERIMETER_SWON_M: for i in 0 to 1 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & SWITCHOFF_PERIMETER_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & SEMICOLON_ENCODE_c;
---                        end loop SEND_PERIMETER_SWON_M;
---                        data_cnt_v := data_cnt_v + 2*2;
+                    elsif ( fsm_switchon_start = '1' ) then
 
---                        -- Less English characters are written in SWITCHON state compared to ALARM
---                        -- Therefore clear extra data characters from ALARM state
---                        CLEAR_WORD_SWON_M : for i in 0 to 3 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & SWON_CLEAR_WORD_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & BLANK_ENCODE_c;
---                        end loop CLEAR_WORD_SWON_M;
---                        data_cnt_v := data_cnt_v + 2*4;
+                        -- Report the type of data to be stored
+                        store_v := STORE_SWITCH_ON;
 
---                    elsif ( fsm_switchoff_start = '1' ) then
+                        -- Get switchon data input encoded to LCD characters  - hh/mm/ss
+                        dataInputEncode(BCD_decoded_swon_data_s, data_line2_v);
 
---                        -- Report the type of data to be stored
---                        store_v := STORE_SWITCH_OFF;
+                        -- Get switchoff data input encoded to LCD characters - hh/mm/ss
+                        dataInputEncode(BCD_decoded_swoff_data_s, data_line4_v);
 
---                        -- Get switchon data input encoded to LCD characters  - hh/mm/ss
---                        dataInputEncode(BCD_decoded_swon_data_s, data_line2_v);
+                        -- Line 1: Send first address - "On:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ON_SWITCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & ON_SWITCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ON_SWITCH_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Get switchoff data input encoded to LCD characters - hh/mm/ss
---                        dataInputEncode(BCD_decoded_swoff_data_s, data_line4_v);
+                        -- Line 1: Send "On:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_SWON_WORD_SWON_M : for i in 0 to 2 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & ON_SWITCH_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & ON_SWITCH_ENCODE_c(i);
+                        end loop SEND_SWON_WORD_SWON_M;
+                        data_cnt_v := data_cnt_v + 2*3;
 
---                        -- Line 1: "On:" word
---                        SEND_SWON_WORD_SWOFF_M : for i in 0 to 2 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & ON_SWITCH_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & ON_SWITCH_ENCODE_c(i);
---                        end loop SEND_SWON_WORD_SWOFF_M;
---                        data_cnt_v := data_cnt_v + 2*3;
+                        -- Line 2: Send first address - SWON data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCHON_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCHON_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCHON_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 2: Actual switch-on data
---                        SEND_SW_ON_DATA_SWOFF_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & SWITCHON_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line2_v(i);
---                        end loop SEND_SW_ON_DATA_SWOFF_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Line 2: Actual SWON data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_SWON_DATA_SWON_M : for i in 0 to 5 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line2_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line2_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
 
---                        -- Line 3: "Off:" word
---                        SEND_SWOFF_WORD_SWOFF_M : for i in 0 to 3 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & OFF_SWITCH_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & OFF_SWITCH_ENCODE_c(i);
---                        end loop SEND_SWOFF_WORD_SWOFF_M;
---                        data_cnt_v := data_cnt_v + 2*4;
+                            if (i = 1 or i = 3) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_SWON_DATA_SWON_M;
 
---                        -- Line 4: Actual switch-off data
---                        SEND_SW_OFF_DATA_SWOFF_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & SWITCHOFF_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line4_v(i);
---                        end loop SEND_SW_OFF_DATA_SWOFF_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Line 3: Send first address - "Off:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & OFF_SWITCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & OFF_SWITCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & OFF_SWITCH_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 4: Send STAR symbol
---                        fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_PREFIX_c   & SWITCH_STAR_ADDR_c(1)(6 downto 0);
---                        fifo_array_v(data_cnt_v + 1) := CMD_WRITE_DATA_PREFIX_c & STAR_ENCODE_c;
---                        data_cnt_v := data_cnt_v + 2*1;
+                        -- Line 3: Send "Off:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_SWOFF_WORD_SWON_M : for i in 0 to 3 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & ON_SWITCH_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & ON_SWITCH_ENCODE_c(i);
+                        end loop SEND_SWOFF_WORD_SWON_M;
+                        data_cnt_v := data_cnt_v + 2*4;
 
---                        -- Line 2: Perimeter for SWITCHON data was sent from TIME state
+                        -- Line 4: Send first address - SWOFF data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCHOFF_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCHOFF_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCHOFF_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 4: Perimeter for SWITCHOFF data was sent from SWITCHON state
+                        -- Line 4: Actual SWOFF data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_SWOFF_DATA_SWON_M : for i in 0 to 5 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line4_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line4_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
 
---                        -- Line 2: Clear STAR symbol from SWITCHON state
---                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_PREFIX_c   & SWITCHOFF_CLEAR_SYM_ADDR_c(6 downto 0);
---                        fifo_array_v(data_cnt_v + 1) := CMD_WRITE_DATA_PREFIX_c & BLANK_ENCODE_c;
---                        data_cnt_v := data_cnt_v + 2*1;
+                            if (i = 1 or i = 3) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_SWOFF_DATA_SWON_M;
 
---                    elsif ( fsm_countdown_start = '1' ) then
+                        -- Line 2: Send first address - switchon STAR symbol
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_STAR_ADDR_c(0)(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCH_STAR_ADDR_c(0)(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_STAR_ADDR_c(0)(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Report the type of data to be stored
---                        store_v := STORE_TIMER;
+                        -- Line 2: Send switchon STAR symbol
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c; -- Change RS
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & STAR_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c;
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Get time data input encoded to LCD characters - hh/mm/ss
---                        dataInputEncode(BCD_decoded_time_data_s, data_line2_v);
+                    elsif ( fsm_switchoff_start = '1' ) then
 
---                        -- Get countdown timer data input encoded to LCD characters - hh/mm/ss
---                        dataInputEncode(BCD_decoded_timer_data_s, data_line4_v);
+                        -- Report the type of data to be stored
+                        store_v := STORE_SWITCH_OFF;
 
---                        -- Line 1: "Time:" word
---                        SEND_TIME_WORD_TM_M : for i in 0 to 4 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIME_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & TIME_ENCODE_c(i);
---                        end loop SEND_TIME_WORD_TM_M;
---                        data_cnt_v := data_cnt_v + 2*5;
+                        -- Get switchon data input encoded to LCD characters  - hh/mm/ss
+                        dataInputEncode(BCD_decoded_swon_data_s, data_line2_v);
 
---                        -- Line 2: Actual time data
---                        SEND_TIME_DATA_TM_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIME_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line2_v(i);
---                        end loop SEND_TIME_DATA_TM_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Get switchoff data input encoded to LCD characters - hh/mm/ss
+                        dataInputEncode(BCD_decoded_swoff_data_s, data_line4_v);
 
---                        -- Line 3: "Timer:" word
---                        SEND_ALARM_WORD_TM_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIMER_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & TIMER_ENCODE_c(i);
---                        end loop SEND_ALARM_WORD_TM_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Line 1: Send first address - "On:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ON_SWITCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & ON_SWITCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ON_SWITCH_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 4: Actual timer data
---                        SEND_TIMER_DATA_TM_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & TIMER_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line4_v(i);
---                        end loop SEND_TIMER_DATA_TM_M;
---                        data_cnt_v := data_cnt_v + 2*6;
+                        -- Line 1: Send "On:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_SWON_WORD_SWOFF_M : for i in 0 to 2 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & ON_SWITCH_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & ON_SWITCH_ENCODE_c(i);
+                        end loop SEND_SWON_WORD_SWOFF_M;
+                        data_cnt_v := data_cnt_v + 2*3;
 
---                        -- Line 2: Perimeter for TIME data was sent from TIME state
+                        -- Line 2: Send first address - SWON data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCHON_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCHON_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCHON_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
 
---                        -- Line 4: Perimeter for TIMER data was sent from SWITCHON state
+                        -- Line 2: Actual SWON data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_SWON_DATA_SWOFF_M : for i in 0 to 5 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line2_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line2_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
 
---                        -- Line 4: Clear STAR symbol from SWITCHOFF state
---                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_PREFIX_c   & TIMER_CLEAR_SYM_ADDR_c(6 downto 0);
---                        fifo_array_v(data_cnt_v + 1) := CMD_WRITE_DATA_PREFIX_c & BLANK_ENCODE_c;
---                        data_cnt_v := data_cnt_v + 2*1;
+                            if (i = 1 or i = 3) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_SWON_DATA_SWOFF_M;
+
+                        -- Line 3: Send first address - "Off:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & OFF_SWITCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & OFF_SWITCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & OFF_SWITCH_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 3: Send "Off:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_SWOFF_WORD_SWOFF_M : for i in 0 to 3 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & ON_SWITCH_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & ON_SWITCH_ENCODE_c(i);
+                        end loop SEND_SWOFF_WORD_SWOFF_M;
+                        data_cnt_v := data_cnt_v + 2*4;
+
+                        -- Line 4: Send first address - SWOFF data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCHOFF_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCHOFF_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCHOFF_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 4: Actual SWOFF data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_SWOFF_DATA_SWOFF_M : for i in 0 to 5 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line4_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line4_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
+
+                            if (i = 1 or i = 3) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_SWOFF_DATA_SWOFF_M;
+
+                        -- Line 4: Send first address - switch STAR symbol
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_STAR_ADDR_c(1)(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCH_STAR_ADDR_c(1)(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_STAR_ADDR_c(1)(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 4: Send STAR symbol
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c; -- Change RS
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & STAR_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c;
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 2: Send first address - clear switchon STAR symbol
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_STAR_ADDR_c(0)(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCH_STAR_ADDR_c(0)(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_STAR_ADDR_c(0)(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 2: Clear switchon STAR symbol
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                        data_cnt_v := data_cnt_v + 3;
+
+                    elsif ( fsm_countdown_start = '1' ) then
+
+                        -- Report the type of data to be stored
+                        store_v := STORE_TIMER;
+
+                        -- Get time data input encoded to LCD characters - hh/mm/ss
+                        dataInputEncode(BCD_decoded_time_data_s, data_line2_v);
+
+                        -- Get countdown timer data input encoded to LCD characters - hh/mm/ss
+                        dataInputEncode(BCD_decoded_timer_data_s, data_line4_v);
+
+                        -- Line 1: Send first address - "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 1: Send "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_TIME_WORD_TM_M : for i in 0 to 4 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & TIME_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & TIME_ENCODE_c(i);
+                        end loop SEND_TIME_WORD_TM_M;
+                        data_cnt_v := data_cnt_v + 2*5;
+
+                        -- Line 2: Send first address - TIME data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 2: Actual TIME data
+                        fifo_array_v(data_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_TIME_DATA_TM_M : for i in 0 to 5 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line2_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line2_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
+
+                            if (i = 1 or i = 3) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_TIME_DATA_TM_M;
+
+                        -- Line 3: Send first address - "Timer:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIMER_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIMER_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIMER_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 3: Send "Timer:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_TIMER_WORD_TM_M : for i in 0 to 5 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & TIMER_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & TIMER_ENCODE_c(i);
+                        end loop SEND_TIMER_WORD_TM_M;
+                        data_cnt_v := data_cnt_v + 2*6;
+
+                        -- Line 4: Send first address - Combine clearing switchoff STAR symbol and send TIMER data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_STAR_ADDR_c(1)(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & SWITCH_STAR_ADDR_c(1)(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & SWITCH_STAR_ADDR_c(1)(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 4: Clear switchoff STAR symbol
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 4: Actual TIMER data
+                        SEND_TIMER_DATA_TM_M : for i in 0 to 5 loop
+                            -- Read from MSB
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line4_v(7-i);
+                            fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line4_v(7-i);
+                            data_cnt_v := data_cnt_v + 2;
+
+                            if (i = 1 or i = 3) then
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                                data_cnt_v := data_cnt_v + 2;
+                            end if;
+                        end loop SEND_TIMER_DATA_TM_M;
+
+                        -- Line 4: Send first address - TIMER indicator
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIMER_INDI_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIMER_INDI_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIMER_INDI_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 4: Send TIMER indicator
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        if ( lcd_countdown_act = '1' ) then
+                            SEND_TIMER_INDI_ON_TM_M : for i in 0 to 1 loop
+                                fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & ON_SWITCH_ENCODE_c(i);
+                                fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & ON_SWITCH_ENCODE_c(i);
+                            end loop SEND_TIMER_INDI_ON_TM_M;
+                            data_cnt_v := data_cnt_v + 2*2;
+                        else
+                            SEND_TIMER_INDI_OFF_TM_M : for i in 0 to 2 loop
+                                fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & OFF_SWITCH_ENCODE_c(i);
+                                fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & OFF_SWITCH_ENCODE_c(i);
+                            end loop SEND_TIMER_INDI_OFF_TM_M;
+                            data_cnt_v := data_cnt_v + 2*3;
+                        end if;
 
                     elsif ( fsm_stopwatch_start = '1' ) then
 
@@ -978,148 +1197,118 @@ begin
                         dataInputEncode(BCD_decoded_time_data_s, data_line2_v);
 
                         -- Get stopwatch data input encoded to LCD characters - hh/mm/ss
-                        dataInputEncode(BCD_decoded_stw_data_s, data_line4_v);
+                        -- dataInputEncode(BCD_decoded_stw_data_s, data_line4_v);
 
---                        -- Line 1: "Time:" word
---                        SEND_TIME_WORD_STW_M : for i in 0 to 4 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c & TIME_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & TIME_ENCODE_c(i);
---                        end loop SEND_TIME_WORD_STW_M;
---                        data_cnt_v := data_cnt_v + 2*5;
-
---                        -- Line 2: Actual time data
---                        SEND_TIME_DATA_STW_M : for i in 0 to 5 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c & TIME_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line2_v(i);
---                        end loop SEND_TIME_DATA_STW_M;
---                        data_cnt_v := data_cnt_v + 2*6;
-                          
-                        -- Line 2: Send first address
-                        fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(5)(6 downto 0);
-                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_DATA_ADDR_c(5)(6 downto 0);
-                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(5)(6 downto 0);
+                        -- Line 1: Send first address - "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_ADDR_c(6 downto 0);
                         data_cnt_v := data_cnt_v + 3;
 
-                        -- Line 2: Actual time data
-                        fifo_array_v(data_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                        -- Line 1: Send "Time:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                        data_cnt_v := data_cnt_v + 1;
+                        SEND_TIME_WORD_STW_M : for i in 0 to 4 loop
+                            fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & TIME_ENCODE_c(i);
+                            fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & TIME_ENCODE_c(i);
+                        end loop SEND_TIME_WORD_STW_M;
+                        data_cnt_v := data_cnt_v + 2*5;
+
+                        -- Line 2: Send first address - TIME data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIME_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIME_DATA_ADDR_c(6 downto 0);
+                        data_cnt_v := data_cnt_v + 3;
+
+                        -- Line 2: Actual TIME data
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
                         data_cnt_v := data_cnt_v + 1;
                         SEND_TIME_DATA_STW_M : for i in 0 to 5 loop
                             -- Read from MSB
-                            fifo_array_v(data_cnt_v)     := CMD_SET_DATA_PREFIX_c        & data_line2_v(7-i);
+                            fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line2_v(7-i);
                             fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line2_v(7-i);
                             data_cnt_v := data_cnt_v + 2;
-                            
+
                             if (i = 1 or i = 3) then
-                                fifo_array_v(data_cnt_v)     := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                                fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
                                 fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
                                 data_cnt_v := data_cnt_v + 2;
                             end if;
                         end loop SEND_TIME_DATA_STW_M;
-                        
-                        -- Line 3: Send first address
-                        fifo_array_v(data_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_ADDR_c(0)(6 downto 0);
-                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & STOPWATCH_ADDR_c(0)(6 downto 0);
-                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_ADDR_c(0)(6 downto 0);
+
+                        -- Line 3: Send first address - "Stop Watch:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & STOPWATCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_ADDR_c(6 downto 0);
                         data_cnt_v := data_cnt_v + 3;
 
-                        -- Line 3: "Stop Watch:" word
-                        fifo_array_v(data_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
+                        -- Line 3: Send "Stop Watch:" word
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
                         data_cnt_v := data_cnt_v + 1;
                         SEND_STW_WORD_STW_M : for i in 0 to 10 loop
                             fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_DATA_PREFIX_c        & STOPWATCH_ENCODE_c(i);
                             fifo_array_v(data_cnt_v + 2*i+1) := CMD_SET_DATA_EN_LOW_PREFIX_c & STOPWATCH_ENCODE_c(i);
                         end loop SEND_STW_WORD_STW_M;
                         data_cnt_v := data_cnt_v + 2*11;
-                        
 
---                        -- Line 3: "Stop Watch:" word
---                        SEND_STW_WORD_STW_M : for i in 0 to 10 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c & STOPWATCH_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & STOPWATCH_ENCODE_c(i);
---                        end loop SEND_STW_WORD_STW_M;
---                        data_cnt_v := data_cnt_v + 2*11;
+                        -- Line 4: STOPWATCH data will be sent later on
 
---                        -- Line 4: Actual stopwatch data
---                        SEND_STW_DATA_STW_M : for i in 0 to 7 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c & STOPWATCH_DATA_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & data_line4_v(i);
---                        end loop SEND_STW_DATA_STW_M;
---                        data_cnt_v := data_cnt_v + 2*8;
-
---                        -- Line 4: Send LAP word
---                        SEND_LAP_WORD_STW_M : for i in 0 to 2 loop
---                            fifo_array_v(data_cnt_v + 2*i) := CMD_SET_ADDR_PREFIX_c & LAP_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & LAP_ENCODE_c(i);
---                        end loop SEND_LAP_WORD_STW_M;
---                        data_cnt_v := data_cnt_v + 2*3;
-
---                        -- Line 2: Perimeter for TIME data was sent from TIME state
-
---                        -- Line 4: Send perimeters "." for STOPWATCH data
---                        SEND_PERIMETER_STW_M: for i in 0 to 2 loop
---                            fifo_array_v(data_cnt_v + 2*i) := CMD_SET_ADDR_PREFIX_c   & STOPWATCH_PERIMETER_ADDR_c(i)(6 downto 0);
---                            if ( i /= 2 ) then
---                                fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & SEMICOLON_ENCODE_c;
---                            else
---                                fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & DOT_ENCODE_c;
---                            end if;
---                        end loop SEND_PERIMETER_STW_M;
---                        data_cnt_v := data_cnt_v + 2*3;
-
---                        -- Line 4: Clear extra characters from "On" / "Off" word from TIMER state
---                        CLEAR_DATA_STW_M : for i in 0 to 1 loop
---                            fifo_array_v(data_cnt_v + 2*i)   := CMD_SET_ADDR_PREFIX_c   & STOPWATCH_CLEAR_SYM_ADDR_c(i)(6 downto 0);
---                            fifo_array_v(data_cnt_v + 2*i+1) := CMD_WRITE_DATA_PREFIX_c & BLANK_ENCODE_c;
---                        end loop CLEAR_DATA_STW_M;
---                        data_cnt_v := data_cnt_v + 2*2;
-
-                    end if;
-                    
-                    if ( fsm_stopwatch_start = '1' and en_100 = '1' ) then
-                        -- Get stopwatch data input encoded to LCD characters - hh/mm/ss
-                        dataInputEncode(BCD_decoded_stw_data_s, data_line4_v);
-                        
-                        -- Line 4: Send first address
-                        fifo_stw_array_v(data_stw_cnt_v)     := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(7)(6 downto 0);
-                        fifo_stw_array_v(data_stw_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & STOPWATCH_DATA_ADDR_c(7)(6 downto 0);
-                        fifo_stw_array_v(data_stw_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(7)(6 downto 0);
-                        data_stw_cnt_v := data_stw_cnt_v + 3;
-
-                        -- Line 4: Actual stopwatch data
-                        fifo_stw_array_v(data_stw_cnt_v)     := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
-                        data_stw_cnt_v := data_stw_cnt_v + 1;
-                        SEND_STW_DATA_STW_M : for i in 0 to 7 loop
-                            -- Read from MSB
-                            fifo_stw_array_v(data_stw_cnt_v)     := CMD_SET_DATA_PREFIX_c        & data_line4_v(7-i);
-                            fifo_stw_array_v(data_stw_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line4_v(7-i);
-                            data_stw_cnt_v := data_stw_cnt_v + 2;
-                            
-                            if (i = 1 or i = 3) then
-                                fifo_stw_array_v(data_stw_cnt_v)     := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
-                                fifo_stw_array_v(data_stw_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
-                                data_stw_cnt_v := data_stw_cnt_v + 2;
-                            end if;
-                            
-                            if (i = 5) then
-                                fifo_stw_array_v(data_stw_cnt_v)     := CMD_SET_DATA_PREFIX_c        & DOT_ENCODE_c;
-                                fifo_stw_array_v(data_stw_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & DOT_ENCODE_c;
-                                data_stw_cnt_v := data_stw_cnt_v + 2;
-                            end if;
-                        end loop SEND_STW_DATA_STW_M;
-                    end if;
+                    end if; -- FSM states
 
 
                     -- *******************************
                     -- Retrieve global data & count
                     -- *******************************
-                    -- Get data & count to global variable
-                    data_fifo_cnt_r   <= data_cnt_v;
-                    data_fifo_array_r <= fifo_array_v;
+                    -- Get data & count to global variables
+                    data_fifo_cnt_r       <= data_cnt_v;
+                    data_fifo_array_r     <= fifo_array_v;
+                    store_r               <= store_v;       -- debug purposes
+
+                end if; -- en_10
+
+                -- *******************************
+                -- Stopwatch data collection
+                -- *******************************
+                if ( fsm_stopwatch_start = '1' and en_100 = '1' ) then
+
+                    -- Get stopwatch data input encoded to LCD characters - hh/mm/ss
+                    dataInputEncode(BCD_decoded_stw_data_s, data_line4_v);
+
+                    -- Line 4: Send first address
+                    fifo_stw_array_v(data_stw_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                    fifo_stw_array_v(data_stw_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                    fifo_stw_array_v(data_stw_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                    data_stw_cnt_v := data_stw_cnt_v + 3;
+
+                    -- Line 4: Actual stopwatch data
+                    fifo_stw_array_v(data_stw_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
+                    data_stw_cnt_v := data_stw_cnt_v + 1;
+                    SEND_STW_DATA_STW_M : for i in 0 to 7 loop
+                        -- Read from MSB
+                        fifo_stw_array_v(data_stw_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & data_line4_v(7-i);
+                        fifo_stw_array_v(data_stw_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & data_line4_v(7-i);
+                        data_stw_cnt_v := data_stw_cnt_v + 2;
+
+                        if (i = 1 or i = 3) then
+                            fifo_stw_array_v(data_stw_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & SEMICOLON_ENCODE_c;
+                            fifo_stw_array_v(data_stw_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & SEMICOLON_ENCODE_c;
+                            data_stw_cnt_v := data_stw_cnt_v + 2;
+                        end if;
+
+                        if (i = 5) then
+                            fifo_stw_array_v(data_stw_cnt_v + 0) := CMD_SET_DATA_PREFIX_c        & DOT_ENCODE_c;
+                            fifo_stw_array_v(data_stw_cnt_v + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & DOT_ENCODE_c;
+                            data_stw_cnt_v := data_stw_cnt_v + 2;
+                        end if;
+                    end loop SEND_STW_DATA_STW_M;
+
+                    -- *******************************
+                    -- Retrieve global data & count
+                    -- *******************************
                     data_fifo_stw_cnt_r   <= data_stw_cnt_v;
                     data_fifo_stw_array_r <= fifo_stw_array_v;
-                    store_r           <= store_v;       -- debug purposes
 
-                end if; -- en_100
+                end if; -- Stopwatch data collection
             end if;
         end if;
     end process STORE_DATA;
@@ -1129,19 +1318,14 @@ begin
     begin
         if ( clk'EVENT and clk = '1' ) then
             if ( reset = '1' ) then
-                state_r            <= INIT;
-                fifo_wr_en         <= '0';
-                fifo_wr_data       <= (others => '0');
-                data_fifo_index_r  <= 0;
-                data_fifo_stw_index_r  <= 0;
-                lcd_cmd_cnt_r      <= 0;
-                prev_data_fifo_r   <= (others => '0');
-                wait_cnt_r         <= 0;
-                -- led_alarm_act      <= '0';
-                -- led_alarm_ring     <= '0';
-                -- led_countdown_act  <= '0';
-                -- led_countdown_ring <= '0';
-                -- led_switch_act     <= '0';
+                state_r               <= INIT;
+                fifo_wr_en            <= '0';
+                fifo_wr_data          <= (others => '0');
+                prev_data_fifo_r      <= (others => '0');
+                data_fifo_index_r     <= 0;
+                data_fifo_stw_index_r <= 0;
+                lcd_cmd_cnt_r         <= 0;
+                wait_cnt_r            <= 0;
             else
                 case state_r is
                     when INIT =>
@@ -1161,30 +1345,30 @@ begin
                             when 2 =>
                                 state_r <= TURN_ON_DISPLAY;
                             when 3 =>
-                                if ( data_fifo_cnt_r = 0 ) then
-                                    state_r    <= IDLE;      -- IDLE when there's no data to send
+                                if ( en_10 /= '1' ) then
+                                    state_r <= IDLE;      -- IDLE when there's no data to send
                                 else
-                                    state_r    <= SEND_DATA;
+                                    state_r <= SEND_DATA; -- Start to write data directly
                                 end if;
                             when others =>
                                 state_r <= INIT;
                         end case;
-                        lcd_cmd_cnt_r    <= lcd_cmd_cnt_r + 1;
+                        lcd_cmd_cnt_r   <= lcd_cmd_cnt_r + 1;
                     when CLEAR_DISPLAY =>
                         fifo_wr_en       <= '1';
                         fifo_wr_data     <= CMD_SET_CMD_PREFIX_c & CMD_CLEAR_DISPLAY_c;
                         prev_data_fifo_r <= CMD_CLEAR_DISPLAY_c;
                         state_r          <= WAIT_CLEAR;
                     when WAIT_CLEAR =>
-                        fifo_wr_en       <= '1';
-                        fifo_wr_data <= CMD_SET_CMD_EN_LOW_PREFIX_c & prev_data_fifo_r;
+                        fifo_wr_en     <= '1';
+                        fifo_wr_data   <= CMD_SET_CMD_EN_LOW_PREFIX_c & prev_data_fifo_r;
                         if ( wait_cnt_r < WAIT_CLEAR_DISPLAY_c ) then
-                            state_r <= WAIT_CLEAR;
+                            state_r    <= WAIT_CLEAR;
                             wait_cnt_r <= wait_cnt_r + 1;
                         else
-                            state_r <= SET_EN_LOW;
+                            state_r    <= SET_EN_LOW;
                             wait_cnt_r <= 0;
-                        end if;                
+                        end if;
                     when FUNCTION_SET =>
                         fifo_wr_en       <= '1';
                         fifo_wr_data     <= CMD_SET_CMD_PREFIX_c & CMD_FUNCTION_SET_c;
@@ -1197,7 +1381,7 @@ begin
                         state_r          <= SET_EN_LOW;
                     when TURN_ON_DISPLAY =>
                         fifo_wr_en       <= '1';
-                        fifo_wr_data     <= CMD_SET_CMD_PREFIX_c & CMD_TURN_ON_DISPLAY_c; 
+                        fifo_wr_data     <= CMD_SET_CMD_PREFIX_c & CMD_TURN_ON_DISPLAY_c;
                         prev_data_fifo_r <= CMD_TURN_ON_DISPLAY_c;
                         state_r          <= SET_EN_LOW;
                     when SEND_DATA =>
@@ -1217,18 +1401,18 @@ begin
                             data_fifo_stw_index_r <= data_fifo_stw_index_r + 1;
                             state_r               <= SEND_STW_DATA;
                         else
-                            fifo_wr_en        <= '0';
-                            state_r           <= IDLE;
+                            fifo_wr_en <= '0';
+                            state_r    <= IDLE;
                         end if;
                     when IDLE =>
                         if ( en_10 = '1' ) then
                             data_fifo_index_r <= 0;
                             state_r           <= SEND_DATA;
-                        elsif ( store_r = STORE_STW and en_100 = '1' ) then
+                        elsif ( fsm_stopwatch_start = '1' and en_100 = '1' ) then
                             data_fifo_stw_index_r <= 0;
-                            state_r           <= SEND_STW_DATA;
+                            state_r               <= SEND_STW_DATA;
                         else
-                            fifo_wr_en <= '0';                            
+                            fifo_wr_en <= '0';
                             state_r    <= IDLE;
                         end if;
                     when others =>
