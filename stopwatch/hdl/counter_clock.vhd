@@ -56,7 +56,7 @@ Begin
 	Begin
 		If (clk = '1' And clk'event) Then
  
-			If sw_reset = '1' Then
+			If sw_reset = '1' or (key_plus_imp = '1' and fsm_stopwatch_start = '1') Then
 				csec_signal <= "0000000";
 				sec_signal <= "0000000";
 				min_signal <= "0000000";
