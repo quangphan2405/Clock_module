@@ -1273,20 +1273,20 @@ begin
                         data_cnt_v := data_cnt_v + 2*11;
 
                         -- Line 4: STOPWATCH data will be sent later on
-                        
+
                         -- Line 4: Send first address - Clear leftover from TIMER
                         fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIMER_INDI_OVERLAP_ADDR_c(6 downto 0);
                         fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & TIMER_INDI_OVERLAP_ADDR_c(6 downto 0);
                         fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & TIMER_INDI_OVERLAP_ADDR_c(6 downto 0);
                         data_cnt_v := data_cnt_v + 3;
-                        
+
                         -- Line 4: Clear leftover from TIMER (not probably but to be safe)
                         CLEAR_STW_OVERLAP_STW_M : for i in 0 to 1 loop
                             fifo_array_v(data_cnt_v + 2*i + 0) := CMD_SET_DATA_PREFIX_c        & BLANK_ENCODE_c;
                             fifo_array_v(data_cnt_v + 2*i + 1) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c;
                         end loop CLEAR_STW_OVERLAP_STW_M;
                         data_cnt_v := data_cnt_v + 2*2;
-                        
+
 
                     end if; -- FSM states
 

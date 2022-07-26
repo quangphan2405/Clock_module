@@ -164,6 +164,7 @@ architecture behavior of clock_module is
     port (
         clk                 : in  std_logic;
         reset               : in  std_logic;
+        en_100              : in  std_logic;
         fsm_stopwatch_start : in  std_logic;
         key_minus_imp       : in  std_logic;
         key_plus_imp        : in  std_logic;
@@ -183,6 +184,7 @@ architecture behavior of clock_module is
         clk                 : in  std_logic;
         reset               : in  std_logic;
         en_100              : in  std_logic;
+        en_10               : in  std_logic;
         -- Time
         fsm_time_start      : in  std_logic;
         lcd_time_act        : in  std_logic;  -- DCF
@@ -418,6 +420,7 @@ begin
     port map (
         clk                 => clk,
         reset               => reset,
+        en_100              => en_100,
         fsm_stopwatch_start => fsm_stopwatch_start,
         key_minus_imp       => key_minus_imp,
         key_plus_imp        => key_plus_imp,
@@ -436,6 +439,7 @@ begin
         clk                 => clk,
         reset               => reset,
         en_100              => en_100,
+        en_10               => en_10,
         -- Time
         fsm_time_start      => fsm_time_start,
         lcd_time_act        => lcd_time_act,
