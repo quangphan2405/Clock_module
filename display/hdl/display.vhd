@@ -503,13 +503,13 @@ begin
                     fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & ALARM_INDICATOR_ADDR_c(1)(6 downto 0);
                     data_cnt_v := data_cnt_v + 3;
                     -- Line 3: Send alarm indicative symbol if present
-                    if ( lcd_alarm_act = '1' ) then
+                    if ( lcd_alarm_snooze = '1' ) then
                         fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c; -- Change RS
-                        fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & STAR_ENCODE_c;
-                        fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c;
-                    elsif ( lcd_alarm_snooze = '1' ) then
-                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_Z_ENCODE_c; -- Change RS
                         fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & LETTER_Z_ENCODE_c;
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & STAR_ENCODE_c;
+                    elsif ( lcd_alarm_act = '1' ) then
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_Z_ENCODE_c; -- Change RS
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_DATA_PREFIX_c        & STAR_ENCODE_c;
                         fifo_array_v(data_cnt_v + 2) := CMD_SET_DATA_EN_LOW_PREFIX_c & LETTER_Z_ENCODE_c;
                     else
                         fifo_array_v(data_cnt_v + 0) := CMD_SET_DATA_EN_LOW_PREFIX_c & BLANK_ENCODE_c; -- Change RS
@@ -640,9 +640,9 @@ begin
                         -- TIME state can be driven from DATE, ALARM, SWITCHOFF, COUNTDOWN and STOPWATCH
                         -- Therefore, clean up any fields left from all possible previous state
                         -- Line 3: Send first address - Clear
-                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(6 downto 0);
-                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & STOPWATCH_DATA_ADDR_c(6 downto 0);
-                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_DATA_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 0) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 1) := CMD_SET_ADDR_PREFIX_c        & STOPWATCH_ADDR_c(6 downto 0);
+                        fifo_array_v(data_cnt_v + 2) := CMD_SET_ADDR_EN_LOW_PREFIX_c & STOPWATCH_ADDR_c(6 downto 0);
                         data_cnt_v := data_cnt_v + 3;
 
                         -- Line 3: Clear "Stop Watch:" word (longest and covers all cases)
