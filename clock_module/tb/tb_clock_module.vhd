@@ -136,14 +136,14 @@ begin
         lcd_en             => lcd_en,
         lcd_rw             => lcd_rw,
         lcd_rs             => lcd_rs,
-        lcd_data           => lcd_data,
+        lcd_data           => lcd_data
     );
 
     -- Clock 10 kHz generator
     CLK_10K_GEN : process
     begin
         wait for CLK_10K_PERIOD_c/2; -- 50/50 duty cycle
-        clk_10k <= not clk_10k;
+        clk <= not clk;
     end process CLK_10K_GEN;
 
     -- Enable 1 kHz generator
