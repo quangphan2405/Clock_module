@@ -246,7 +246,7 @@ begin
 
        when wait_alarm =>
             n_fsm_time_start <= '0';
-            n_fsm_alarm_start <= '0';
+            n_fsm_alarm_start <= '1';
             n_fsm_date_start <= '0';
             n_fsm_switch_on_start <= '0';
             n_fsm_switch_off_start <= '0';
