@@ -62,7 +62,7 @@ Architecture Behavioral Of stopwatch Is
 	Component counter_clock
 		Port (
 			clk : In std_logic;
-		    en_100 : In STD_LOGIC;
+		    en_100 : In STD_LOGIC:= '0';
 			fsm_stopwatch_start : In STD_LOGIC;
 			sw_reset : In std_logic;
 			key_plus_imp : In STD_LOGIC;
