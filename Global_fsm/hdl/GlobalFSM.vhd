@@ -69,13 +69,16 @@ begin
    -- Timer 
    timer : process(clk,reset)
    begin
-     if reset = '1' then
-         t <= (others => '0');
-     elsif clk'EVENT and clk= '1' then
-         if reg_state /= nx_state then
-             t <= (others => '0');
-         elsif reg_state = date_display then
-             t <= t + 1;
+     
+     if clk'EVENT and clk= '1' then
+         if reset ='0' then
+           if reg_state /= nx_state then
+               t <= (others => '0');
+           elsif reg_state = date_display then
+               t <= t + 1;
+          end if;
+         else
+            t <= (others => '0');
          end if;      
      end if;
    end process timer;
