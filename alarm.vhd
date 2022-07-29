@@ -1,10 +1,10 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: TUM
+-- Engineer: Bo Zhou
 -- 
 -- Create Date: 25.06.2022 20:55:01
 -- Design Name: 
--- Module Name: top - Behavioral
+-- Module Name: alarm - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -71,6 +71,7 @@ architecture Behavioral of alarm is
            mm_current : in STD_LOGIC_VECTOR (5 downto 0);
            hh_current : in STD_LOGIC_VECTOR (4 downto 0);
            clk : in STD_LOGIC;
+           rst : in STD_LOGIC;
            I_act : in STD_LOGIC;
            snooze_state : in STD_LOGIC;
            snooze_1min : in STD_LOGIC;
@@ -111,7 +112,7 @@ architecture Behavioral of alarm is
 begin
     u1: active port map (clk=>clk, I_ring=>ring, fsm_alarm=>fsm_alarm_start, action_imp=>key_action_imp,
                          rst=>reset, O_act=>led_act_1, lcd_act=>lcd_alarm_act);
-    u2: ringing port map (clk=>clk, ss_alarm=>ss, mm_alarm=>mm, hh_alarm=>hh, ss_current=>second(5 downto 0),
+    u2: ringing port map (clk=>clk, rst=>reset, ss_alarm=>ss, mm_alarm=>mm, hh_alarm=>hh, ss_current=>second(5 downto 0),
                           mm_current=>minute(5 downto 0), hh_current=>hour(4 downto 0), I_act=>led_act_1, snooze_1min=>snooze_1min,
                           snooze_state=>snooze_state, action_stop=>action_stop, action_long=>key_action_long, action_imp=>key_action_imp, 
                           O_ring=>ring, O_snooze=>snooze_imp);

@@ -39,6 +39,7 @@ entity ringing is
            mm_current : in STD_LOGIC_VECTOR (5 downto 0);
            hh_current : in STD_LOGIC_VECTOR (4 downto 0);
            clk : in STD_LOGIC;
+           rst : in STD_LOGIC;
            I_act : in STD_LOGIC;
            snooze_state : in STD_LOGIC;
            snooze_1min : in STD_LOGIC;
@@ -53,13 +54,13 @@ architecture Behavioral of ringing is
     signal reg_1, enable: std_logic := '0';
     
 begin
-process (clk, ss_alarm, ss_current, mm_alarm, mm_current, hh_alarm, hh_current, snooze_1min, action_stop, reg_1, I_act, snooze_state)
-    variable cnt: integer range 0 to 30100;
+process (clk, rst, ss_alarm, ss_current, mm_alarm, mm_current, hh_alarm, hh_current, snooze_1min, action_stop, reg_1, I_act, snooze_state)
+    variable cnt: integer range 0 to 20100;
 begin
     if (clk = '1' and clk'EVENT) then
         if (enable='1') then
                 --cnt := 0;
-            if (cnt=30100) then
+            if (cnt=20100) then
                 reg_1 <= '0';
                 O_snooze <= '1';
                 enable <= '0';
@@ -71,6 +72,9 @@ begin
                 cnt := cnt +1;
             end if;
         end if;
+        if (rst='1')then
+            reg_1 <= '0';
+        else
         if (ss_alarm=ss_current) and (mm_alarm=mm_current) and (hh_alarm=hh_current) then
             reg_1 <= I_act;
         --1 min snooze is reached
@@ -85,7 +89,7 @@ begin
             if (action_stop='1') or (action_long='1') then
                 reg_1 <= '0';
             end if;
-                
+        end if;        
         end if;
         if (reg_1='0') then
             O_snooze <= '0';
