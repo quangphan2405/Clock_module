@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: Bo Zhou
 -- 
 -- Create Date: 25.06.2022 21:41:50
 -- Design Name: 
@@ -31,11 +31,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity tb_top is
+entity tb_alarm is
 --  Port ( );
-end tb_top;
+end tb_alarm;
 
-architecture Behavioral of tb_top is
+architecture Behavioral of tb_alarm is
     component alarm
         Port ( clk : in STD_LOGIC;
            reset : in STD_LOGIC;
@@ -81,40 +81,37 @@ begin
     end process clock;
     process
     begin 
-    --case1
+    
+      --case1: Press reset -> The alarm mode is deactivated and the alarm time is reset to 00:16
         wait for 100 ns;
         fsm_alarm_start <= '1';
         key_action_imp <= '1'; wait for 100 ns; key_action_imp <= '0';
         wait for 100 ns;
-        reset <= '1';
-        wait for 200 ns;
-        if (led_alarm_act='0') then
-            report "reset successful";
-        else
-            report "reset failed";
-        end if;
-     --case2
-        wait for 100 ns;
-        reset <= '0'; 
+        key_enable <= '1'; wait for 100 ns; key_enable <= '0';
+        wait for 100 ns; reset <= '1'; wait for 100 ns; reset <= '0'; 
+        
+      --case2: Not in the alarm mode -> Action key and +/- key do not work for alarm module
+        wait for 1 ms;
         fsm_alarm_start <= '0';  
         wait for 100 ns;
         key_action_imp <= '1'; wait for 100 ns; key_action_imp <= '0';
         wait for 100 ns;
         key_enable <= '1';
         key_plus_minus <= '0';
-     --case3
         wait for 100 ns;
-        fsm_alarm_start <= '1';
         key_enable <= '0';
+        
+      --case3: In the alarm mode, press Action key -> Toggle between in-/action state
+        wait for 1 ms;
+        fsm_alarm_start <= '1';
         wait for 100 ns;
+        key_action_imp <= '1'; wait for 100 ns; key_action_imp <= '0';
+        wait for 100 ns;
+        key_action_imp <= '1'; wait for 100 ns; key_action_imp <= '0';
+
+      --case4: Press +/- key -> Modify the alarm time (23:59->00:00; 00:00->23:59)
+        wait for 1 ms;
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
-        wait for 100 ns;
-        key_action_imp <= '1'; wait for 100 ns; key_action_imp <= '0';
-        wait for 100 ns;
-        key_action_imp <= '1'; wait for 100 ns; key_action_imp <= '0';
-        wait for 100 ns;
-        key_action_long <= '1'; wait for 100 ns; key_action_long <= '0';
-     --case4
         wait for 100 ns;
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
         wait for 100 ns;
@@ -126,32 +123,43 @@ begin
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
         wait for 100 ns;
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
-     --case5
         wait for 100 ns;
+        key_enable <= '1'; wait for 100 ns; key_enable <= '0';
+        wait for 100 ns;
+        key_enable <= '1'; wait for 100 ns; key_enable <= '0';
+        
+      --case5: In the active state, the alarm time is reached -> Ringing 
+        wait for 1 ms;
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
         wait for 100 ns;
         fsm_alarm_start <= '0';
-        --reset <= '1';
         wait for 400 ns;
         fsm_alarm_start <= '1';
-     --case6
         wait for 100 ns;
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
-        wait for 100 ns;
-        key_action_long <= '1'; wait for 100 ns; key_action_long <= '0';
-     --case7
-        wait for 100 ns;
+        
+      --case6: Long press Action key -> Ringing stops
+        wait for 1 ms; key_action_imp <= '1'; wait for 100 ns; key_action_imp <= '0';
+        wait for 2 ms; key_action_long <= '1'; wait for 100 ns; key_action_long <= '0';
+        
+      --case7: Not press Action key for one minute -> Ringing stops
+        wait for 1 ms;
         key_plus_minus <= '0';
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
         wait for 100 ns;
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
         wait for 100 ns;
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
+        wait for 100 ns;
+        key_enable <= '1'; wait for 100 ns; key_enable <= '0';
+        wait for 100 ns;
+        key_enable <= '1'; wait for 100 ns; key_enable <= '0';
         wait for 10 ms;
         fsm_alarm_start <= '0';
         wait for 10 ms;
         fsm_alarm_start <= '1';
-     --case8 
+        
+      --case8: Press Action key for less than 2 second -> Snooze state 
         wait for 41 ms;
         key_plus_minus <= '1';
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
@@ -159,14 +167,12 @@ begin
         key_enable <= '1'; wait for 100 ns; key_enable <= '0';
         wait for 200 us;
         key_action_imp <= '1'; wait for 100 ns; key_action_imp <= '0';
-        wait for 200 ns;
+        wait for 10 us;
         fsm_alarm_start <= '0';
-        wait for 10 ms;
-        fsm_alarm_start <= '0';
-        wait for 60 ms;
-        key_action_long <= '1'; wait for 100 ns; key_action_long <= '0';
-        --wait for 200 us;
-        --key_plus_minus <= '1';
+        wait for 60 us;
+        key_action_imp <= '1'; wait for 100 ns; key_action_imp <= '0';
+        wait for 2 us;
+        key_plus_minus <= '1';
         
         
         wait;
