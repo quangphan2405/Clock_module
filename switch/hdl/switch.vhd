@@ -1,14 +1,11 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: TUM
+-- Engineer: Bo Zhou
+-- 
 -- 
 -- Create Date: 05.07.2022 15:29:43
--- Design Name: 
 -- Module Name: switch - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
+-- Project Name: Project IC design
 -- 
 -- Dependencies: 
 -- 

@@ -3,12 +3,9 @@
 -- Engineer: Bo Zhou
 -- 
 -- Create Date: 25.06.2022 20:55:01
--- Design Name: 
 -- Module Name: alarm - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
+-- Project Name: Project IC design
+
 -- 
 -- Dependencies: 
 -- 
