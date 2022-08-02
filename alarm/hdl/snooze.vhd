@@ -44,7 +44,7 @@ architecture Behavioral of snooze is
     signal enable, reg_2 : std_logic := '0';
 begin
 process (clk, enable, reg_2, I_snooze)
-    variable cnt: integer range 0 to 599999;
+    variable cnt: integer range 0 to 579896;
     variable cnt_1: integer range 0 to 2499;
 begin
     if (clk = '1' and clk'EVENT) then
@@ -58,7 +58,7 @@ begin
                 cnt := 0;
                 O_1min <= '0';
                 --reg_1 <= '0';
-            elsif (enable='1') and (cnt=599999) then
+            elsif (enable='1') and (cnt=579896) then
                 cnt := 0;
                 enable <= '0';
                 O_1min <= '1';

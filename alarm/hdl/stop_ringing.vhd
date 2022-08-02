@@ -41,13 +41,13 @@ architecture Behavioral of stop_ringing is
     signal reg_1: std_logic := '0';
 begin
 process (clk, I_ring)
-    variable cnt: integer range 0 to 599999;
+    variable cnt: integer range 0 to 599998;
 begin
     if (clk = '1' and clk'EVENT) then
         if (I_ring='0') then
             cnt := 0; 
             reg_1 <= '0';           
-        elsif (I_ring='1') and (cnt=599999) then
+        elsif (I_ring='1') and (cnt=599998) then
             cnt := 0;
             reg_1 <= '1';
         else

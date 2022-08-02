@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- Author       : Quang Phan
+-- Author       : Quang Phan, Bo Zhou, Yinjia Wang
 -- Author email : quang.phan@tum.de
 -- Create Date  : 18/07/2022
 -- Project Name : Project Lab IC Design
@@ -193,6 +193,206 @@ begin
     -- Stimulus process
     STIM : process
     begin
+    
+        -- Generate reset
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+        
+        -- Global FSM test ------------------------------------------------
+        -- global FSM : date display state test
+        wait for CLK_10K_PERIOD_c*2;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        key_mode_imp <= '0';
+        wait for 4sec;
+        
+          -- Generate reset
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+
+        
+        -- Global FSM :Alarm state test
+        -- Time display -> alarm and activat it -> time display
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        
+        wait for 2sec;
+        key_action_imp <= '1'; 
+        wait for CLK_10K_PERIOD_c; 
+        key_action_imp <= '0';
+        wait for CLK_10K_PERIOD_c; 
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        
+        -- Generate reset
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+        
+        -- Global FSM :switch on state test
+        -- time display -> switch on -> activate it -> switch off2 -> time isplay
+        -- Access to swith on
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for 1sec;
+        -- Activiation
+        wait for CLK_10K_PERIOD_c;
+        key_action_imp <= '1'; 
+        wait for CLK_10K_PERIOD_c; 
+        key_action_imp <= '0';
+        wait for 1sec;
+        -- Go through switch off
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for 1sec;
+        -- return time display
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        
+        -- Generate reset
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+        
+        
+        -- Generate reset
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+        
+--        -- Global FSM : Switch off state test
+--        -- Access to swith off
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for 1sec;
+        -- Activiation
+        wait for CLK_10K_PERIOD_c;
+        key_action_imp <= '1'; 
+        wait for CLK_10K_PERIOD_c; 
+        key_action_imp <= '0';
+        wait for 1sec;
+        -- back to time display
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for 1sec;
+        
+        -- Generate reset
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+        
+        -- Global FSM :count down state test
+        --access to count down
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for 1sec;
+        
+        -- Back to time display 
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for 1sec;
+        
+        -- Generate reset
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+        
+--        -- Global FSM: stop watch state test
+--        -- Access tp stop watch function
+        key_plus_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_plus_imp <= '0';
+        wait for 1sec;
+        
+        
+        -- Back to time display
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        
+        -- Generate reset
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+        
+        -------------------------------Global FSM State test end at 15s---------------------------
+        
         -- Generate reset
         wait for CLK_10K_PERIOD_c*2;
         reset <= '1';
@@ -201,6 +401,7 @@ begin
         wait for CLK_10K_PERIOD_c/2;
 
         -- Test time module
+          
 
         -- Generate reset
         wait for CLK_10K_PERIOD_c*2;
@@ -210,42 +411,328 @@ begin
         wait for CLK_10K_PERIOD_c/2;
 
         -- Test date module
+--        wait for CLK_10K_PERIOD_c*2;
+--        key_mode_imp <= '1';
+--        wait for CLK_10K_PERIOD_c*2;
+--        key_mode_imp <= '0';
+--        wait for 4sec;
+
+--        -- Generate reset
+--        wait for CLK_10K_PERIOD_c*2;
+--        reset <= '1';
+--        wait for CLK_10K_PERIOD_c*2;
+--        reset <= '0';
+--        wait for CLK_10K_PERIOD_c/2;
+
+-- Test alarm module
 
         -- Generate reset
         wait for CLK_10K_PERIOD_c*2;
         reset <= '1';
         wait for CLK_10K_PERIOD_c*2;
         reset <= '0';
-        wait for CLK_10K_PERIOD_c/2;
-
-        -- Test alarm module
-
-        -- Generate reset
+        
+        --case1: toggling between active/inactive
         wait for CLK_10K_PERIOD_c*2;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c*2;
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c; key_action_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c; key_action_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c; key_action_imp <= '0';
+
+        --case2: time modification & ringing & ringing stop after 1 min without pressing Action key
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        --pressing +/- key and mode key will not influence this process
+        wait for 1000 ms;
+        key_mode_imp <= '1'; wait for CLK_10K_PERIOD_c*5; key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c*5000;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c*5; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c*5000;
+        key_plus_minus <= '1';
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c*5; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_plus_minus <= '0';
+        --case3: ringing stop while long pressing Action key
+        wait for 61000 ms;
         reset <= '1';
         wait for CLK_10K_PERIOD_c*2;
         reset <= '0';
-        wait for CLK_10K_PERIOD_c/2;
+        wait for CLK_10K_PERIOD_c*2;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c*2;
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c; key_action_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c*2;
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c; key_action_imp <= '0';
+        wait for 2000 ms;
+        key_action_long <= '1'; wait for CLK_10K_PERIOD_c; key_action_long <= '0';
+        --case4: ringing stop and going into snooze state when pressing Action key no more than 2 s.
+        --* LED must wait for 3 second to detect key_act_long signal.
+        wait for 1000 ms;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+        wait for CLK_10K_PERIOD_c*2;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c*2;
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c; key_action_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_plus_minus <= '0';
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c*2;
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c; key_action_imp <= '0';
+        --pressing action key, +/- key and mode key will not influence this process
+        wait for 3000 ms;
+        key_mode_imp <= '1'; wait for CLK_10K_PERIOD_c*5; key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c*5000;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c*5; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c*5000;
+        key_plus_minus <= '1';
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c*5; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c*5000;
+        key_plus_minus <= '0';
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c*5; key_action_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c*5; key_action_imp <= '0';
+        --test for alarm module ends
+        wait for 70000 ms;
+        reset <= '1';
+        wait for CLK_10K_PERIOD_c*2;
+        reset <= '0';
+
+        
 
         -- Test switch-on module
-
-        -- Generate reset
         wait for CLK_10K_PERIOD_c*2;
         reset <= '1';
         wait for CLK_10K_PERIOD_c*2;
         reset <= '0';
         wait for CLK_10K_PERIOD_c/2;
+        wait for CLK_10K_PERIOD_c*2;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for CLK_10K_PERIOD_c*2;
+        key_action_imp <= '1'; wait for CLK_10K_PERIOD_c; key_action_imp <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_plus_minus <= '0';
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+
 
         -- Test switch-off module
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '1';
+        wait for CLK_10K_PERIOD_c;
+        key_mode_imp <= '0';
+        wait for 30 sec;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
+        wait for CLK_10K_PERIOD_c;
+        key_enable <= '1'; wait for CLK_10K_PERIOD_c; key_enable <= '0';
 
         -- Generate reset
-        wait for CLK_10K_PERIOD_c*2;
+        wait for 3 sec;
         reset <= '1';
         wait for CLK_10K_PERIOD_c*2;
         reset <= '0';
         wait for CLK_10K_PERIOD_c/2;
 
         -- Test countdown module
+        
+       
 
         -- Generate reset
         wait for CLK_10K_PERIOD_c*2;
@@ -255,6 +742,9 @@ begin
         wait for CLK_10K_PERIOD_c/2;
 
         -- Test stopwatch module
+        
+       
+        
 
         -- Generate reset
         wait for CLK_10K_PERIOD_c*2;
