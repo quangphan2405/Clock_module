@@ -1,16 +1,11 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: TUM
+-- Engineer: Yinjia Wang
 -- 
 -- Create Date: 2022/07/11 17:28:07
--- Design Name: 
+-- Design Name: Global FSM test bench
 -- Module Name: GlobalFSM_tb - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
+-- Project Name: Project Labprojectory IC design
 -- 
 -- Revision:
 -- Revision 0.01 - File Created
@@ -39,15 +34,15 @@ end tb_GlobalFSM;
 
 architecture Behavioral of tb_GlobalFSM is
 component GlobalFSM is 
-port( clk : in STD_LOGIC;
---      EN_1 : in std_logic;
+port(    -- Inputs  
+           clk : in STD_LOGIC;
            reset : in STD_LOGIC;
            key_mode_imp : in STD_LOGIC;
            key_action_imp : in STD_LOGIC;
            key_plus_imp : in STD_LOGIC;
            key_minus_imp : in STD_LOGIC;
            fsm_time_start : out STD_LOGIC;
- 
+         -- Outputs
            fsm_date_start : out STD_LOGIC;
            fsm_alarm_start : out STD_LOGIC;
            fsm_switch_on_start : out STD_LOGIC;
@@ -60,19 +55,18 @@ signal clk_period : time := 100us;
 signal clk_1Hz_period :time := 1sec;
 --Inputs and Outputs
 signal  clk, EN_1, reset, key_mode_imp, key_action_imp, key_plus_imp, key_minus_imp : std_logic := '0';
-signal time_display, date_display, alarm_clock, switch_on, switch_off, 
-       count_down,stop_watch, wait_alarm, wait_switch_on, wait_switch_off : std_logic := '0';
+signal time_display, date_display, alarm_clock, switch_on, switch_off, count_down,stop_watch : std_logic := '0';
 
  
 begin
 
 uut : GlobalFSM port map( clk => clk,
---                         EN_1 => EN_1,
                          reset => reset,
                          key_mode_imp => key_mode_imp,
                          key_action_imp => key_action_imp,
                          key_plus_imp => key_plus_imp,
                          key_minus_imp => key_minus_imp,
+                         
                          fsm_time_start => time_display,
                          fsm_date_start => date_display,
                          fsm_alarm_start => alarm_clock,
@@ -91,15 +85,19 @@ stim_proc : process
 begin
 
 
+    
+    wait for clk_period;
+    
     -- case 1 time display -> date_display -> time alarm_clock (Pass)
     wait for clk_period;
     key_mode_imp <= '1';
     wait for clk_period;
     key_mode_imp <= '0';
-    wait for 4sec;
+    wait for 4 sec;
 
 
     -- Case 2 : alarm_clock (Pass)
+    
     key_mode_imp <= '1';
     wait for clk_period;
     key_mode_imp <= '0';
@@ -107,15 +105,15 @@ begin
     key_mode_imp <= '1';
     wait for clk_period;
     key_mode_imp <= '0';
-    wait for 1sec;
+    wait for 5*clk_period;
     key_action_imp <= '1';
     wait for clk_period;
     key_action_imp <= '0';
-    wait for 1sec;
+    wait for 5*clk_period;
     key_mode_imp <= '1';
     wait for clk_period;
     key_mode_imp <= '0';
-    wait for 1 sec;
+    wait for 10*clk_period;
 
 
     --Case 3: time switch on : Errors 
@@ -146,7 +144,7 @@ begin
     key_mode_imp <= '1';
     wait for clk_period;
     key_mode_imp <= '0';
-    wait for 3*clk_period; -- time display
+    wait for 10*clk_period; -- time display
 
 
     --Case 4 : time switch off; Pass
@@ -173,7 +171,7 @@ begin
     key_mode_imp <= '1';
     wait for clk_period;
     key_mode_imp <= '0';
-      wait for 1sec;
+      wait for 10*clk_period;
 
 
     -- Case 5 : count down timer: PASS
@@ -200,7 +198,7 @@ begin
     key_mode_imp <= '1';
     wait for clk_period;
     key_mode_imp <= '0';
-    wait for 1sec;
+    wait for 10*clk_period;
     
     
     -- Case 6 : Stop watch PASS
@@ -212,27 +210,10 @@ begin
     key_mode_imp <= '1';
     wait for clk_period;
     key_mode_imp <= '0';
-    wait for 1sec;
-
-
-    -- Case 7 : reset funtion PASS
-    wait for clk_period;
-    key_mode_imp <= '1';
-    wait for clk_period;
-    key_mode_imp <= '0';
-    wait for 5*clk_period;
-    reset <= '1';
-    wait for clk_period;
-    reset<= '0';
-    wait for 1sec;
-    key_plus_imp <= '1';
-    wait for clk_period;
-    key_plus_imp <= '0';
-    wait for 5*clk_period;
-    reset <= '1';
-    wait for clk_period;
-    reset<= '0';
-    wait for 1sec;
+    wait for 10*clk_period;
+    
+    
+    
     wait;
 end process;
 
