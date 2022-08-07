@@ -476,11 +476,9 @@ begin
                     -- *******************************
                     -- Reset data counter
                     data_cnt_v := 0;
-                    data_stw_cnt_v := 0;
 
                     -- Reset the data_array and assign later on
                     fifo_array_v := (others => (others => '0'));
-                    fifo_stw_array_v := (others => (others => '0'));
 
 
                     -- *******************************
@@ -1305,6 +1303,10 @@ begin
                 -- Stopwatch data collection
                 -- *******************************
                 if ( fsm_stopwatch_start = '1' and en_100 = '1' ) then
+
+                    -- Reset data holder
+                    data_stw_cnt_v   := 0;
+                    fifo_stw_array_v := (others => (others => '0'));
 
                     -- Get stopwatch data input encoded to LCD characters - hh/mm/ss
                     dataInputEncode(BCD_decoded_stw_data_s, data_line4_v);

@@ -23,6 +23,7 @@ architecture behavior of tb_display is
         clk                 : in  std_logic;
         reset               : in  std_logic;
         en_100              : in  std_logic;
+        en_10               : in  std_logic;
         -- Time
         fsm_time_start      : in  std_logic;
         lcd_time_act        : in  std_logic;                      -- DCF
@@ -65,6 +66,7 @@ architecture behavior of tb_display is
     signal clk_10k             : std_logic := '0';
     signal reset               : std_logic := '0';
     signal en_100              : std_logic := '0';
+    signal en_10               : std_logic := '0';
     -- Time
     signal fsm_time_start      : std_logic := '0';
     signal lcd_time_act        : std_logic := '0';                                  -- DCF
@@ -146,7 +148,7 @@ architecture behavior of tb_display is
     constant CMD_FUNCTION_SET_c    : std_logic_vector(10 downto 0) := "10000111000";
 
     -- Error counter
-    signal error_cnt : integer := 0;
+    -- signal error_cnt : integer := 0;
 
     -- Process to decode commands to LCD
 
@@ -159,6 +161,7 @@ begin
         clk                 => clk_10k,
         reset               => reset,
         en_100              => en_100,
+        en_10               => en_10,
         -- Time
         fsm_time_start      => fsm_time_start,
         lcd_time_act        => lcd_time_act,
@@ -208,13 +211,24 @@ begin
     -- Enable 100 Hz generator
     EN_100_GEN : process
     begin
-        wait for CLK_10K_PERIOD_c*9/2;
+        wait for CLK_10K_PERIOD_c*99/2;
         en_100 <= '1';
         wait for CLK_10K_PERIOD_c;    -- 1/99 duty cycle, actually "en_100"
         en_100 <= '0';
         wait for CLK_10K_PERIOD_c/2;
-        wait for CLK_10K_PERIOD_c*95;
+        wait for CLK_10K_PERIOD_c*49;
     end process EN_100_GEN;
+
+    -- Enable 10 Hz generator
+    EN_10_GEN : process
+    begin
+        wait for CLK_10K_PERIOD_c*99/2;
+        en_10 <= '1';
+        wait for CLK_10K_PERIOD_c;    -- 1/999 duty cycle, actually "en_10"
+        en_10 <= '0';
+        wait for CLK_10K_PERIOD_c/2;
+        wait for CLK_10K_PERIOD_c*949;
+    end process EN_10_GEN;
 
     -- Time Data generator
     DATA_GEN : process
@@ -261,78 +275,9 @@ begin
         reset <= '1';
         wait for CLK_10K_PERIOD_c*2;
         reset <= '0';
-        wait for CLK_10K_PERIOD_c/2;
+        wait for CLK_10K_PERIOD_c*9/2;
 
-        -- Wake up the display and activate TIME mode
-        fsm_time_start <= '1';
-        wait for CLK_10K_PERIOD_c*9/2; -- Wait for data to transmit thru FIFO
-        -- Check TURN_ON_DISPLAY command after waking up
-        if ( lcd_output /= CMD_TURN_ON_DISPLAY_c ) then
-            error_cnt <= error_cnt + 1;
-            report "TURN_ON_DISPLAY command not received!";
-        end if;
-        -- Check FUNCTION_SET command in the next cycle
-        wait for CLK_10K_PERIOD_c;
-        if ( lcd_output /= CMD_FUNCTION_SET_c ) then
-            error_cnt <= error_cnt + 1;
-            report "FUNCTION_SET command not received!";
-        end if;
-
-        -- Activate DATE mode after 3 TIME data
-        wait for CLK_100_PERIOD_c*2;
-        wait on en_100;
-        fsm_time_start <= '0';
-        fsm_date_start <= '1';
-
-        -- Activate ALARM mode after 3 DATE data
-        wait for CLK_100_PERIOD_c*2;
-        wait on en_100;
-        fsm_date_start  <= '0';
-        fsm_alarm_start <= '1';
-
-        -- Activate SWITCH-ON mode after 3 ALARM data
-        wait for CLK_100_PERIOD_c*2;
-        wait on en_100;
-        fsm_alarm_start    <= '0';
-        fsm_switchon_start <= '1';
-
-        -- Activate SWITCH-OFF mode after 3 SWITCH-ON data
-        wait for CLK_100_PERIOD_c*2;
-        wait on en_100;
-        fsm_switchon_start  <= '0';
-        fsm_switchoff_start <= '1';
-
-        -- Activate COUNTDOWN mode after 3 SWITCH-OFF data
-        wait for CLK_100_PERIOD_c*2;
-        wait on en_100;
-        fsm_switchoff_start <= '0';
-        fsm_countdown_start <= '1';
-
-        -- Activate STOPWATCH mode after 3 COUNTDOWN data
-        wait for CLK_100_PERIOD_c*2;
-        wait on en_100;
-        fsm_countdown_start <= '0';
-        fsm_stopwatch_start <= '1';
-
-        -- Activate TIME mode after 3 STOPWATCH data
-        wait for CLK_100_PERIOD_c*2;
-        wait on en_100;
-        fsm_stopwatch_start <= '0';
-        fsm_time_start      <= '1';  -- Always ends up at TIME state
-
-
-        -- Wait for a long time
-        wait for CLK_100_PERIOD_c*20;
-        fsm_time_start <= '0';  -- Will be turned on after reset
-
-        -- Generate reset
-        wait for CLK_10K_PERIOD_c*3/2;
-        reset <= '1';
-        wait for CLK_10K_PERIOD_c*2;
-        reset <= '0';
-        wait for CLK_10K_PERIOD_c/2;
-
-        -- Do the same test with all the features enabled
+        -- Enable all features
         lcd_time_act      <= '1';
         lcd_alarm_act     <= '1';  -- Will go LOW later and lcd_alarm_snooze goes HIGH by then
         lcd_switchon_act  <= '1';
@@ -342,74 +287,55 @@ begin
 
         -- Wake up the display and activate TIME mode
         fsm_time_start <= '1';
-        wait for CLK_10K_PERIOD_c*9/2; -- Wait for data to transmit thru FIFO
-        -- Check TURN_ON_DISPLAY command after waking up
-        if ( lcd_output /= CMD_TURN_ON_DISPLAY_c ) then
-            error_cnt <= error_cnt + 1;
-            report "TURN_ON_DISPLAY command not received!";
-        end if;
-        -- Check FUNCTION_SET command in the next cycle
-        wait for CLK_10K_PERIOD_c;
-        if ( lcd_output /= CMD_FUNCTION_SET_c ) then
-            error_cnt <= error_cnt + 1;
-            report "FUNCTION_SET command not received!";
-        end if;
 
-        -- Activate DATE mode after 3 TIME data
-        wait for CLK_100_PERIOD_c*2;
+        -- Activate DATE mode after 2 TIME data
+        wait for CLK_100_PERIOD_c*19;
         wait on en_100;
         fsm_time_start <= '0';
         fsm_date_start <= '1';
 
         -- Test the snooze function
-        wait for CLK_100_PERIOD_c;
+        wait for CLK_100_PERIOD_c*10;
         lcd_alarm_act    <= '0';
         lcd_alarm_snooze <= '1';
-        wait for CLK_100_PERIOD_c;
+        wait for CLK_100_PERIOD_c*10;
         lcd_alarm_snooze <= '0';
-        wait for CLK_100_PERIOD_c;
+        wait for CLK_100_PERIOD_c*10;
 
         -- Activate ALARM mode after 3 DATE data
         wait on en_100;
         fsm_date_start  <= '0';
         fsm_alarm_start <= '1';
 
-        -- Activate SWITCH-ON mode after 3 ALARM data
-        wait for CLK_100_PERIOD_c*2;
+        -- Activate SWITCH-ON mode after 2 ALARM data
+        wait for CLK_100_PERIOD_c*20;
         wait on en_100;
         fsm_alarm_start    <= '0';
         fsm_switchon_start <= '1';
 
-        -- Activate SWITCH-OFF mode after 3 SWITCH-ON data
-        wait for CLK_100_PERIOD_c*2;
+        -- Activate SWITCH-OFF mode after 2 SWITCH-ON data
+        wait for CLK_100_PERIOD_c*20;
         wait on en_100;
         fsm_switchon_start  <= '0';
         fsm_switchoff_start <= '1';
 
-        -- Activate COUNTDOWN mode after 3 SWITCH-OFF data
-        wait for CLK_100_PERIOD_c*2;
+        -- Activate COUNTDOWN mode after 2 SWITCH-OFF data
+        wait for CLK_100_PERIOD_c*20;
         wait on en_100;
         fsm_switchoff_start <= '0';
         fsm_countdown_start <= '1';
 
-        -- Activate STOPWATCH mode after 3 COUNTDOWN data
-        wait for CLK_100_PERIOD_c*2;
+        -- Activate STOPWATCH mode after 2 COUNTDOWN data
+        wait for CLK_100_PERIOD_c*20;
         wait on en_100;
         fsm_countdown_start <= '0';
         fsm_stopwatch_start <= '1';
 
-        -- Activate TIME mode after 3 STOPWATCH data
-        wait for CLK_100_PERIOD_c*2;
+        -- Activate TIME mode after 2 STOPWATCH data
+        wait for CLK_100_PERIOD_c*20;
         wait on en_100;
         fsm_stopwatch_start <= '0';
-        fsm_time_start      <= '1';  -- Always ends up at TIME state
-
-        -- Print testbench output
-        if ( error_cnt /= 0 ) then
-            report "TEST FAILED! Number of unmatched results is " & integer'image(error_cnt);
-        else
-            report "TEST PASSED!";
-        end if;
+        fsm_time_start      <= '0';  -- Ends up at INIT state
 
         wait;
     end process STIM;

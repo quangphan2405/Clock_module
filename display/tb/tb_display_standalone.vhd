@@ -114,19 +114,9 @@ begin
         wait for CLK_10K_PERIOD_c/2;
 
         -- Wait for a long time
-        wait for 1000 ms;
+        wait for 100 sec;
 
         -- Generate reset by BTND again
-        wait for CLK_10K_PERIOD_c*2;
-        BTND <= '1';
-        wait for CLK_10K_PERIOD_c*2;
-        BTND <= '0';
-        wait for CLK_10K_PERIOD_c/2;
-
-        -- Wait for a long time
-        wait for 1000 ms;
-
-        -- Generate reset by BTND before finishing
         wait for CLK_10K_PERIOD_c*2;
         BTND <= '1';
         wait for CLK_10K_PERIOD_c*2;
